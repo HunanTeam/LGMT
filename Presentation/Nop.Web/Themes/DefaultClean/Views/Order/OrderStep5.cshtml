@@ -1,0 +1,19 @@
+﻿@model OrderDetailsModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Order
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderDetails").Text);
+}
+<div id="wrap">
+    <div class="account">
+        @Html.Action("CustomerMenu", "Customer")
+    </div>
+    <div class="order">
+        @Html.Partial("OrderNumber", Model)
+        @Html.Partial("OrderProgress", OrderStep.Complete)
+        @Html.Partial("OrderItems", Model)
+        @Html.Partial("OrderAddress", Model)   
+    </div>
+</div>

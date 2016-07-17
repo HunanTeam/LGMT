@@ -1,0 +1,23 @@
+﻿@model HomepageModuleModel
+@using Nop.Admin.Models.PageContent;
+@{
+    //page title
+    ViewBag.Title = T("Admin.ContentManagement.News.NewsItems.EditNewsItemDetails").Text;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-content.png")" alt="" />
+            首页模块 - @Model.Name @Html.ActionLink("返回首页模块列表", "List")
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            <input type="submit" name="save-continue" class="k-button" value="@T("Admin.Common.SaveContinue")" />
+            <span id="newsitem-delete" class="k-button">@T("Admin.Common.Delete")</span>
+        </div>
+    </div>
+    @Html.Partial("_CreateOrUpdate", Model)
+}
+@Html.DeleteConfirmation("newsitem-delete")

@@ -1,0 +1,85 @@
+﻿@model CategoryModel
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_Layout.cshtml";
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(categoryUrl);
+    }
+
+    var breadcrumbDelimiter = EngineContext.Current.Resolve<CommonSettings>().BreadcrumbDelimiter;
+
+    //current category ID
+    int currentCategoryId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("catalog", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("category", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentCategoryId = Convert.ToInt32(Url.RequestContext.RouteData.Values["categoryId"].ToString());
+    }
+
+    //current product ID
+    int currentProductId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("product", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("productdetails", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentProductId = Convert.ToInt32(Url.RequestContext.RouteData.Values["productId"].ToString());
+    }
+}
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@*category breadcrumb*@
+
+<div id="sidenav">
+    <ul class="sale">
+        @Html.Action("CategoryNavigation", "Catalog", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
+    </ul>
+</div>
+<!--end-->
+<!--右边-->
+<div class="grid_38">
+    @if (Model.PictureModel != null && !string.IsNullOrEmpty(Model.PictureUrl))
+    {
+        <div class="right_top_pic">
+            <a href="@Model.PictureUrl" title=""><img src="@Model.PictureModel.FullSizeImageUrl" /></a>
+        </div>
+    }
+    <ul class="list_display">
+        @foreach (var product in Model.Products)
+        {
+            <li>
+                <a class="imgd" href="@Url.RouteUrl("Product", new { SeName = product.SeName })" target="_blank">
+                    <img src="@product.DefaultPictureModel.ImageUrl" alt="" />
+                </a>
+                <span class="productname">@(product.Name.Length > 17 ? product.Name.Substring(0, 17) : product.Name)</span><br />
+                <span class="hidden" style="display: inline;">
+                    @if (!String.IsNullOrEmpty(product.ProductPrice.OldPrice))
+                    {
+                        <span class="activities">
+                            <span>@product.ProductPrice.OldPrice</span>
+                        </span> @Html.Raw("&nbsp; &nbsp;")
+                        <span>优惠价</span>
+                    }
+                    <span>
+                        <span>@product.ProductPrice.Price</span>
+                    </span>
+                </span>
+            </li>
+        }
+    </ul>
+    @{
+        var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+    }
+    @if (!pager.IsEmpty())
+    {
+        <div class="pages">
+            @pager
+        </div>
+    }
+</div>

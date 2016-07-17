@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    ViewBag.Title = "路过麦田";
+}
+@section sec_head{
+    <script type="text/javascript" src="/scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/content/custom/js/banner.js"></script>
+}
+@section heads_before{
+    <div class="advier" style="display:none;"><a href="javascript:void(0);">x</a></div>
+}
+@section sec_body{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".advier a").click(function () {
+                $(".advier").slideUp("slow");
+            });
+            if ($.cookie('advier_auto_open') == null) { //一天以内只自动显示一次
+                setTimeout(function () { $(".advier").slideUp("slow"); }, 10000);
+                $.cookie('advier_auto_open', 'advier_had_auto_open', { expires: 1 });
+            }
+            $("#how_to_booking").click(function () {
+                $(".advier").slideDown("slow");
+            });
+        });
+    </script>
+}
+<div class="index_banner">
+    <div id="banner">
+        <div class="slides">
+            <ul class="slide-pic">
+                <li class="cur"><img alt="" src="/content/custom/images/5.jpg" /></li>
+                <li><img alt="" src="/content/custom/images/4.jpg" /></li>
+            </ul>
+            <ul class="slide-li op">
+                <li class=""></li>
+                <li class="cur"></li>
+            </ul>
+            <ul class="slide-li slide-txt">
+                <li class=""><a href="#"></a></li>
+                <li class="cur"><a href="#"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <h1>享受乐趣</h1>
+        <span>向2000家客户提供个性化窗帘装饰</span>
+        <p><em></em><a id="how_to_booking" href="javascript:void(0);">如何预约</a></p>
+    </div>
+    @Html.Action("SearchForm", "Catalog")
+</div>
+<div id="wrap">
+    @Html.Action("HomepageProductGroup", "Product")
+    @Html.Action("HomepageProductTags", "Catalog")
+</div>
+<div class="index_third">
+    <img src="/content/custom/images/12.jpg">
+</div>
+<div class="index_four">
+    <div class="content">
+        <h1>以快速便捷美观为基础的订购方式</h1>
+        <ul>
+            <li>
+                <img src="/content/custom/images/index_1.png">
+                <p>实景设计</p>
+                <span>制作前我们将根据您所选的花色进行实景照片设计供您参考。<a href="#">了解更多</a></span>
+            </li>
+            <li>
+                <img src="/content/custom/images/index_2.png">
+                <p>实景设计</p>
+                <span>制作前我们将根据您所选的花色进行实景照片设计供您参考。<a href="#">了解更多</a></span>
+            </li>
+            <li>
+                <img src="/content/custom/images/index_3.png">
+                <p>实景设计</p>
+                <span>制作前我们将根据您所选的花色进行实景照片设计供您参考。<a href="#">了解更多</a></span>
+            </li>
+        </ul>
+    </div>
+</div>
+

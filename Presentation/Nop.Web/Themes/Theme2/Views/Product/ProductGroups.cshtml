@@ -1,0 +1,60 @@
+﻿@model ProductGroupsModel
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.Search").Text);
+}
+@section sec_head{
+}
+
+<div id="wrap">
+    <div class="shop_type">
+        @using (Html.BeginForm("ProductGroups", "Product", FormMethod.Get, new { id = "search-form" }))
+        {
+            <div class="search">
+                @Html.DropDownListFor(model => model.tid, Model.AvailableTags)
+                <input type="submit" value="搜 索" class="butn" />
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $("#@Html.FieldIdFor(model => model.tid)").change(function () {
+                        $("#search-form").submit();
+                    });
+                });
+            </script>
+        }
+        <h3>@Html.Raw(Model.ProductGroups.Count > 0 ? "以下是我们精心为您设计的所有搭配" : "暂无相关搭配 :(")</h3>
+        <ul class="type_list">
+            @foreach (var productGroup in Model.ProductGroups)
+            {
+                <li>
+                    <img src="@productGroup.PictureUrl" />
+                    <p>@productGroup.Name</p>
+                    <span>@(productGroup.Description.Length > 60 ? productGroup.Description.Substring(0, 57) + "..." : productGroup.Description)</span>
+                    <a href="/product/productGroup?id=@productGroup.Id">详情</a>
+                </li>
+            }
+        </ul>
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber").RenderEmptyParameters(true);
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pages">
+                @pager
+            </div>
+        }
+        @*<div class="pages">
+                <ul>
+                    <li class="pg-prev pg-disabled">上一页</li>
+                    <li class="pg-current">1</li>
+                    <li class="">2</li>
+                    <li class="">3</li>
+                    <li class="">4</li>
+                    <li class="">5</li>
+                    <li class="pg-next">下一页</li>
+                </ul>
+            </div>*@
+    </div>
+</div>

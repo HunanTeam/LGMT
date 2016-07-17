@@ -1,0 +1,407 @@
+﻿@model IList<ProductDetailsModel.ProductAttributeModel>
+@using Nop.Web.Models.Catalog;
+@using Nop.Core.Domain.Catalog;
+@using Nop.Core.Infrastructure;
+@using System.Text;
+@using System.Globalization;
+@using Nop.Services.Security;
+
+@{
+    var priceAttributeScripts = new StringBuilder();
+    var productId = Model.Any() ? Model.First().ProductId : 0;
+    var priceAdjustmentTableName = string.Format("priceAdjustmentTable_{0}", productId);
+    var priceAdjustmentFuncName = string.Format("adjustPrice_{0}", productId);
+}
+
+@*尺寸，款式*@
+@helper attrHtml1(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+    <label>
+        @textPrompt
+    </label>
+    if (!string.IsNullOrEmpty(attribute.Description))
+    {
+        <div class="des">
+            @Html.Raw(attribute.Description)
+        </div>
+    }
+    <p data-id="attr_@(attribute.Id)">
+        @foreach (var attributeValue in attribute.Values)
+        {
+            var attributeName = attributeValue.Name;
+            priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
+            <label for="@(controlId)_@(attributeValue.Id)">
+                <span data-id="@(controlId)_@(attributeValue.Id)" @(attributeValue.IsPreSelected ? @Html.Raw(" class=\"select\"") : null)>@attributeValue.Name</span>
+                <input id="@(controlId)_@(attributeValue.Id)" style="display:none;" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+            </label>
+
+        }
+    </p>
+}
+
+@*颜色*@
+@helper attrHtml2(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+    <label>
+        @textPrompt
+    </label>
+    if (!string.IsNullOrEmpty(attribute.Description))
+    {
+        <div class="des">
+            @Html.Raw(attribute.Description)
+        </div>
+    }
+    <p class="colors" data-id="attr_@(attribute.Id)">
+        @foreach (var attributeValue in attribute.Values)
+        {
+            var attributeName = attributeValue.Name;
+            priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
+            <label for="@(controlId)_@(attributeValue.Id)" style="width:auto;">
+                <span data-id="@(controlId)_@(attributeValue.Id)" style="background: @(attributeValue.ColorSquaresRgb)" @(attributeValue.IsPreSelected ? @Html.Raw(" class=\"select\"") : null)>@attributeName</span>
+                <input id="@(controlId)_@(attributeValue.Id)" style="display:none;" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+            </label>
+        }
+    </p>
+}
+
+@*房间*@
+@helper attrHtml3(List<ProductDetailsModel.ProductAttributeModel> attributes, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    <label>房间</label>
+    <p>
+        @foreach (var attribute in attributes)
+        {
+            string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+            priceAttributeScripts.AppendFormat("$('#{0}').change(function(){{{1}();}});\n", controlId, priceAdjustmentFuncName);
+            <select name="@(controlId)" id="@(controlId)">
+                @if (!attribute.IsRequired)
+                {
+                    <option value="0">---</option>
+                }
+                @foreach (var attributeValue in attribute.Values)
+                {
+                    var attributeName = attributeValue.Name;
+                    <option selected="@attributeValue.IsPreSelected" value="@attributeValue.Id">@attributeName</option>
+                }
+            </select>
+        }
+    </p>
+}
+
+@*加购窗帘*@
+@helper attrHtml5(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+    <label>
+        加购窗帘
+    </label>
+    if (!string.IsNullOrEmpty(attribute.Description))
+    {
+        <div class="des">
+            @Html.Raw(attribute.Description)
+        </div>
+    }
+    <p>
+        @foreach (var attributeValue in attribute.Values)
+        {
+            var attributeName = attributeValue.Name;
+            priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
+            <input id="@(controlId)_@(attributeValue.Id)" type="checkbox" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" @(attribute.AttributeControlType == AttributeControlType.ReadonlyCheckboxes ? Html.Raw(" disabled=\"disabled\"") : null) />
+            <label for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+        }
+    </p>
+}
+
+@*加购*@
+@helper attrHtml6(List<ProductDetailsModel.ProductAttributeModel> attributes, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    <label>加购</label>
+    <p>
+        @foreach (var attribute in attributes)
+        {
+            string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+            foreach (var attributeValue in attribute.Values)
+            {
+                var attributeName = attributeValue.Name;
+                priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
+                <input id="@(controlId)_@(attributeValue.Id)" type="checkbox" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" @(attribute.AttributeControlType == AttributeControlType.ReadonlyCheckboxes ? Html.Raw(" disabled=\"disabled\"") : null) />
+                <label class="em" for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+            }
+        }
+    </p>
+}
+
+@*加购帘头*@
+@helper attrHtml7(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+    <label>
+        加购帘头
+    </label>
+    if (!string.IsNullOrEmpty(attribute.Description))
+    {
+        <div class="des">
+            @Html.Raw(attribute.Description)
+        </div>
+    }
+    <p data-id="attr_@(attribute.Id)">
+        @foreach (var attributeValue in attribute.Values)
+        {
+            var attributeName = attributeValue.Name;
+            priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
+            <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+            <label class="em" for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+        }
+    </p>
+    @*<script type="text/javascript">
+            $(':checkbox[name=@(controlId)]').each(function(){
+                $(this).click(function(){
+                    if($(this).attr('checked')){
+                        $(':checkbox[name=@(controlId)]').removeAttr('checked');
+                        $(this).attr('checked','checked');
+                    }
+                });
+            });
+        </script>*@
+}
+
+@*尺寸（长度，高度）*@
+@helper attrHtml8(List<ProductDetailsModel.ProductAttributeModel> attributes, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
+{
+    <label style="margin-top: 10px">尺寸</label>
+    <p style="margin-top: 10px">
+        @foreach (var attribute in attributes)
+        {
+            if (attribute != null)
+            {
+                string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+                <label style="padding-right:5px">@attribute.Name</label>
+                <input name="@(controlId)" type="text" class="textbox" maxlength="3" id="@(controlId)" value="@attribute.DefaultValue" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" style="height:28px; line-height:28px; border:1px solid #ddd; width:60px; text-align:center; margin-top:0px" />
+                <label style="padding-left:5px; padding-right:20px;">cm</label>
+            }
+        }
+    </p>
+}
+
+@if (Model.Count > 0)
+{
+    var attribute = Model.FirstOrDefault(m => m.Name == "尺寸");
+    if (attribute != null)
+    {
+        <li>@attrHtml1(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.TextPrompt == "款式");
+    if (attribute != null)
+    {
+        <li>@attrHtml1(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.Name == "颜色");
+    if (attribute != null)
+    {
+        <li>@attrHtml2(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.Name == "房间");
+    var attribute2 = Model.FirstOrDefault(m => m.Name == "序号");
+    if (attribute != null && attribute2 != null)
+    {
+        <li>@attrHtml3(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.Name == "轨道");
+    attribute2 = Model.FirstOrDefault(m => m.Name == "窗纱");
+    var attribute3 = Model.FirstOrDefault(m => m.Name == "遮光布");
+    if (attribute != null && attribute2 != null && attribute3 != null)
+    {
+        <li>@attrHtml6(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2, attribute3 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.Name == "帘头");
+    if (attribute != null)
+    {
+        <li>@attrHtml7(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    attribute = Model.FirstOrDefault(m => m.Name == "长度");
+    attribute2 = Model.FirstOrDefault(m => m.Name == "高度");
+    if (attribute != null || attribute2 != null)
+    {
+        <li>@attrHtml8(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+    }
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("p[data-id]").delegate('input', 'click', function(event) {
+                $(this).closest('p').find("span").removeClass('select');
+                $("span[data-id='"+$(this).attr("id")+"']").addClass('select');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        //Price adjustment function
+        function @(priceAdjustmentFuncName)() {
+            $.ajax({
+                cache: false,
+                url: '@Url.Action("ProductDetails_AttributeChange", "ShoppingCart", new {productId = productId})',
+                data: $('#product-details-form').serialize(),
+                type: 'post',
+                success: function(data) {
+                    if (data.price) {
+                        $(".price-value-@(productId)").text(data.price);
+                    }
+                }
+            });
+        }
+        //Price attributes handlers
+        $(document).ready(function() {
+            @(priceAdjustmentFuncName)();
+            @Html.Raw(priceAttributeScripts.ToString())
+        });
+    </script>
+}
+
+@if (Model.Count > 0)
+{
+    //attribute picture update
+    var pictureAdjustmentTableScripts = new StringBuilder();
+    var pictureAttributeScripts = new StringBuilder();
+    string pictureAdjustmentTableName = "";
+    string pictureAdjustmentFuncName = "";
+    string pictureDefaultSizePrefix = "defaultsize";
+    string pictureFullSizePrefix = "fullsize";
+    var pictureSizes = new[] { pictureDefaultSizePrefix, pictureFullSizePrefix };
+    foreach (var attribute in Model)
+    {
+        string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+
+        pictureAdjustmentTableName = string.Format("productAttributeValueAdjustmentTable_{0}", attribute.ProductId);
+        pictureAdjustmentFuncName = string.Format("adjustProductAttributeValuePicture_{0}", attribute.ProductId);
+
+        switch (attribute.AttributeControlType)
+        {
+            case AttributeControlType.DropdownList:
+                {
+                    pictureAttributeScripts.AppendFormat("$('#{0}').change(function(){{{1}('{2}',{3});}});\n", controlId, pictureAdjustmentFuncName, controlId, attribute.ProductId);
+
+                    foreach (var pictureSize in pictureSizes)
+                    {
+                        pictureAdjustmentTableScripts.AppendFormat("{0}['{1}_{2}'] = new Array(", pictureAdjustmentTableName, controlId, pictureSize);
+                        int numberOfJsArrayItems = 0;
+                        if (!attribute.IsRequired)
+                        {
+                            pictureAdjustmentTableScripts.AppendFormat(CultureInfo.InvariantCulture, "'{0}',", "");
+                            numberOfJsArrayItems++;
+                        }
+                        foreach (var attributeValue in attribute.Values)
+                        {
+                            var pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            if (pictureSize == pictureDefaultSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            }
+                            else if (pictureSize == pictureFullSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.FullSizeImageUrl;
+                            }
+
+                            pictureAdjustmentTableScripts.AppendFormat(CultureInfo.InvariantCulture, "'{0}',", pictureUrl);
+                            numberOfJsArrayItems++;
+                        }
+                        //If you create an array with a single numeric parameter, that number is used for specifying the number of elements in this array.
+                        //so have a little hack here (we need at least two elements)
+                        if (numberOfJsArrayItems == 1)
+                        {
+                            pictureAdjustmentTableScripts.AppendFormat(CultureInfo.InvariantCulture, "'{0}',", "");
+                        }
+                        pictureAdjustmentTableScripts.Length -= 1;
+                        pictureAdjustmentTableScripts.Append(");\n");
+                    }
+                }
+                break;
+            case AttributeControlType.RadioList:
+            case AttributeControlType.ColorSquares:
+                {
+                    foreach (var attributeValue in attribute.Values)
+                    {
+                        pictureAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}('{3}_{4}',{5});}});\n", controlId, attributeValue.Id, pictureAdjustmentFuncName, controlId, attributeValue.Id, attribute.ProductId);
+                        foreach (var pictureSize in pictureSizes)
+                        {
+                            var pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            if (pictureSize == pictureDefaultSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            }
+                            else if (pictureSize == pictureFullSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.FullSizeImageUrl;
+                            }
+                            pictureAdjustmentTableScripts.AppendFormat(CultureInfo.InvariantCulture, "{0}['{1}_{2}_{3}'] = '{4}';\n", pictureAdjustmentTableName, controlId, attributeValue.Id, pictureSize, pictureUrl);
+                        }
+                    }
+                }
+                break;
+            case AttributeControlType.Checkboxes:
+            case AttributeControlType.ReadonlyCheckboxes:
+                {
+                    foreach (var attributeValue in attribute.Values)
+                    {
+                        pictureAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}('{3}_{4}',{5});}});\n", controlId, attributeValue.Id, pictureAdjustmentFuncName, controlId, attributeValue.Id, attribute.ProductId);
+                        foreach (var pictureSize in pictureSizes)
+                        {
+                            var pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            if (pictureSize == pictureDefaultSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.ImageUrl;
+                            }
+                            else if (pictureSize == pictureFullSizePrefix)
+                            {
+                                pictureUrl = attributeValue.PictureModel.FullSizeImageUrl;
+                            }
+                            pictureAdjustmentTableScripts.AppendFormat(CultureInfo.InvariantCulture, "{0}['{1}_{2}_{3}'] = '{4}';\n", pictureAdjustmentTableName, controlId, attributeValue.Id, pictureSize, pictureUrl);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (!String.IsNullOrEmpty(pictureAttributeScripts.ToString()))
+    {
+        <script type="text/javascript">
+
+            //Picture adjustment table
+            var @(pictureAdjustmentTableName) = new Array();
+            //Picture adjustment table initialize
+            @Html.Raw(pictureAdjustmentTableScripts.ToString())
+            //Picture adjustment function
+            function @(pictureAdjustmentFuncName)(controlId, productId) {
+                var ctrl = $('#' + controlId);
+                var pictureDefaultSizeUrl = '';
+                var pictureFullSizeUrl = '';
+                if((ctrl.is(':radio') && ctrl.is(':checked')) || (ctrl.is(':checkbox') && ctrl.is(':checked'))) {
+                    pictureDefaultSizeUrl = @(pictureAdjustmentTableName)[controlId + '_@(pictureDefaultSizePrefix)'];
+                    pictureFullSizeUrl = @(pictureAdjustmentTableName)[controlId + '_@(pictureFullSizePrefix)'];
+                } else if(ctrl.is('select')) {
+                    var idx = $('#' + controlId + " option").index($('#' + controlId + " option:selected"));
+                    if(idx != -1) {
+                        pictureDefaultSizeUrl = @(pictureAdjustmentTableName)[controlId + '_@(pictureDefaultSizePrefix)'][idx];
+                        pictureFullSizeUrl = @(pictureAdjustmentTableName)[controlId + '_@(pictureFullSizePrefix)'][idx];
+                    }
+                }
+                if (typeof pictureDefaultSizeUrl == 'string' && pictureDefaultSizeUrl != '') {
+                    $('#main-product-img-' + productId).attr("src", pictureDefaultSizeUrl);
+                }
+                if (typeof pictureFullSizeUrl == 'string' && pictureFullSizeUrl != '') {
+                    $('#main-product-img-lightbox-anchor-' + productId).attr("href", pictureFullSizeUrl);
+                }
+            }
+            // Picture attributes handlers
+            $(document).ready(function() {
+                @Html.Raw(pictureAttributeScripts.ToString())
+            });
+        </script>
+    }
+}

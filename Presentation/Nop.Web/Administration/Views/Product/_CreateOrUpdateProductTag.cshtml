@@ -1,0 +1,51 @@
+﻿@model ProductTagModel
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+@if (ViewBag.RefreshPage == true)
+{
+    <script type="text/javascript">
+        try {
+            window.opener.document.forms['@(ViewBag.formId)'].@(ViewBag.btnId).click();         
+        }
+        catch (e) { }
+        window.close();
+    </script>
+}
+<table class="adminContent">
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.Name):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            图片:
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.PictureId)
+            @Html.ValidationMessageFor(model => model.PictureId)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            推荐:
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(x => x.Recommended)
+            @Html.ValidationMessageFor(model => model.Recommended)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            排序:
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.DisplayOrder)
+            @Html.ValidationMessageFor(model => model.DisplayOrder)
+        </td>
+    </tr>
+</table>

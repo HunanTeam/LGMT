@@ -1,0 +1,19 @@
+﻿@model TopMenuModel
+@using Nop.Web.Models.Catalog;
+
+<ul id="nav">
+    @{
+        var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+    }
+    @foreach (var category in rootCategories)
+    {
+        <li><a href="@Url.RouteUrl("Category", new { SeName = category.SeName })">@category.Name</a><span>|</span></li>
+    }
+    <li><a href="@Url.Action("productgroups", "product")">简单购</a></li>
+</ul>
+
+
+
+
+
+

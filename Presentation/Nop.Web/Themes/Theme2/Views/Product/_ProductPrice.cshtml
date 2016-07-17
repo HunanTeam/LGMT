@@ -1,0 +1,21 @@
+﻿@model ProductDetailsModel.ProductPriceModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+@using System.Globalization;
+@using System.Text.RegularExpressions;
+@{
+    var dynamicPriceUpdate = EngineContext.Current.Resolve<CatalogSettings>().EnableDynamicPriceUpdate;
+    var dynamicPriceUpdateAjax = EngineContext.Current.Resolve<CatalogSettings>().DynamicPriceUpdateAjax;
+    var dynamicPriceUpdateSupported = dynamicPriceUpdate && !dynamicPriceUpdateAjax;
+    string dynamicPriceReplacement = String.Format("<span class=\"price-val-for-dyn-upd-{0}\">${{val}}</span> ", Model.ProductId);
+}
+@if (dynamicPriceUpdateSupported)
+{
+    <script type="text/javascript">
+        var priceValForDynUpd_@(Model.ProductId) = @(((float)(Model.PriceValue != Model.PriceWithDiscountValue ? Model.PriceWithDiscountValue : Model.PriceValue)).ToString(new CultureInfo("en-US")));
+    </script>
+}
+<li><label>价格</label><p><b><font class="price-value-@(Model.ProductId)">@Html.Raw(Model.Price)</font></b></p></li>

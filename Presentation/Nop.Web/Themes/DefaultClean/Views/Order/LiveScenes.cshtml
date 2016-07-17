@@ -1,0 +1,27 @@
+﻿@model OrderDetailsModel
+@using Nop.Web.Models.Order
+
+@if (Model.LiveScenes.Count > 0)
+{
+    <div class="uploads">
+        <h1>实景设计</h1>
+        <div class="upload_pic">
+            <h2>实景图</h2>
+            <ul>
+                @foreach (var lc in Model.LiveScenes)
+                {
+                    <li><p>@lc.Room  @lc.Window</p><img src="@lc.OriginalPictureUrl"></li>
+                }
+            </ul>
+        </div>
+        <div class="upload_pic">
+            <h2>设计图</h2>
+            <ul>
+                @foreach (var lc in Model.LiveScenes)
+                {
+                    <li><img src="@lc.EffectPictureUrl"></li>
+                }
+            </ul>
+        </div>
+    </div>
+}

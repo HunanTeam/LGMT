@@ -1,0 +1,88 @@
+﻿@model OrderDetailsModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Order
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderDetails").Text);
+}
+@section sec_head{
+    <script src="/Scripts/jquery.form.js" type="text/javascript"></script>
+    <script src="/Scripts/laydate/laydate.js" type="text/javascript"></script>
+}
+@section sec_body{
+    <script type="text/javascript">
+        function fileChange(target) {
+            //检测上传文件的类型
+            var imgName = target.value;
+            var ext, idx;
+            if (imgName == '') {
+                alert("请选择需要上传的文件!");
+                return;
+            } else {
+                idx = imgName.lastIndexOf(".");
+                if (idx != -1) {
+                    ext = imgName.substr(idx + 1).toUpperCase();
+                    ext = ext.toLowerCase();
+                    // alert("ext="+ext);
+                    if (ext != 'jpg' && ext != 'png' && ext != 'jpeg' && ext != 'gif') {
+                        alert("只能上传.jpg  .png  .jpeg  .gif类型的文件!");
+                        return;
+                    }
+                } else {
+                    alert("只能上传.jpg  .png  .jpeg  .gif类型的文件!");
+                    return;
+                }
+            }
+        }
+
+        $(function () {
+            laydate({
+                elem: '#booking_date', //需显示日期的元素选择器
+                event: 'click',
+                format: 'YYYY-MM-DD',
+                min: '@DateTime.Now.ToString("yyyy-MM-dd")',
+            });
+        });
+    </script>
+}
+<div id="wrap">
+    <div class="account">
+        @Html.Action("CustomerMenu", "Customer")
+    </div>
+    <div class="order">
+        @using (Html.BeginForm("OrderStep2Submit", "Order", new { orderId = Model.Id }, FormMethod.Post, new { id = "order-form" }))
+        {
+            @Html.Partial("OrderNumber", Model)
+            @Html.Partial("OrderProgress", OrderStep.ConfirmBooking)
+            @Html.Partial("LiveScenes", Model)
+            @Html.Partial("OrderItems", Model)
+            @Html.Partial("OrderAddress", Model)
+            <div class="date">
+                <h1>预约时间</h1>
+                <div class="infor">
+                    <label>日期</label>
+                    <input id="booking_date" type="text" name="bookingDate" readonly="readonly">
+                    <select name="bookingTime"><option value="am">上午</option><option value="pm">下午</option></select>
+                </div>
+            </div>
+            <div class="submission">
+                <a href="javascript:void(0);" class="submit">确定预约</a>
+                <script type="text/javascript">
+                    $(".submit").click(function () {
+                        if ($("input[name='selectedOrderItems']:checked").length == 0) {
+                            layer.msg('请至少勾选一件商品进行预约!', function () { });
+                            return;
+                        }
+                        if ($("#booking_date").val() == "") {
+                            layer.msg('请填写预约时间', function () { });
+                            $("#booking_date").click();
+                            return;
+                        }
+                        $("#order-form").submit();
+                    });
+                </script>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@model ShoppingCartModel
+@using Nop.Core
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.ShoppingCart;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+}
+<div id="wrap">
+    <div class="order">
+        @Html.Partial("CartItems", Model)
+        <div class="submission">
+            <a href="@Url.Action("StartOrder")" class="submit">开始预约</a>
+        </div>
+    </div>
+</div>

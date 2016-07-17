@@ -1,0 +1,16 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+
+<a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+    <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+</a>
+<a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })"><p>@Model.Name</p></a>
+@if (!string.IsNullOrEmpty(Model.ShortDescription))
+{
+    var shortDes = Model.ShortDescription.Length > 28 ? Model.ShortDescription.Substring(0, 25) + "..." : Model.ShortDescription;
+    <span>@(shortDes)</span>
+}

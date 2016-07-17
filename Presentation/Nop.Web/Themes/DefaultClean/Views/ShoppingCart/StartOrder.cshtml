@@ -1,0 +1,271 @@
+﻿@model StartOrderModel
+@using Nop.Core;
+@using Nop.Core.Domain.Orders;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.ShoppingCart;
+@using Nop.Web.Models.Checkout;
+@using Nop.Web.Models.Order;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+}
+@section sec_head{
+    <script src="/Scripts/jquery.form.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.cityselect.js" type="text/javascript"></script>
+    <script src="/Scripts/laydate/laydate.js" type="text/javascript"></script>
+}
+@section sec_body{
+    <script type="text/javascript">
+        function validOrder() {
+            var orderStep = $("#orderStep").val();
+            if (orderStep == "@((int)OrderStep.MeasureForPrice)") {
+                if ($("#booking_date").val() == "") {
+                    layer.msg('请填写预约时间', function () { });
+                    $("#booking_date").click();
+                    return false;
+                }
+            }
+            var username = $("#@Html.IdFor(model=>model.Name)").val();
+            if (username == "") {
+                layer.msg('请填写姓名', function () { });
+                $("#@Html.IdFor(m => m.Name)").focus();
+                return false;
+            }
+            var phone = $("#@Html.IdFor(model=>model.Phone)").val();
+            if (phone == "") {
+                layer.msg('请填写手机号码', function () { });
+                $("#@Html.IdFor(m => m.Phone)").focus();
+                return false;
+            }
+            if (!/^[1]+[3,5,8,4,6,9]+\d{9}$/.test(phone)) {
+                layer.msg('手机号码格式不正确', function () { });
+                $("#@Html.IdFor(m => m.Phone)").focus();
+                return;
+            }
+            @if (!Model.CustomerIsRegistered)
+            {
+            <text>
+            var password = $("#@Html.IdFor(model => model.Password)").val();
+            if (password == "") {
+                layer.msg('请填写密码', function () { });
+                $("#@Html.IdFor(model => model.Password)").focus();
+                return;
+            }
+            if (password.length < 6) {
+                layer.msg('密码长度不能小于6位', function () { });
+                $("#@Html.IdFor(m => m.Password)").focus();
+                return;
+            }
+            </text>
+            }
+            var addressDetail = $("#@Html.IdFor(model=>model.AddressDetail)").val();
+            if (addressDetail == "") {
+                layer.msg('请填写详细地址', function () { });
+                $("#@Html.IdFor(m => m.AddressDetail)").focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        function submitOrder() {
+            if (validOrder()) {
+                $("#order-form").ajaxSubmit({
+                    url: "@Url.Action("StartOrderSubmit","ShoppingCart")",
+                    success: function (data) {
+                        if (data.success)
+                            document.location.href = "@Url.Action("StepInfo", "Order")?orderId=" + data.orderId;
+                        else
+                            layer.alert(data.message, { icon: 7 });
+                    }
+                });
+            }
+        }
+
+        $(function () {
+            $("#citySelect").citySelect({
+                prov: "湖南",
+                city: "@(string.IsNullOrEmpty(Model.City) ? "长沙" : Model.City)",
+                dist: "@(string.IsNullOrEmpty(Model.District) ? "芙蓉区" : Model.District)",
+                nodata: "none"
+            });
+
+            laydate({
+                elem: '#booking_date', //需显示日期的元素选择器
+                event: 'click',
+                format: 'YYYY-MM-DD',
+                min: '@DateTime.Now.ToString("yyyy-MM-dd")',
+            });
+
+            $("#btn_upload").click(function () {
+                $("#orderStep").val("@((int)OrderStep.Pending)");
+                $("#btn_submit").html("提交心愿单");
+            });
+
+            $("#btn_upload_after").click(function () {
+                $("#orderStep").val("@((int)OrderStep.Pending)");
+                $("#btn_submit").html("保存心愿单");
+            });
+
+            $("#btn_book").click(function () {
+                layer.msg('跳过此步骤后，您将无法上传实景图片获得我们为您免费设计的效果图，我们将直接安排师傅上门为您测量，您确定要跳过此步骤吗？', {
+                    time: 0
+                  , btn: ['确定', '不跳过']
+                  , yes: function (index) {
+                      $("#orderStep").val("@((int)OrderStep.MeasureForPrice)");
+                      $('#upload_img').slideUp("fast");
+                      $("#booking_date_aera").show();
+                      $("#btn_no_upload").hide();
+                      $("#btn_need_upload").show();
+                      $("#btn_submit").html("提交预约");
+                      layer.close(index);
+                  }
+                });
+            });
+
+            $("#btn_upload").click(function () {
+                $("#orderStep").val("@((int)OrderStep.ConfirmBooking)");
+                $('#upload_img').slideDown("fast");
+                $("#booking_date_aera").hide();
+                $("#btn_no_upload").show();
+                $("#btn_need_upload").hide();
+                $("#btn_submit").html("提交心愿单");
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function fileChange(target) {
+            var imgName = target.value;
+            var ext, idx;
+            if (imgName == '') {
+                alert("请选择需要上传的文件!");
+                return;
+            } else {
+                idx = imgName.lastIndexOf(".");
+                if (idx != -1) {
+                    ext = imgName.substr(idx + 1).toUpperCase();
+                    ext = ext.toLowerCase();
+                    if (ext != 'jpg' && ext != 'png' && ext != 'jpeg' && ext != 'gif') {
+                        layer.msg('只能上传.jpg  .png  .jpeg  .gif类型的图片文件!', function () { });
+                        target.value = "";
+                        return false;
+                    }
+                } else {
+                    layer.msg('只能上传.jpg  .png  .jpeg  .gif类型的图片文件!', function () { });
+                    target.value = "";
+                    return false;
+                }
+            }
+
+            //检测上传文件的大小
+            //var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
+            //var fileSize = 0;
+            //if (isIE && !target.files) {
+            //    var filePath = target.value;
+            //    var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+            //    var file = fileSystem.GetFile(filePath);
+            //    fileSize = file.Size;
+            //} else {
+            //    fileSize = target.files[0].size;
+            //}
+
+            //var size = fileSize / 1024 * 1024;
+            ////alert(size);
+            //if (size > (1024 * 8)) {
+            //    alert("文件大小不能超过800KB");
+            //} else {
+
+            //}
+        }
+    </script>
+}
+<div id="wrap">
+    @using (Html.BeginForm("StartOrderSubmit", "ShoppingCart", FormMethod.Post, new { id = "order-form" }))
+    {
+        <div class="order">
+            @Html.Partial("OrderProgress", OrderStep.Pending)
+            @Html.Action("CartItems")
+            <div class="uploads">
+                <p style="line-height:26px; font-size:12px;">给卖家留言：</p>
+                <textarea name="CustomerNote" style="width:100%;height:100px;"></textarea>
+            </div>
+            <div class="uploads">
+                <h1>上传实景  免费设计</h1>
+                <div id="upload_img" class="upload_img" style="border-bottom:0px;">
+                    <div class="fl">
+                        <h2>您的心愿单内有以下房间可以上传图片进行设计</h2>
+                        <div class="up_load">
+                            @foreach (var item in Model.LiveScenes)
+                            {
+                                <p>
+                                    <span>@item.Room</span><span>@item.Window</span>
+                                    <a href="javascript:void(0);"><input name="LiveScene_@item.OrderItemId" type="file" onchange="fileChange(this)" /></a>
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    <div class="fr">
+                        <p>
+                            TIPS:您可以在此步骤上传实景照片，如果没有实景照片，您也可以点击“以后上传”进行订单保存，随后在我的账户订单中可以再次进行实景照片的上传。
+                        </p>
+                        @*<a id="btn_upload" href="javascript:void(0)">上传</a><a id="btn_upload_after" href="javascript:void(0)">以后上传</a>*@
+                    </div>
+                </div>
+                @*<div class="note"><a id="btn_book" href="javascript:void(0)">跳过此步骤，直接预约</a></div>*@
+                <div id="btn_no_upload" class="note" style="border-top: 1px solid #ddd;"><a id="btn_book" href="javascript:void(0)">跳过此步骤，直接预约</a></div>
+                <div id="btn_need_upload" class="note" style="display: none; border-top: 1px solid #ddd;"><a id="btn_upload" href="javascript:void(0)">上传实景图，享受免费设计</a></div>
+            </div>
+            <div id="booking_date_aera" class="date" style="display:none;">
+                <h1>预约时间</h1>
+                <div class="infor">
+                    <label>日期</label>
+                    <input id="booking_date" type="text" name="bookingDate" readonly="readonly">
+                    <select name="bookingTime"><option value="am">上午</option><option value="pm">下午</option></select>
+                </div>
+            </div>
+            <div class="confirmation">
+                <h1>预约信息</h1>
+                <div class="infor">
+                    <ul>
+                        <li>
+                            <label>姓 名</label>@Html.TextBoxFor(model => model.Name)
+                            @if (!Model.CustomerIsRegistered)
+                            {
+                                <label>性 别</label>
+                                <input type="radio" name="@Html.NameFor(model => model.Gender)" class="radio" value="男" checked="checked"><span style="padding-right:20px; color:#333">男</span>
+                                <input type="radio" name="@Html.NameFor(model => model.Gender)" class="radio" value="女"><span style="color:#333">女</span>
+                            }
+                        </li>
+                        <li>
+                            <label>手 机</label>@Html.TextBoxFor(model => model.Phone, new { maxlength = 11 })
+                            @if (!Model.CustomerIsRegistered)
+                            {
+                                <span>预约提交后，手机即为您在路过麦田的会员账号。</span>
+                            }
+                        </li>
+                        @if (!Model.CustomerIsRegistered)
+                        {
+                            <li>
+                                <label>密 码</label>@Html.PasswordFor(model => model.Password)
+                                <span>请牢记密码，此为往后登录路过麦田的会员密码，并请定期更换密码设定。</span>
+                            </li>
+                        }
+                        <li>
+                            <label>测量地址</label>
+                            <div id="citySelect">
+                                <select class="prov" name="province" style="display:none;"></select>
+                                <select class="city" name="@Html.NameFor(model => model.City)"></select>
+                                <select class="dist" name="@Html.NameFor(model => model.District)"></select>
+                            </div>
+                            @Html.TextBoxFor(model => model.AddressDetail)
+                        </li>
+                        <li>
+                            <input type="hidden" id="orderStep" name="orderStep" value="@((int)OrderStep.Pending)" />
+                            <a id="btn_submit" href="javascript:void(0);" onclick="submitOrder()">提交心愿单</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>

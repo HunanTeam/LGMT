@@ -1,0 +1,30 @@
+﻿@model OrderStep
+@using Nop.Core.Domain.Orders;
+@{
+    var step = Model;
+}
+<div class="process">
+    <ul>
+        <li @if ((int)step >= (int)OrderStep.Pending) { <text> class="over" </text>                   }>
+            <p>1</p><span>&nbsp;</span><em>预选单</em>
+        </li>
+        <li @if ((int)step >= (int)OrderStep.ConfirmBooking) { <text> class="over" </text>                   }>
+            <p>2</p><span>&nbsp;</span><em>确定预约</em>
+        </li>
+        <li @if ((int)step >= (int)OrderStep.MeasureForPrice) { <text> class="over" </text>                   }>
+            <p>3</p><span>&nbsp;</span><em>测量报价</em>
+        </li>
+        @*<li @if ((int)step >= (int)OrderStep.PayDeposit) { <text> class="over" </text>                    }>
+            <p>4</p><span>&nbsp;</span><em>支付定金</em>
+        </li>*@
+        <li @if ((int)step >= (int)OrderStep.ManufactureAndInstallment) { <text> class="over" </text>                   }>
+            <p>4</p><span>&nbsp;</span><em>制作安装</em>
+        </li>
+        @*<li @if ((int)step >= (int)OrderStep.PayBalance) { <text> class="over" </text>                    }>
+            <p>6</p><span>&nbsp;</span><em>支付尾款</em>
+        </li>*@
+        <li @if ((int)step >= (int)OrderStep.Complete) { <text> class="over last" </text>                     } else { <text> class="last" </text>                  }>
+            <p>5</p><span>&nbsp;</span><em>交易完成</em>
+        </li>
+    </ul>
+</div>

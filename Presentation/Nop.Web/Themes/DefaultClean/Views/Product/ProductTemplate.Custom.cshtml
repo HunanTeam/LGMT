@@ -1,0 +1,174 @@
+﻿@model ProductDetailsModel
+@using Nop.Core
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_Layout.cshtml";
+
+    //title, meta
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //current category ID
+    int currentCategoryId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("catalog", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("category", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentCategoryId = Convert.ToInt32(Url.RequestContext.RouteData.Values["categoryId"].ToString());
+    }
+
+    //current product ID
+    int currentProductId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("product", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("productdetails", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentProductId = Convert.ToInt32(Url.RequestContext.RouteData.Values["productId"].ToString());
+    }
+}
+@section sec_head{
+    <script type="text/javascript" src="/content/custom/js/jquery-easing-1.3.pack.js"></script>
+    <script type="text/javascript" src="/content/custom/js/jquery-easing-compatibility.1.2.pack.js"></script>
+    <script type="text/javascript" src="/content/custom/js/coda-slider.1.1.1.pack.js"></script>
+    <link type="text/css" href="/content/custom/css/notification.css" rel="stylesheet" />
+}
+@section heads_before{
+    <div class="ajax-loading-block-window" style="display: none">
+    </div>
+    <div id="dialog-notifications-success" title="通知" style="display:none;">
+    </div>
+    <div id="dialog-notifications-error" title="错误" style="display:none;">
+    </div>
+    <div id="bar-notification" class="bar-notification" style="display:none;">
+        <span class="close" title="关闭">&nbsp;</span>
+    </div>
+}
+@section sec_body{
+    <script type="text/javascript">
+        var IO = document.getElementById('float'), Y = IO, H = 0, IE6;
+        IE6 = window.ActiveXObject && !window.XMLHttpRequest;
+        while (Y) { H += Y.offsetTop; Y = Y.offsetParent };
+        if (IE6)
+            IO.style.cssText = "position:absolute;top:expression(this.fix?(document" +
+              ".documentElement.scrollTop-(this.javascript||" + H + ")):0)";
+        window.onscroll = function () {
+            var d = document, s = Math.max(d.documentElement.scrollTop, document.body.scrollTop);
+            if (s > H && IO.fix || s <= H && !IO.fix) return;
+            if (!IE6) IO.style.position = IO.fix ? "" : "fixed";
+            IO.fix = !IO.fix;
+        };
+        try { document.execCommand("BackgroundImageCache", false, true) } catch (e) { };
+        //]]>
+    </script>
+}
+
+<div id="wrap">
+    <div class="product_details">
+        <div class="first">
+            <div class="fl">
+                <!--product pictures-->
+                @Html.Partial("_ProductDetailsPictures", Model)
+            </div>
+            <div class="fr_01">
+                @using (Html.BeginRouteForm("Product", new { SeName = Model.SeName }, FormMethod.Post, new { id = "product-details-form" }))
+                {
+                    <div class="product_title">
+                        <div id="product_name_area">
+                            <span class="title1">@Model.Name</span>
+                            @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                            {
+                                <br />
+                                <span class="title2">@Model.ShortDescription</span>
+                            }
+                        </div>
+                        <!--price-->
+                        @{
+                            var dataDictPrice = new ViewDataDictionary();
+                            dataDictPrice.TemplateInfo.HtmlFieldPrefix = string.Format("price_{0}", Model.Id);
+                            @Html.Partial("_ProductPrice", Model.ProductPrice, dataDictPrice)
+                        }
+                    </div>
+                    <!--attributes-->
+                    {
+                        var dataDictAttributes = new ViewDataDictionary();
+                        dataDictAttributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", Model.Id);
+                        @Html.Partial("_ProductAttributesCustom", Model.ProductAttributes, dataDictAttributes)
+                    }
+                    <!-- add to cart-->
+                    {
+                        var dataDictAddToCart = new ViewDataDictionary();
+                        dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                        @Html.Partial("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                    }
+                }
+            </div>
+        </div>
+        @Html.Action("RelatedProducts", "Product", new { productId = Model.Id })
+        <div class="third">
+            <!--左边-->
+            <div id="sidenav">
+                <ul class="sale">
+                    @Html.Action("CategoryNavigation", "Catalog", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
+                </ul>
+            </div>
+            <!--end-->
+            <div class="fr">
+                <div class="detail_titles_04">
+                    <ul id="product-taps">
+                        <li class="select" data-show="product-details">商品信息</li>
+                        <li data-show="product-size">尺码信息</li>
+                        <li data-show="chuanglian-peijian">窗帘与配件</li>
+                        @*<li>商品评价</li>*@
+                    </ul>
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#product-taps li").click(function () {
+                                $("#product-taps li").removeClass("select");
+                                $(this).addClass("select");
+                                $(".content").hide();
+                                $("#" + $(this).attr("data-show")).show();
+                            });
+                        });
+                    </script>
+                </div>
+                <div id="product-details" class="content">
+                    <div class="hypostatic_store">
+                        <div class="left_01">
+                            <p>1.深浅色请分开洗涤。</p>
+                            <p>2.请放入细网洗涤袋中弱速水洗，以保持商品型态。</p>
+                            <p>3.洗涤时，水温请低于30℃；请使用中性洗剂；请勿长时间浸泡。</p>
+                            <p>4.请勿使用漂白剂、荧光增白剂及洗涤柔软剂，以免破坏布料。</p>
+                            <p>5.不可湿放，以免窗帘染色；请弱速轻脱水，不可烘干，以免窗帘缩水。</p>
+                            <p>6.如需整烫，请以低温垫布熨烫。</p>
+                        </div>
+                        <div class="right_01">
+                            <img src="/themes/defaultclean/content/images/7.jpg">
+                            <div class="cos_01">
+                                <b>体验店地址：</b>
+                                <p>你可以到韶山南路查看实体店&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">查看地图</a></p>
+                                <span>铁道学院店</span>
+                                @*<a href="#" class="send_01">免费发送地址到手机上</a>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details">
+                        @Html.Raw(Model.FullDescription)
+                    </div>
+                </div>
+                <div id="product-size" class="content" style="display:none">
+                    <div class="details">
+                        @Html.Raw(Model.ExtendInfo1)
+                    </div>
+                </div>
+                <div id="chuanglian-peijian" class="content" style="display:none">
+                    <div class="details">
+                        @Html.Raw(Model.ExtendInfo2)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,291 @@
+﻿@model OrderDetailsModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Order
+<div class="hearts">
+    @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
+    {
+        <h1>预约单<font>*确定您最终需要预约的商品</font></h1>
+    }
+    else if (Model.OrderStepId == (int)OrderStep.MeasureForPrice
+        || Model.OrderStepId == (int)OrderStep.ManufactureAndInstallment
+        || Model.OrderStepId == (int)OrderStep.Complete)
+    {
+        <h1>报价单<font>*这是经过测量后的价格详单</font></h1>
+    }
+    else
+    {
+        <h1>心愿单<font>*您可以预选多款进行设计</font></h1>
+    }
+    @if (Model.Items1.Count > 0)
+    {
+        <div class="table_select">
+            <p class="menus">窗帘<a id="items_chuanglian_toggle" href="javascript:void(0);">-</a></p>
+            <table id="items_chuanglian" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th style="width:200px; text-align:left;">商品名</th>
+                        <th style="width:24px">颜色</th>
+                        <th>尺寸</th>            
+                        <th>房间</th>
+                        <th>序号</th>
+                        <th style="width:40px">轨道</th>
+                        <th style="width:40px">窗纱</th>
+                        <th style="width:40px">遮光布</th>
+                        <th style="width:60px">帘头</th>
+                        <th style="width:80px">小计</th>
+                        @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
+                        {
+                            <th style="width:24px">选择</th>
+                        }
+                    </tr>
+                    @foreach (var item in Model.Items1)
+                    {
+                        var attrs = new Dictionary<string, string>();
+                        foreach (var attrInfo in item.AttributeInfo.Split(new string[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries).ToList())
+                        {
+                            var tmp = attrInfo.Split(':');
+                            attrs.Add(tmp[0], tmp[1]);
+                        }
+                        <tr>
+                            <td>
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })"><img alt="@item.Picture.AlternateText" width="60" height="60" src="@item.Picture.ImageUrl" title="@item.Picture.Title" /></a>
+                            </td>
+                            <td style="text-align:left">
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })" >@item.ProductName</a>
+                                @*@if (!String.IsNullOrEmpty(item.AttributeInfo))
+                                    {
+                                        <br />
+                                        @Html.Raw(item.AttributeInfo)
+                                    }*@
+                            </td>                
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ColorSquaresRgb))
+                                {
+                                    <p style="background:@item.ColorSquaresRgb"></p>
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("尺寸"))
+                                {
+                                    <text>@attrs["尺寸"]</text>
+                                }
+                            </td>            
+                            <td>
+                                @if (attrs.ContainsKey("房间"))
+                                {
+                                    <text>@attrs["房间"]</text>
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("序号"))
+                                {
+                                    <text>@attrs["序号"]</text>
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("轨道") && attrs["轨道"] != "")
+                                {
+
+                                    <img src="/content/custom/images/active-true.jpg">
+                                }
+                                else
+                                {
+                                    <img src="/content/custom/images/active-false.jpg">
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("窗纱") && attrs["窗纱"] != "")
+                                {
+
+                                    <img src="/content/custom/images/active-true.jpg">
+                                }
+                                else
+                                {
+                                    <img src="/content/custom/images/active-false.jpg">
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("遮光布") && attrs["遮光布"] != "")
+                                {
+
+                                    <img src="/content/custom/images/active-true.jpg">
+                                }
+                                else
+                                {
+                                    <img src="/content/custom/images/active-false.jpg">
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("帘头"))
+                                {
+                                    <text>@attrs["帘头"]</text>
+                                }
+                            </td>
+                            <td>@item.SubTotal</td>
+                            @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
+                            {
+                                <td><input type="checkbox" checked="checked" name="selectedOrderItems" value="@item.Id" /></td>
+                            }
+                        </tr>
+                        if (Model.OrderStepId >= (int)OrderStep.MeasureForPrice)
+                        {
+                            <tr class="border0">
+                                <td colspan="14">
+                                    <div class="over">
+                                        <div class="fl">实际量尺信息</div>
+                                        <div class="fr" @if (string.IsNullOrEmpty(item.MeasureNote)) { <text> style="color:red" </text>                 }>
+                                            @(string.IsNullOrEmpty(item.MeasureNote) ? "商家暂未录入实际测量信息" : item.MeasureNote)
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @if (Model.Items2.Count > 0)
+    {
+        <div class="table_select">
+            <p class="menus">其他<a id="items_other_toggle" href="javascript:void(0);">-</a></p>
+            <table id="items_other" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th style="width:200px; text-align:left;">商品名</th>          
+                        <th style="width:24px">颜色</th>
+                        <th>尺寸</th>           
+                        <th>房间</th>
+                        <th>序号</th>
+                        <th style="width:40px">&nbsp;</th>
+                        <th style="width:40px">&nbsp;</th>
+                        <th style="width:40px">&nbsp;</th>
+                        <th style="width:60px">&nbsp;</th>
+                        <th style="width:80px">小计</th>
+                    </tr>
+                    @foreach (var item in Model.Items2)
+                    {
+                        var attrs = new Dictionary<string, string>();
+                        foreach (var attrInfo in item.AttributeInfo.Split(new string[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries).ToList())
+                        {
+                            var tmp = attrInfo.Split(':');
+                            attrs.Add(tmp[0], tmp[1]);
+                        }
+                        var styles = new string[] { "百叶窗款式", "轨道款式", "罗马杆款式" };
+                        <tr>
+                            <td>
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })"><img alt="@item.Picture.AlternateText" width="60" height="60" src="@item.Picture.ImageUrl" title="@item.Picture.Title" /></a>
+                            </td>
+                            <td style="text-align:left">
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })" >@item.ProductName</a>
+                                @*@if (!String.IsNullOrEmpty(item.AttributeInfo))
+                                    {
+                                        <br />
+                                        @Html.Raw(item.AttributeInfo)
+                                    }*@
+                            </td>                  
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ColorSquaresRgb))
+                                {
+                                    <p style="background:@item.ColorSquaresRgb"></p>
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("长度"))
+                                {
+                                    <text>@(attrs["长度"])cm</text>
+                                }
+                                @if (attrs.ContainsKey("高度"))
+                                {
+                                    <text> x @(attrs["高度"])cm</text>
+                                }
+                            </td>              
+                            <td>
+                                @if (attrs.ContainsKey("房间"))
+                                {
+                                    <text>@attrs["房间"]</text>
+                                }
+                            </td>
+                            <td>
+                                @if (attrs.ContainsKey("序号"))
+                                {
+                                    <text>@attrs["序号"]</text>
+                                }
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>@item.SubTotal</td>
+                            @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
+                            {
+                                <td><input type="checkbox" checked="checked" name="selectedOrderItems" value="@item.Id" /></td>
+                            }
+                        </tr>
+                        if (Model.OrderStepId >= (int)OrderStep.MeasureForPrice)
+                        {
+                            <tr class="border0">
+                                <td colspan="14">
+                                    <div class="over">
+                                        <div class="fl">实际量尺信息</div>
+                                        <div class="fr" @if (string.IsNullOrEmpty(item.MeasureNote)) { <text> style="color:red" </text>                  }>
+                                            @(string.IsNullOrEmpty(item.MeasureNote) ? "商家暂未录入实际测量信息" : item.MeasureNote)
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <span class="subtotal">共 @Model.Items.Count 件商品，合计 @Model.OrderTotal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    @if (Model.OrderStepId == (int)OrderStep.MeasureForPrice)
+    {
+        <b class="togel">定金<font>@Model.OrderDeposit</font>，尾款<font>@Model.OrderBalance</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+        @*if (Model.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.Paid)
+            {
+                <b class="togel">（您已经确定支付了定金，请等待商家确认收款）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            }*@
+    }
+    @if (Model.OrderStepId == (int)OrderStep.ManufactureAndInstallment)
+    {
+        <b class="togel">定金<font>@Model.OrderDeposit</font><strong>（已支付）</strong>，尾款<font>@Model.OrderBalance</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+        @*if (Model.OrderBalancePaymentStatus == (int)OrderBalancePaymentStatus.Paid)
+            {
+                <b class="togel">（您已经确定支付了尾款，请等待商家确认收款）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            }*@
+    }
+    @if (Model.OrderStepId == (int)OrderStep.Complete)
+    {
+        <b class="togel">定金<font>@Model.OrderDeposit</font><strong>（已支付）</strong>，尾款<font>@Model.OrderBalance</font><strong>（已支付）</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+    }
+    <p class="points">※线上预算金额仅为概略估算，实际售价仍以测量师傅的报价为准。</p>
+    <p class="points">※预约量尺上限为20窗。政企单位订购请联系我们，或重新调整数量。</p>
+    <p class="points">※线上计算之金额为基本窗，高度＜280cm，高度超过280聪cm，请与客服联系。</p>
+</div>
+<script type="text/javascript">
+    //收起或打开购物车商品
+    function toggleCartItems(name) {
+        $("#" + name + "_toggle").click(function () {
+            var command = $(this).html();
+            if (command == "-") {
+                $("#" + name).hide();
+                $(this).html("+");
+            }
+            else {
+                $("#" + name).show();
+                $(this).html("-");
+            }
+        });
+    }
+    $(function () {
+        //收起/打开窗帘商品
+        toggleCartItems("items_chuanglian");
+        //收起/打开其他商品
+        toggleCartItems("items_other");
+    });
+</script>

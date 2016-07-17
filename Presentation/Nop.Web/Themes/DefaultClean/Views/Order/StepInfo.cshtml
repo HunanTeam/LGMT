@@ -1,0 +1,30 @@
+﻿@model StepInfoModel
+@using Nop.Core.Domain.Orders;
+@using Nop.Web.Models.Order;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+
+    var url = Url.Action("OrderStep1", new { orderId = Model.OrderId });
+    switch (Model.Step)
+    {
+        case OrderStep.Pending: url = Url.Action("OrderStep1", new { orderId = Model.OrderId }); break;
+        case OrderStep.ConfirmBooking: url = Url.Action("OrderStep2", new { orderId = Model.OrderId }); break;
+        case OrderStep.MeasureForPrice: url = Url.Action("OrderStep3", new { orderId = Model.OrderId }); break;
+        case OrderStep.ManufactureAndInstallment: url = Url.Action("OrderStep4", new { orderId = Model.OrderId }); break;
+        case OrderStep.Complete: url = Url.Action("OrderStep5", new { orderId = Model.OrderId }); break;
+    }
+}
+<div id="wrap">
+    <div class="order">
+        @Html.Partial("OrderProgress", Model.Step)
+        <div class="fed">
+            <h1>操作成功</h1>
+            <div class="infor">
+                <p>
+                    @Model.Description
+                </p>
+                <a href="@url" style="margin-right:300px">订单详情</a><a href="@Url.Action("CustomerOrders", "Order")">我的账户</a>
+            </div>
+        </div>
+    </div>
+</div>

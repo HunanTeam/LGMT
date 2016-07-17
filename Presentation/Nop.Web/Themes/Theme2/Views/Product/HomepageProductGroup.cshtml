@@ -1,0 +1,23 @@
+﻿@model ProductGroupOverviewModel
+@using Nop.Web.Models.Catalog
+
+@if (Model != null)
+{
+    <div class="index_first">
+        <div class="img_tits">
+            <a href="/product/productgroup?id=@Model.Id" target="_blank">
+                <img src="@Model.PictureUrl">
+                <p>@Model.Name</p>
+            </a>
+        </div>
+        <div class="content">
+            <p>开始快速订购</p>
+            @if (ViewBag.MinProductPrice != null)
+            {
+                <b>¥&nbsp;@(((decimal)ViewBag.MinProductPrice).ToString("f0"))*</b>
+            }
+            <a href="/product/productgroup?id=@Model.Id" target="_blank">我要选这个</a>
+            <span>*多种款式可选</span>
+        </div>
+    </div>
+}

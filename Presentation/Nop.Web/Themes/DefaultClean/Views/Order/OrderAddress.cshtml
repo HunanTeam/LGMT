@@ -1,0 +1,16 @@
+﻿@model OrderDetailsModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Order
+
+<div class="confirmation">
+    <h1>预约信息</h1>
+    <div class="infor">
+        <p>@Model.ShippingAddress.FirstName，你好，这是您的预约地址</p>
+        <p>电话 ：@Model.ShippingAddress.PhoneNumber</p>
+        <p>地址：@(Model.ShippingAddress.City + Model.ShippingAddress.District + Model.ShippingAddress.Address1)</p>
+        @if (Model.OrderStepId == (int)OrderStep.Pending || Model.OrderStepId == (int)OrderStep.ConfirmBooking)
+        {
+            @*<a href="javascript:void(0);">修改</a>*@
+        }
+    </div>
+</div>

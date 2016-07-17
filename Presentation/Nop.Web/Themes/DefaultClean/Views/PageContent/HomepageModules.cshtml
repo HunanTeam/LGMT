@@ -1,0 +1,369 @@
+﻿@model List<HomepageModuleModel>
+@using Nop.Core.Domain.PageContent
+@using Nop.Web.Models.PageContent
+
+@{
+    var adModuleModel = Model.FirstOrDefault(m => m.ModuleType == (int)HomepageModuleType.BigADBox);
+}
+
+@if (adModuleModel != null)
+{
+    <table cellpadding="0" cellspacing="0" width="1180">
+        <tbody>
+            <tr><td height="10">&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <div class="banner" id="b04">
+                        <ul>
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl1))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url1)'" src="@(adModuleModel.PictureUrl1)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl2))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url2)'" src="@(adModuleModel.PictureUrl2)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl3))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url3)'" src="@(adModuleModel.PictureUrl3)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl4))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url4)'" src="@(adModuleModel.PictureUrl4)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl5))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url5)'" src="@(adModuleModel.PictureUrl5)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl6))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url6)'" src="@(adModuleModel.PictureUrl6)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl7))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url7)'" src="@(adModuleModel.PictureUrl7)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl8))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url8)'" src="@(adModuleModel.PictureUrl8)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl9))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url9)'" src="@(adModuleModel.PictureUrl9)" alt="" width="1200" height="570"></li>
+                            }
+                            @if (!string.IsNullOrEmpty(adModuleModel.PictureUrl10))
+                            {
+                            <li><img onclick="document.location.href='@(adModuleModel.Url10)'" src="@(adModuleModel.PictureUrl10)" alt="" width="1200" height="570"></li>
+                            }
+                        </ul>
+                        <a href="javascript:void(0);" class="unslider-arrow04 prev">
+                            <img class="arrow" id="al" src="/themes/defaultclean/content/images/arrowl.png" alt="prev" width="20" height="35">
+                        </a>
+                        <a href="javascript:void(0);" class="unslider-arrow04 next">
+                            <img class="arrow" id="ar" src="/themes/defaultclean/content/images/arrowr.png" alt="next" width="20" height="37">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20">&nbsp;</td></tr>
+        </tbody>
+    </table>
+    <!--快递包邮-->
+    <table cellpadding="0" cellspacing="0" width="1180">
+        <tbody>
+            <tr>
+                <td><img src="/themes/defaultclean/content/images/icon_49free2_CN.gif" alt="" width="280" height="70" border="0"></td>
+                <td><img src="/themes/defaultclean/content/images/icon20150529_line_CN.gif" alt="" style="display: inline;"></td>
+                <td><img src="/themes/defaultclean/content/images/icon_newsB16423_CN.gif" alt="" width="280" height="70" border="0"></td>
+                <td><img src="/themes/defaultclean/content/images/icon20150529_line_CN.gif" alt="" border="0"></td>
+                <td><img src="/themes/defaultclean/content/images/icon_7dayreturn.gif" alt="" width="280" height="70" border="0"></td>
+                <td><img src="/themes/defaultclean/content/images/icon20150529_line_CN.gif" alt="" style="display: inline;"></td>
+                <td><img src="/themes/defaultclean/content/images/icon_newsB160531_CN.gif" alt="" width="280" height="70" border="0"></td>
+            </tr>
+            <tr>
+                <td height="20">&nbsp;</td>
+                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var unslider04 = $('#b04').unslider({
+                dots: true
+            }),
+            data04 = unslider04.data('unslider');
+            $('.unslider-arrow04').click(function () {
+                var fn = this.className.split(' ')[1];
+                data04[fn]();
+            });
+        });
+    </script>
+}
+
+@foreach (var model in Model.Where(m => m.ModuleType != (int)HomepageModuleType.BigADBox))
+{
+    <table cellpadding="0" cellspacing="0" width="1180">
+        <tbody>
+            <tr><td class="type_titles_01">@(model.Name)</td></tr>
+        </tbody>
+    </table>
+    if (model.ModuleType == (int)HomepageModuleType.Style)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url2)" target="_blank">
+                            <img src="@(model.PictureUrl2)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url3)" target="_blank">
+                            <img src="@(model.PictureUrl3)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url4)" target="_blank">
+                            <img src="@(model.PictureUrl4)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url5)" target="_blank">
+                            <img src="@(model.PictureUrl5)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                </tr>
+                <tr><td height="20" colspan="9">&nbsp;</td></tr>
+                <tr>
+                    <td>
+                        <a href="@(model.Url6)" target="_blank">
+                            <img src="@(model.PictureUrl6)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url7)" target="_blank">
+                            <img src="@(model.PictureUrl7)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url8)" target="_blank">
+                            <img src="@(model.PictureUrl8)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url9)" target="_blank">
+                            <img src="@(model.PictureUrl9)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url10)" target="_blank">
+                            <img src="@(model.PictureUrl10)" alt="" height="240" width="220">
+                        </a>
+                    </td>
+                </tr>
+                <tr><td height="20" colspan="9">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+    else if (model.ModuleType == (int)HomepageModuleType.Products1)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="500" width="280">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <table cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url2)" target="_blank">
+                                            <img src="@(model.PictureUrl2)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr><td height="20">&nbsp;</td></tr>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url3)" target="_blank">
+                                            <img src="@(model.PictureUrl3)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url4)" target="_blank">
+                            <img src="@(model.PictureUrl4)" alt="" height="500" width="580">
+                        </a>
+                    </td>
+                </tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td height="50">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+    else if (model.ModuleType == (int)HomepageModuleType.Products2)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="500" width="580">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url2)" target="_blank">
+                            <img src="@(model.PictureUrl2)" alt="" height="500" width="280">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <table cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url3)" target="_blank">
+                                            <img src="@(model.PictureUrl3)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr><td height="20">&nbsp;</td></tr>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url4)" target="_blank">
+                                            <img src="@(model.PictureUrl4)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td height="50" colspan="5">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+    else if (model.ModuleType == (int)HomepageModuleType.Products3)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="500" width="280">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url2)" target="_blank">
+                            <img src="@(model.PictureUrl2)" alt="" height="500" width="580">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <table cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url3)" target="_blank">
+                                            <img src="@(model.PictureUrl3)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr><td height="20">&nbsp;</td></tr>
+                                <tr>
+                                    <td>
+                                        <a href="@(model.Url4)" target="_blank">
+                                            <img src="@(model.PictureUrl4)" alt="" height="240" width="280">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td height="50">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+    else if (model.ModuleType == (int)HomepageModuleType.Products4)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="500" width="580">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url2)" target="_blank">
+                            <img src="@(model.PictureUrl2)" alt="" height="500" width="280">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url3)" target="_blank">
+                            <img src="@(model.PictureUrl3)" alt="" height="500" width="280">
+                        </a>
+                    </td>
+                </tr>
+                <tr><td height="50">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+    else if (model.ModuleType == (int)HomepageModuleType.Products5)
+    {
+        <table cellpadding="0" cellspacing="0" width="1180">
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="@(model.Url1)" target="_blank">
+                            <img src="@(model.PictureUrl1)" alt="" height="240" width="380">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url2)" target="_blank">
+                            <img src="@(model.PictureUrl2)" alt="" height="240" width="380">
+                        </a>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td>
+                        <a href="@(model.Url3)" target="_blank">
+                            <img src="@(model.PictureUrl3)" alt=" " height="240" width="380">
+                        </a>
+                    </td>
+                </tr>
+                <tr><td height="50" colspan="5">&nbsp;</td></tr>
+            </tbody>
+        </table>
+    }
+}

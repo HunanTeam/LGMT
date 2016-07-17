@@ -1,0 +1,29 @@
+﻿@model ProductDetailsModel.ProductPriceModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+@using System.Globalization;
+@using System.Text.RegularExpressions;
+@{
+    var dynamicPriceUpdate = EngineContext.Current.Resolve<CatalogSettings>().EnableDynamicPriceUpdate;
+    var dynamicPriceUpdateAjax = EngineContext.Current.Resolve<CatalogSettings>().DynamicPriceUpdateAjax;
+    var dynamicPriceUpdateSupported = dynamicPriceUpdate && !dynamicPriceUpdateAjax;
+    string dynamicPriceReplacement = String.Format("<span class=\"price-val-for-dyn-upd-{0}\">${{val}}</span> ", Model.ProductId);
+}
+@if (dynamicPriceUpdateSupported)
+{
+    <script type="text/javascript">
+        var priceValForDynUpd_@(Model.ProductId) = @(((float)(Model.PriceValue != Model.PriceWithDiscountValue ? Model.PriceWithDiscountValue : Model.PriceValue)).ToString(new CultureInfo("en-US")));
+    </script>
+}
+<div id="product_price_area">
+    @if (!string.IsNullOrEmpty(Model.OldPrice))
+    {
+        <span class="store_price activities">@Model.OldPrice.Replace("¥", "").Replace(".00", "")</span>
+    }
+    <span class="currencyIdentifier">￥</span>
+    <span class="price price-value-@(Model.ProductId)">@Model.Price.Replace("¥", "").Replace(".00", "")</span>
+    <div id="activitylink">@*<a href="#">超值组合．2件¥ 78</a>*@</div>
+</div>

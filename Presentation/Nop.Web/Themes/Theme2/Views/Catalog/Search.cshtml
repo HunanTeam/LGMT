@@ -1,0 +1,106 @@
+﻿@model SearchModel
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.Search").Text);
+
+    var selectedCategory = Model.AvailableCategories.FirstOrDefault(m => m.Selected);
+    var selectedTag = Model.AvailableTags.FirstOrDefault(m => m.Selected);
+}
+@section sec_head{
+}
+<div id="wrap">
+    <div class="shop_type">
+        @using (Html.BeginRouteForm("ProductSearch", FormMethod.Get, new { id = "search-form" }))
+        {
+            <div class="search">
+                @Html.DropDownListFor(model => model.cid, Model.AvailableCategories)
+                @Html.DropDownListFor(model => model.tid, Model.AvailableTags)
+                <input type="submit" class="butn" value="@T("Search")" />
+                @*<input type="checkbox" class="checkbox"><label>新品</label>
+                    <input type="checkbox" class="checkbox"><label>热销</label>
+                    <input type="checkbox" class="checkbox"><label>折扣</label>*@
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $("#@Html.FieldIdFor(model => model.cid)").change(function () {
+                        $("#search-form").submit();
+                    });
+                    $("#@Html.FieldIdFor(model => model.tid)").change(function () {
+                        $("#search-form").submit();
+                    });
+                });
+            </script>
+        }
+        @if (selectedTag == null && selectedCategory == null)
+        {
+            <h3>下面是全部商品 ^_^</h3>
+        }
+        @if (selectedTag != null && Model.ProductGroup != null)
+        {
+            <h3>我们的设计师为您精心搭配了<font>“@selectedTag.Text”</font>风格装饰</h3>
+            <ul class="type_list">
+                <li>
+                    <img src="@Model.ProductGroup.PictureUrl">
+                    <p>@Model.ProductGroup.Name</p>                 
+                    <span>@(Model.ProductGroup.Description.Length > 60 ? Model.ProductGroup.Description.Substring(0, 57) + "..." : Model.ProductGroup.Description)</span>
+                    <a href="/product/productgroup?id=@Model.ProductGroup.Id">详情</a>
+                </li>
+            </ul>
+        }
+        @if (selectedCategory != null || selectedTag != null)
+        {
+            var tip = string.Empty;
+            if (selectedCategory != null)
+            {
+                tip = "<font>“" + selectedCategory.Text + "”</font>";
+            }
+            if (selectedTag != null)
+            {
+                tip = tip + "<font>“" + selectedTag.Text + "”</font>";
+            }
+            if (Model.Products.Count > 0)
+            {
+                <h3>
+                    下面是 @Html.Raw(tip) 的全部相关商品 ^_^
+                </h3>
+            }
+            else
+            {
+                <h3>
+                    暂无 @Html.Raw(tip) 的相关商品 :(
+                </h3>
+            }
+        }
+        <ul class="list_list">
+            @foreach (var product in Model.Products)
+            {
+                <li>
+                    @Html.Partial("_ProductBox", product)
+                </li>
+            }
+        </ul>
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber")
+                .BooleanParameterName("adv").BooleanParameterName("isc").BooleanParameterName("sid").RenderEmptyParameters(true);
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pages">
+                @pager
+            </div>
+        }
+        <div class="pages" style="display:none;">
+            <ul>
+                <li class="pg-prev pg-disabled">上一页</li>
+                <li class="pg-current">1</li>
+                <li class="">2</li>
+                <li class="">3</li>
+                <li class="">4</li>
+                <li class="">5</li>
+                <li class="pg-next">下一页</li>
+            </ul>
+        </div>
+    </div>
+</div>

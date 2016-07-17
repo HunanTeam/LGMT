@@ -1,0 +1,14 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@using Nop.Web.Models.Catalog;
+@using Nop.Core.Domain.Orders;
+@if (!Model.DisableBuyButton || Model.CustomerEntersPrice)
+{
+    @Html.TextBoxFor(model => model.EnteredQuantity, new { @class = "qty-input", style = "display:none;" })
+    <div class="addcart">
+        <a href="javascript:void(0);" class="btn_addcart" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductToCart-Details", new { productId = Model.ProductId, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart })', '#product-details-form');return false;">加入预选单</a>
+    </div>
+    <div class="size2">
+        <span class="product-keep" id="add-to-wishlist-button-@Model.ProductId" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductToCart-Details", new { productId = Model.ProductId, shoppingCartTypeId = (int)ShoppingCartType.Wishlist })', '#product-details-form'); return false;">收藏商品</span>
+        @*<a class="product-size" href="#">发送给朋友参考</a>*@
+    </div>
+}

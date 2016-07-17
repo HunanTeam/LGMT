@@ -1,0 +1,168 @@
+﻿@model RegisterModel
+@using Nop.Web.Models.Customer;
+@{
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@T("PageTitle.Register").Text</title>
+    <link type="text/css" href="/content/custom/css/main.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/jquery-1.10.2.min.js"></script>
+    <script src="/scripts/jquery.form.js" type="text/javascript"></script>
+    <link type="text/css" href="/scripts/layer/skin/layer.css" rel="stylesheet" />
+    <script src="/scripts/layer/layer.js" type="text/javascript"></script>
+    <script src="/scripts/public.common.js" type="text/javascript"></script>
+</head>
+<body style="background:#efefef">
+    <div class="login_pop">
+        @using (Html.BeginForm("Register", "Customer", FormMethod.Post, new { id = "register-form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="fl">
+                <ul class="reg">
+                    <li>
+                        <input id="CustomerPhone" name="CustomerPhone" type="text" placeholder="手机号码" maxlength="11" />
+                    </li>
+                    <li>
+                        <input id="validateCode" name="validateCode" type="text" placeholder="验证码" maxlength="4" style="width: 80px; float: left;" />
+                        <img id="gc" src="@Url.Action("GetValidateCode")" onclick="this.src = '@Url.Action("GetValidateCode")?r=' + Math.random()" style="height: 40px; margin-top: 10px; margin-left: 10px; float: left;" />
+                    </li>
+                    <li>
+                        <input id="PhoneAuthCode" name="PhoneAuthCode" type="text" placeholder="手机验证码" maxlength="6" />
+                        <a id="getAuthCode" href="javascript:void(0);">获取验证码</a>
+                    </li>
+                    <li>
+                        <input id="Password" name="Password" type="password" placeholder="密码" maxlength="20" />
+                    </li>
+                    <li>
+                        <input type="button" id="register-button" class="butn" value="@T("Account.Register.Button")" />
+                        <p class="valid_info" style="display:none;">注册失败，请重试！</p>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="fr">
+            <h1>第三方快速登录</h1>
+            <p>使用第三方登录，不用输入账号密码。</p>
+            <ul>
+                <li><a href="#" class="weibo"></a></li>
+                <li><a href="#" class="qq"></a></li>
+                <li><a href="#" class="weixin"></a></li>
+            </ul>
+            <span><a href="@Url.Action("Login")">返回登录</a></span>
+        </div>
+        <div class="close"><a id="btn_close" href="javascript:void(0);">关闭</a></div>
+        <script type="text/javascript">
+            $("#btn_close").click(function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            });
+        </script>
+    </div>
+    <script type="text/javascript">
+        $("#register-button").click(function () {
+            var customerPhone = $("#@Html.IdFor(m=>m.CustomerPhone)").val();
+            if (customerPhone == "") {
+                layer.msg('请填写手机号码', function () { });
+                $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                return;
+            }
+            if (!/^[1]+[3,5,8,4,6,9]+\d{9}$/.test(customerPhone)) {
+                layer.msg('手机号码格式不正确', function () { });
+                $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                return;
+            }
+            var authCode = $("#@Html.IdFor(m=>m.PhoneAuthCode)").val();
+            if (authCode == "") {
+                layer.msg('请填写验证码', function () { });
+                $("#@Html.IdFor(m => m.PhoneAuthCode)").focus();
+                return;
+            }
+            var password = $("#@Html.IdFor(m=>m.Password)").val();
+            if (password == "") {
+                layer.msg('请填写密码', function () { });
+                $("#@Html.IdFor(m => m.Password)").focus();
+                return;
+            }
+            if (password.length < 6) {
+                layer.msg('密码长度不能小于6位', function () { });
+                $("#@Html.IdFor(m => m.Password)").focus();
+                return;
+            }
+
+            $("#register-form").ajaxSubmit({
+                url: "@Url.Action("Register", "Customer")",
+                success: function (result) {
+                    if (result.success) {
+                        parent.document.location.href = parent.document.location.href;
+                        //refreshHeaderLinks(true, function () {
+                        //    var index = parent.layer.getFrameIndex(window.name);
+                        //    parent.layer.close(index);
+                        //});
+                    }
+                    else {
+                        $(".valid_info").html(result.message);
+                        $(".valid_info").show();
+                    }
+                }
+            });
+        });
+
+        var time = 0;     //获取验证码时间倒计时
+        $("#getAuthCode").click(function () {
+            if (time == 0) {
+                var customerPhone = $("#@Html.IdFor(m=>m.CustomerPhone)").val();
+                if (customerPhone == "") {
+                    layer.msg('请填写手机号码', function () { });
+                    $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                    return;
+                }
+                if (!/^[1]+[3,5,8,4,6,9]+\d{9}$/.test(customerPhone)) {
+                    layer.msg('手机号码格式不正确', function () { });
+                    $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                    return;
+                }
+                var validateCode = $("#validateCode").val();
+                if (validateCode == "") {
+                    layer.msg('请填写图形验证码', function () { });
+                    $("#validateCode").focus();
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("GetVerificationCode", "Customer")",
+                    data: "phone=" + customerPhone + "&validateCode=" + validateCode,
+                    success: function (d) {
+                        if (d.success) {
+                            //$("#gc").click();
+                            //$("#validateCode").val("");
+                            runStopGetAuthCode();
+                        }
+                        else {
+                            layer.msg(d.message, function () { });
+                        }
+                    }
+                });
+            }
+        });
+
+        function runStopGetAuthCode() {
+            time = 60; //获取验证码时间间隔
+            $("#getAuthCode").addClass("disabled");
+            var intervalProcess = setInterval(function () {
+                $("#getAuthCode").html(time + "s后再获取");
+                if (time == 0) {
+                    $("#getAuthCode").removeClass("disabled");
+                    $("#getAuthCode").html("获取验证码");
+                    clearInterval(intervalProcess);
+                    return;
+                }
+                time--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

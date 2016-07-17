@@ -1,0 +1,71 @@
+﻿@model OrderDetailsModel
+@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Order
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderDetails").Text);
+}
+@section sec_head{
+    <script src="/Scripts/jquery.form.js" type="text/javascript"></script>
+}
+@section sec_body{
+    <script type="text/javascript">
+        $("p[data-payment]").click(function () {
+            $("p[data-payment]").removeClass("select");
+            $(this).addClass("select");
+            $("#payment_method").val($(this).attr("data-payment"));
+        });
+    </script>
+}
+<div id="wrap">
+    <div class="account">
+        @Html.Action("CustomerMenu", "Customer")
+    </div>
+    <div class="order">
+        @Html.Partial("OrderNumber", Model)
+        @Html.Partial("OrderProgress", OrderStep.MeasureForPrice)
+        @Html.Partial("OrderItems", Model)
+        @Html.Partial("OrderAddress", Model)
+        @using (Html.BeginForm("OrderStep3Submit", "Order", new { orderId = Model.Id }, FormMethod.Post, new { id = "order-form" }))
+        {
+            if (Model.OrderDepositPaymentStatus == null || Model.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.Pending)
+            {
+                <div class="pay_money">
+                    <h1>支付方式</h1>
+                    <div class="infor">
+                        <div class="fl">支付平台</div>
+                        <div class="fc">
+                            <p class="select" data-payment="alipay"><a href="javascript:void(0);" class="zhifubao">&nbsp;</a><span></span></p>
+                            @*<p><a href="javascript:void(0);" class="weixin">&nbsp;</a><span></span></p>*@
+                        </div>
+                        <div class="fr">
+                            <p data-payment="offline"><a href="javascript:void(0);">线下支付</a><span></span></p>
+                        </div>
+                        <input type="hidden" id="payment_method" name="payment_method" value="alipay" />
+                    </div>
+                </div>
+            }
+            <div class="payment">
+                <p>本次支付为定金（总款的30%）：@Model.OrderDeposit</p>
+                @if (Model.OrderDepositPaymentStatus == null || Model.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.Pending)
+                {
+                    <a href="javascript:void(0);" class="submit">确定支付</a>
+                    <script type="text/javascript">
+                        $("a.submit").click(function () {
+                            var selectedPaymentMethod = $("#payment_method").val();
+                            if (selectedPaymentMethod == "alipay")
+                                document.location.href = "@Url.Action("Alipay")?orderId=@Model.Id";
+                            else if (selectedPaymentMethod == "offline")
+                                $("#order-form").submit();
+                        });
+                    </script>
+                }
+                else
+                {
+                    <p><b>（您已经确定支付了定金，请等待商家确认收款）</b></p>
+                }
+            </div>
+        }
+    </div>
+</div>

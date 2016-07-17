@@ -1,0 +1,193 @@
+﻿@model ProductDetailsModel
+@using Nop.Core
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+
+    //title, meta
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+}
+@section sec_head{
+    <script type="text/javascript" src="/content/custom/js/jquery-easing-1.3.pack.js"></script>
+    <script type="text/javascript" src="/content/custom/js/jquery-easing-compatibility.1.2.pack.js"></script>
+    <script type="text/javascript" src="/content/custom/js/coda-slider.1.1.1.pack.js"></script>
+    <link type="text/css" href="/content/custom/css/notification.css" rel="stylesheet" />
+}
+@section heads_before{
+    <div class="ajax-loading-block-window" style="display: none">
+    </div>
+    <div id="dialog-notifications-success" title="通知" style="display:none;">
+    </div>
+    <div id="dialog-notifications-error" title="错误" style="display:none;">
+    </div>
+    <div id="bar-notification" class="bar-notification" style="display:none;">
+        <span class="close" title="关闭">&nbsp;</span>
+    </div>
+}
+@section sec_body{
+    <script type="text/javascript">
+        var IO = document.getElementById('float'), Y = IO, H = 0, IE6;
+        IE6 = window.ActiveXObject && !window.XMLHttpRequest;
+        while (Y) { H += Y.offsetTop; Y = Y.offsetParent };
+        if (IE6)
+            IO.style.cssText = "position:absolute;top:expression(this.fix?(document" +
+              ".documentElement.scrollTop-(this.javascript||" + H + ")):0)";
+        window.onscroll = function () {
+            var d = document, s = Math.max(d.documentElement.scrollTop, document.body.scrollTop);
+            if (s > H && IO.fix || s <= H && !IO.fix) return;
+            if (!IE6) IO.style.position = IO.fix ? "" : "fixed";
+            IO.fix = !IO.fix;
+        };
+        try { document.execCommand("BackgroundImageCache", false, true) } catch (e) { };
+        //]]>
+    </script>
+}
+<div id="wrap">
+    <div class="product_details">
+        <div class="first">
+            <div class="fl">
+                <!--product pictures-->
+                @Html.Partial("_ProductDetailsPictures", Model)
+            </div>
+            @using (Html.BeginRouteForm("Product", new { SeName = Model.SeName }, FormMethod.Post, new { id = "product-details-form" }))
+            {
+            <div class="fr">
+                <div class="tb_title">
+                    <h1>@Model.Name</h1>
+                    @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                        {
+                        <p>@Model.ShortDescription</p>
+                        }
+                </div>
+                <ul>
+                    <!--price-->
+                    @{
+                        var dataDictPrice = new ViewDataDictionary();
+                        dataDictPrice.TemplateInfo.HtmlFieldPrefix = string.Format("price_{0}", Model.Id);
+                        @Html.Partial("_ProductPrice", Model.ProductPrice, dataDictPrice)
+                    }
+                    <!--attributes-->
+                    @{
+                        var dataDictAttributes = new ViewDataDictionary();
+                        dataDictAttributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", Model.Id);
+                        @Html.Partial("_ProductAttributesCustom", Model.ProductAttributes, dataDictAttributes)
+                    }
+                    @*<li>
+                            <label>发给朋友参考</label>
+                            <p><img src="images/share.png" style="margin-top:5px"></p>
+                        </li>*@
+                    <!-- add to cart-->
+                    @{
+                        var dataDictAddToCart = new ViewDataDictionary();
+                        dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                        @Html.Partial("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                    }
+                </ul>
+            </div>
+            }
+        </div>
+        @Html.Action("RelatedProducts", "Product", new { productId = Model.Id })
+        <div class="third">
+            <div class="menu_LM">
+                <div id="float">
+                    <div class="search">
+                        @using (Html.BeginRouteForm("ProductSearch", FormMethod.Get))
+                        {
+                        <input type="text" class="txt" name="q" placeholder="请输入关键词" maxlength="50" />
+                        <input type="submit" class="butn" value="搜索" />
+                        }
+                    </div>
+                    <ul>
+                        <li class="select">商品详情</li>
+                        <li style="display:none;">评价</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fl">
+                <div class="type">
+                    <h2>>&nbsp;&nbsp;产品</h2>
+                    <ul>
+                        @foreach (var category in (List<CategorySimpleModel>)ViewBag.Categories)
+                        {
+                        <li>
+                            <a href="/catalog/search?cid=@category.Id">@category.Name</a>
+                        </li>
+                        }
+                    </ul>
+                    <h2>>&nbsp;&nbsp;风格</h2>
+                    <ul>
+                        @foreach (var productTag in (List<ProductTagModel>)ViewBag.ProductTags)
+                        {
+                        <li><a href="/catalog/search?tid=@productTag.Id" target="_blank">@productTag.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="fr">
+                <div class="content">
+                    @if (Model.ProductSpecifications.Count > 0)
+                    {
+                    <div class="attributes">
+                        <ul>
+                            @foreach (var spec in Model.ProductSpecifications)
+                                {
+                            <li>@spec.SpecificationAttributeName：&nbsp;@spec.ValueRaw</li>
+                                }
+                        </ul>
+                    </div>
+                    }
+                    <div class="details">
+                        @Html.Raw(Model.FullDescription)
+                    </div>
+                </div>
+                <div class="content" style="display:none;">
+                    <div class="comment">
+                        <ul>
+                            <li>
+                                <div class="tb-rev-item">
+                                    <p>衣服很漂亮，上衣合适，裙子需要修改，26裤头的。物流超快，事先也告诉我可能会有点大，是我自己坚持要的，是非常老实的卖家，非常喜欢她的衣服，可惜能穿的合身的太少！建议考虑一下我们这些娇小型的。</p>
+                                    <span>2016年05月04日 19:44&nbsp;&nbsp;&nbsp;&nbsp;颜色分类：条纹+黑色&nbsp;&nbsp;&nbsp;&nbsp;尺码：S</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-rev-item">
+                                    <p>衣服很漂亮，上衣合适，裙子需要修改，26裤头的。物流超快，事先也告诉我可能会有点大，是我自己坚持要的，是非常老实的卖家，非常喜欢她的衣服，可惜能穿的合身的太少！建议考虑一下我们这些娇小型的。</p>
+                                    <span>2016年05月04日 19:44&nbsp;&nbsp;&nbsp;&nbsp;颜色分类：条纹+黑色&nbsp;&nbsp;&nbsp;&nbsp;尺码：S</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-rev-item">
+                                    <p>衣服很漂亮，上衣合适，裙子需要修改，26裤头的。物流超快，事先也告诉我可能会有点大，是我自己坚持要的，是非常老实的卖家，非常喜欢她的衣服，可惜能穿的合身的太少！建议考虑一下我们这些娇小型的。</p>
+                                    <span>2016年05月04日 19:44&nbsp;&nbsp;&nbsp;&nbsp;颜色分类：条纹+黑色&nbsp;&nbsp;&nbsp;&nbsp;尺码：S</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-rev-item">
+                                    <p>衣服很漂亮，上衣合适，裙子需要修改，26裤头的。物流超快，事先也告诉我可能会有点大，是我自己坚持要的，是非常老实的卖家，非常喜欢她的衣服，可惜能穿的合身的太少！建议考虑一下我们这些娇小型的。</p>
+                                    <span>2016年05月04日 19:44&nbsp;&nbsp;&nbsp;&nbsp;颜色分类：条纹+黑色&nbsp;&nbsp;&nbsp;&nbsp;尺码：S</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pages">
+                        <ul>
+                            <li class="pg-prev pg-disabled">上一页</li>
+                            <li class="pg-current">1</li>
+                            <li class="">2</li>
+                            <li class="">3</li>
+                            <li class="">4</li>
+                            <li class="">5</li>
+                            <li class="pg-next">下一页</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

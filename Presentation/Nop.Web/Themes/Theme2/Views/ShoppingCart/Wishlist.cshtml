@@ -1,0 +1,58 @@
+@model WishlistModel
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.ShoppingCart
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    //title
+    Html.AddTitleParts(T("PageTitle.Wishlist").Text);
+
+    //个人中心菜单
+    ViewBag.Menu = "wishlist";
+}
+@section sec_body
+{
+    <script type="text/javascript">
+        $("a.addtocart").each(function () {
+            $(this).click(function () {
+                var data = "sciId=" + $(this).attr("data-id");
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddItemToCartFromWishlist", "ShoppingCart")",
+                    data: data,
+                    success: function (result) {
+                        if (result.success) {
+                            layer.msg('加入购物车成功', {
+                                time: 0 //不自动关闭
+                                  , btn: ['进入购物车', '关闭']
+                                  , yes: function (index) {
+                                      document.location.href = "@Url.Action("cart", "shoppingcart")";
+                                  }
+                            });
+                            refreshHeaderLinks();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+<div id="wrap">
+    @Html.Partial("CustomerMenu")
+    <div class="account">
+        <ul class="keep">
+            @foreach (var item in Model.Items)
+            {
+                <li>
+                    <form></form>
+                    <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })" target="_blank">
+                        <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title">
+                        <p>@(item.ProductName.Length > 17 ? item.ProductName.Substring(0, 14) + "..." : item.ProductName)</p>
+                    </a>
+                    <a href="javascript:void(0);" data-id="@(item.Id)" class="keep_go addtocart">加入购物车</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

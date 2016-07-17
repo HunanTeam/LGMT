@@ -1,0 +1,14 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@using Nop.Web.Models.Catalog;
+@using Nop.Core.Domain.Orders;
+@if (!Model.DisableBuyButton || Model.CustomerEntersPrice)
+{
+    <li>
+        <label>&nbsp;</label>
+        <p>
+            <a href="#" class="keep">加入收藏</a>
+            @Html.TextBoxFor(model => model.EnteredQuantity, new { @class = "qty-input", style = "display:none;" })
+            <a href="javascript:void(0);" class="want" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductToCart-Details", new { productId = Model.ProductId, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart })', '#product-details-form');return false;">加入心愿单</a>
+        </p>
+    </li>
+}

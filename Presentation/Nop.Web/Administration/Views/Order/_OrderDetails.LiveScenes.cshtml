@@ -1,0 +1,112 @@
+﻿@model OrderModel
+@using Nop.Core.Domain.Tax;
+@using Nop.Core.Domain.Orders;
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "order-livescenes-form" }))
+{
+    <table class="adminContent">
+        <tr>
+            <td>
+                <div id="order-livescenes-grid"></div>
+                <script>
+                    $(document).ready(function () {
+                        $("#order-livescenes-grid").kendoGrid({
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: {
+                                        url: "@Html.Raw(Url.Action("LiveScenes", "Order", new { orderId = Model.Id }))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: addAntiForgeryToken
+                                    }
+                                },
+                                schema: {
+                                    data: "Data",
+                                    total: "Total",
+                                    errors: "Errors",
+                                    model: {
+                                        id: "Id",
+                                        fields: {
+                                            Name: { editable: true, type: "string" },
+                                            Value: { editable: true, type: "string" },
+                                            Store: { editable: true, type: "string" },
+                                            StoreId: { editable: true, type: "number" },
+                                            Id: { editable: false, type: "number" }
+                                        }
+                                    }
+                                },
+                                requestEnd: function (e) {
+                                    if (e.type == "create" || e.type == "update") {
+                                        this.read();
+                                    }
+                                },
+                                error: function (e) {
+                                    display_kendoui_grid_error(e);
+                                    // Cancel the changes
+                                    this.cancelChanges();
+                                },
+                                pageSize: 100,
+                                serverPaging: true,
+                                serverFiltering: true,
+                                serverSorting: true
+                            },
+                            pageable: {
+                                refresh: true
+                            },
+                            editable: {
+                                confirmation: false,
+                                mode: "inline"
+                            },
+                            scrollable: false,
+                            columns: [{
+                                field: "Room",
+                                title: "房间",
+                                width: 150
+
+                            }, {
+                                field: "Window",
+                                title: "窗户",
+                                width: 150
+                            }, {
+                                field: "OriginalPictureUrl",
+                                title: "实景图",
+                                template: '<img src="#=OriginalPictureUrl#" />',
+                                width: 180
+                            }, {
+                                field: "EffectPictureUrl",
+                                title: "效果图",
+                                template: '<img src="#=EffectPictureUrl#" />',
+                                width: 180
+                            }, {
+                                field: "DisplayOrder",
+                                title: "@T("Admin.Catalog.Categories.Fields.DisplayOrder")",
+                                width: 150
+                            }, {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                template: "<input type='submit' value='@T("Admin.Common.Edit")' onclick=\"javascript:OpenWindow('@Url.Content("~/Admin/Order/EditLiveScene/")#=Id#?btnId=btnRefreshLiveScenes&formId=order-livescenes-form', 800, 530, true); return false;\" class='k-button' />"
+                            }]
+                        });
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td width="100%">
+                <input type="submit" id="btnRefreshLiveScenes" style="display: none" />
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#btnRefreshLiveScenes').click(function () {
+                            //refresh grid
+                            var grid = $("#order-livescenes-grid").data('kendoGrid');
+                            grid.dataSource.read();
+
+                            //return false to don't reload a page
+                            return false;
+                        });
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+}

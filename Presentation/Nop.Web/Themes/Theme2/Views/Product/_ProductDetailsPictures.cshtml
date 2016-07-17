@@ -1,0 +1,68 @@
+﻿@model ProductDetailsModel
+@using Nop.Web.Models.Catalog;
+<!-- 代码 开始 -->
+<div id="page-wrap">
+    <div class="slider-wrap">
+        <div id="main-photo-slider" class="csw">
+            <div class="panelContainer">
+                @for (var i = 1; i <= Model.PictureModels.Count; i++)
+                {
+                    var picture = Model.PictureModels[i - 1];
+                    <div class="panel" title="Panel @i"><img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></div>
+                }
+            </div>
+        </div>
+        @if (Model.PictureModels.Count > 0)
+        {
+            var picture1 = Model.PictureModels[0];
+            <a href="#1" class="cross-link active-thumb">
+                <img src="@picture1.ImageUrl" class="nav-thumb" alt="@picture1.AlternateText title=" @picture1.Title />
+            </a>
+            <div id="movers-row">
+                @for (var i = 2; i <= Model.PictureModels.Count; i++)
+                {
+                    var picture = Model.PictureModels[i - 1];
+                    <div>
+                        <a href="#@i" class="cross-link">
+                            <img src="@picture.ImageUrl" class="nav-thumb" alt="@picture.AlternateText" title="@picture.Title" />
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    var theInt = null;
+    var $crosslink, $navthumb;
+    var curclicked = 0;
+    theInterval = function (cur) {
+        clearInterval(theInt);
+        if (typeof cur != 'undefined')
+            curclicked = cur;
+        $crosslink.removeClass("active-thumb");
+        $navthumb.eq(curclicked).parent().addClass("active-thumb");
+        $(".stripNav ul li a").eq(curclicked).trigger('click');
+        theInt = setInterval(function () {
+            $crosslink.removeClass("active-thumb");
+            $navthumb.eq(curclicked).parent().addClass("active-thumb");
+            $(".stripNav ul li a").eq(curclicked).trigger('click');
+            curclicked++;
+            if (6 == curclicked)
+                curclicked = 0;
+        }, 3000);
+    };
+    $(function () {
+        $("#main-photo-slider").codaSlider();
+        $navthumb = $(".nav-thumb");
+        $crosslink = $(".cross-link");
+        $navthumb
+        .click(function () {
+            var $this = $(this);
+            theInterval($this.parent().attr('href').slice(1) - 1);
+            return false;
+        });
+        theInterval();
+    });
+</script>
+<!-- 代码 结束 -->

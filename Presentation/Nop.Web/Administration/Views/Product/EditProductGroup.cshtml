@@ -1,0 +1,22 @@
+﻿@model ProductGroupModel
+@{
+    //page title
+    ViewBag.Title = "编辑商品套餐";
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "product-group-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            编辑商品套餐 - @Model.Name @Html.ActionLink("(返回商品套餐列表)", "ProductGroups")
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            <input type="submit" name="save-continue" class="k-button" value="@T("Admin.Common.SaveContinue")" />
+            <span id="product-group-delete" class="k-button">@T("Admin.Common.Delete")</span>
+        </div>
+    </div>
+    @Html.Partial("_CreateOrUpdateProductGroup", Model)
+}
+@Html.DeleteConfirmation("product-group-delete")

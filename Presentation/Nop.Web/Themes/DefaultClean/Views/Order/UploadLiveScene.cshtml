@@ -1,0 +1,56 @@
+﻿@model OrderDetailsModel
+@using Nop.Web.Models.Order
+
+@if (Model.LiveScenes.Count > 0)
+{
+    <div class="uploads">
+        <h1>上传实景  免费设计</h1>
+        <div class="upload_pic">
+            <ul>
+                @foreach (var lc in Model.LiveScenes)
+                {
+                    <li>
+                        <p>@lc.Room  @lc.Window</p><img id="liveScene@(lc.Id)" src="@lc.OriginalPictureUrl">
+                        <a class="upload_livescene" data-id="@lc.Id" href="javascript:void(0);">
+                            @(lc.OriginalPictureId == 0 ? "待上传" : "重新上传")
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <script src="/scripts/ajaxupload.3.5.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".upload_livescene").each(function () {
+                var liveSceneId = $(this).attr("data-id");
+                new AjaxUpload($(this), {
+                    action: '@Url.Action("UploadLiveSceneFile")',
+                    name: 'coverpicfile',
+                    data: {
+                        controlName: "coverpicfile"
+                    },
+                    responseType: 'json',
+                    onSubmit: function (file, ext) {
+                        if (!(ext && /^(jpg|png|jpeg|gif)$/.test(ext))) {
+                            alert("只能上传 JPG, PNG 或 GIF 类型的文件！");
+                            return false;
+                        }
+                        this.setData({ liveSceneId: liveSceneId });
+                    },
+                    onComplete: function (file, response) {
+                        if (response.success) {
+                            $("#liveScene" + liveSceneId).attr("src", response.picUrl);
+                            $(this).html("重新上传");
+                        }
+                        else {
+                            alert(response.msg);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

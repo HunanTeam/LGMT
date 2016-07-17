@@ -1,0 +1,39 @@
+﻿@model ProductGroupModel
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Themes/DefaultClean/Views/Shared/_CustomLayout.cshtml";
+    Html.AddTitleParts(Model.ProductGroup.Name);
+}
+@section sec_head{
+}
+
+<div id="wrap">
+    <div class="shop_type">
+        <div class="shop_detail">
+            <h1>@Model.ProductGroup.Name</h1>
+            @*<p>@Model.ProductGroup.ShortDescription</p>*@
+            @Html.Raw(Model.ProductGroup.FullDescription)
+        </div>
+        @*<div class="shop_img"><img src="@Model.ProductGroup.PictureUrl"></div>*@
+        <h3>下面是搭配中所有商品，您可以一键加入预约单中哟^_^</h3>
+        <ul class="list_list">
+            @foreach (var product in Model.Products)
+            {
+                <li>
+                    <a href="@Url.RouteUrl("Product", new { SeName = product.SeName })" title="@product.Name">
+                        <img alt="@product.DefaultPictureModel.AlternateText" src="@product.DefaultPictureModel.ImageUrl" title="@product.DefaultPictureModel.Title" />
+                    </a>
+                    <a href="@Url.RouteUrl("Product", new { SeName = product.SeName })"><p>@product.Name</p></a>
+                    @if (!string.IsNullOrEmpty(product.ShortDescription))
+                    {
+                        var shortDes = product.ShortDescription.Length > 28 ? product.ShortDescription.Substring(0, 25) + "..." : product.ShortDescription;
+                        <span>@(shortDes)</span>
+                    }
+                    @*<div class="select_on">&nbsp;</div>*@
+                </li>
+            }
+        </ul>
+        @*<div class="go_shop"><a href="#">一键加入清单</a></div>
+            <div class="go_shop"><a href="#">不感兴趣，接着选</a></div>*@
+    </div>
+</div>

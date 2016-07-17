@@ -1,0 +1,14 @@
+﻿@model SearchFormModel
+@using Nop.Core
+@using Nop.Web.Models.Catalog;
+
+@using (Html.BeginRouteForm("ProductSearch", FormMethod.Get))
+{        <div class="search">
+        <em></em>
+        <p>
+            @Html.DropDownList("cid", Model.AvailableCategories)
+            @Html.DropDownList("tid", Model.AvailableTags)
+            <input type="submit" class="butn" value="开始选购" />
+        </p>
+    </div>
+}

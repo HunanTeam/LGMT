@@ -1,0 +1,15 @@
+---------- DEV -----------
+DataProvider: sqlserver
+DataConnectionString: Data Source=DESKTOP-1MSRKH9\SQLEXPRESS;Initial Catalog=nopCommerce_36_uat;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=2052499
+
+
+---------- UAT -----------
+DataProvider: sqlserver
+DataConnectionString: Data Source=sql.m98.vhostgo.com;Initial Catalog=vslution;Integrated Security=False;Persist Security Info=False;User ID=vslution;Password=qe7p6tua47
+
+
+
+---------- PRO -----------
+DataProvider: sqlserver
+DataConnectionString: Data Source=rm-wz93w3fz0zzdq84i0.sqlserver.rds.aliyuncs.com;Initial Catalog=vslution;Integrated Security=False;Persist Security Info=False;User ID=lgmt;Password=Tt164859320
+

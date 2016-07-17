@@ -1,0 +1,88 @@
+﻿@model HeaderLinksModel
+@using Nop.Web.Models.Common;
+<ul id="header_links" class="menu">
+    <li class="fr"><a href="@Url.Action("cart", "shoppingcart")" class="shop">@(Model.ShoppingCartItems)个商品</a></li>
+    @if (Model.IsAuthenticated)
+    {
+        <li class="fr"><a href="@Url.Action("CustomerOrders","Order")">我的账户</a> | </li>
+        <li class="fr"><a href="@Url.Action("Logout","Customer")">退出</a> | </li>
+    }
+    else
+    {
+        <li class="fr"><a id="btn_login" href="javascript:void(0);">会员登录</a> | </li>
+        <li class="fr"><a id="btn_register" href="javascript:void(0);">注册</a> | </li>
+    }
+    <li style="width:50px"></li>
+    <li class="fl">
+        <a href="javascript:void(0);" id="go_store">去实体店</a>
+        @*<script type="text/javascript">
+                $("#go_store2").click(function () {
+                    layer.open({
+                        type: 1,
+                        shade: false,
+                        title: false, //不显示标题
+                        content: $('.layer_notice'), //捕获的元素
+                        cancel: function (index) {
+                            layer.close(index);
+                            this.content.show();
+                        }
+                    });
+                });
+            </script>*@
+        <div id="storeinfo" class="store" style="display: none;">
+            <h1>欢迎上门选购</h1>
+            <p>我们的地址位于：<br />湖南省长沙市雨花区211号宝马家居饰品广场潇湘晨报对面（公交站 17  159  63  66 路，途径潇湘晨报下车）</p>
+            <p>如果您需要上门挑选，建议准备好<br />  1、窗户尺寸（方便核价预算）<br />2、实景图片（我们将为您免费做实景设计）</p>
+            <p>我们的电话是：0731—85772070<br />  门店上班时间为：9:00—17:50（周末不休，节假日请提前通知）</p>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var continueShow = false;
+                $('#go_store').mousemove(function () {
+                    $('.store').slideDown("3000");
+                });
+                $('#go_store').mouseleave(function () {
+                    continueShow = false;
+                    setTimeout(function () {
+                        if (!continueShow)
+                            $('.store').slideUp("fast");
+                    }, 600);
+                });
+                $("#storeinfo").mousemove(function () {
+                    continueShow = true;
+                });
+                $('#storeinfo').mouseleave(function () {
+                    $('.store').slideUp("fast");
+                });
+            });
+        </script>
+    </li>
+    <li class="fl"><a href="@Url.Action("productgroups", "product")" style="color:#f00">快速选购</a>|</li>
+</ul>
+@if (!Model.IsAuthenticated)
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#btn_login").click(function () {
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['780px', '430px'],
+                    skin: 'layui-layer-rim',
+                    content: ['@Url.RouteUrl("Login")', 'no']
+                });
+            });
+            $("#btn_register").click(function () {
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['780px', '430px'],
+                    skin: 'layui-layer-rim',
+                    content: ['@Url.RouteUrl("Register")', 'no']
+                });
+            });
+        });
+    </script>
+}

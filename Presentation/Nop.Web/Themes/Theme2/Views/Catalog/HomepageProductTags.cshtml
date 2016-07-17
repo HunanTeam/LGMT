@@ -1,0 +1,63 @@
+﻿@model HomepageProductTagsModel
+@using Nop.Web.Models.Catalog;
+@helper showProductTag(ProductTagModel productTag)
+{
+    if (productTag != null)
+    {
+        <a href="/search?tid=@productTag.Id" target="_blank"><img src="@productTag.PictureUrl"><p>@productTag.Name</p></a>
+    }
+}
+@helper showProduct(ProductOverviewModel product)
+{
+    if (product != null)
+    {
+        <a href="@Url.RouteUrl("Product", new { SeName = product.SeName })" target="_blank" title="@product.DefaultPictureModel.Title">
+            <img alt="@product.DefaultPictureModel.AlternateText" src="@product.DefaultPictureModel.ImageUrl" title="@product.DefaultPictureModel.Title" />
+        </a>
+        <div class="centers"></div>
+        <a href="@Url.RouteUrl("Product", new { SeName = product.SeName })" target="_blank" title="@product.DefaultPictureModel.Title"><span>@product.Name</span></a>
+        <div class="pay_bg"><font>@product.ProductPrice.Price.Replace(".00", ".0")</font></div>
+    }
+}
+
+<div class="index_second">
+    <div class="title">
+        <p>多种风格</p>
+        <span>搜索全球热门风格</span>
+    </div>
+    <ul class="content">
+        @*首页共显示8个标签和2个商品*@
+        @for (var i = 1; i <= 10; i++)
+        {
+            ProductTagModel productTag = null;
+            ProductOverviewModel product = null;
+
+            if (i == 2 || i == 6) //商品
+            {
+                if (Model.Products.Count > 0)
+                {
+                    product = Model.Products.First();
+                }
+                <li>@showProduct(product)</li>
+                if (product != null)
+                {
+                    Model.Products.Remove(product);
+                }
+            }
+            else //标签
+            {
+                if (Model.ProductTags.Count > 0)
+                {
+                    productTag = Model.ProductTags.First();
+                }
+                <li @if (i == 1 || i == 7) { <text> style="width:790px" </text>      }>
+                    @showProductTag(productTag)
+                </li>
+if (productTag != null)
+{
+    Model.ProductTags.Remove(productTag);
+}
+            }
+        }
+    </ul>
+</div>

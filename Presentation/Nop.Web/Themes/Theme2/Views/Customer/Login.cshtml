@@ -1,0 +1,111 @@
+﻿@model LoginModel
+@using Nop.Web.Models.Customer;
+@using Nop.Core;
+@using Nop.Core.Infrastructure;
+@{
+    Layout = null;
+
+    //register URL with return URL (if specified)
+    var registerUrl = Url.RouteUrl("Register");
+    if (!String.IsNullOrEmpty(this.Context.Request.QueryString["returnUrl"]))
+    {
+        var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+        registerUrl = webHelper.ModifyQueryString(registerUrl, "returnurl=" + HttpUtility.UrlEncode(this.Context.Request.QueryString["returnUrl"]), null);
+    }
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@T("PageTitle.Login").Text</title>
+    <link type="text/css" href="/content/custom/css/main.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/jquery-1.10.2.min.js"></script>
+    <script src="/scripts/jquery.form.js" type="text/javascript"></script>
+    <link type="text/css" href="/scripts/layer/skin/layer.css" rel="stylesheet" />
+    <script src="/scripts/layer/layer.js" type="text/javascript"></script>
+    <script src="/scripts/public.common.js" type="text/javascript"></script>
+</head>
+<body style="background:#efefef">
+    <div class="login_pop">
+        @using (Html.BeginForm("Login", "Customer", FormMethod.Post, new { id = "login-form" }))
+        {
+            var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
+            <div class="fl">
+                <h1>会员登录</h1>
+                <ul>
+                    <li>
+                        <input id="CustomerPhone" name="CustomerPhone" type="text" placeholder="手机" maxlength=11 />
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </li>
+                    <li>
+                        <input id="Password" name="Password" type="password" placeholder="密码" maxlength=20 />
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </li>
+                    <li><a href="#">忘记密码?</a></li>
+                    <li>
+                        <input id="btn_login" class="butn" type="button" value="@T("Account.Login.LoginButton")" />
+                        <p class="valid_info" style="display:none;">手机号码或密码错误，请重试！</p>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="fr">
+            <h1>第三方快速登录</h1>
+            <p>使用第三方登录，不用输入账号密码。</p>
+            <ul>
+                <li><a href="#" class="weibo"></a></li>
+                <li><a href="#" class="qq"></a></li>
+                <li><a href="#" class="weixin"></a></li>
+            </ul>
+            <span><a href="@Url.Action("Register")">使用手机注册</a></span>
+        </div>
+        <div class="close"><a id="btn_close" href="javascript:void(0);">关闭</a></div>
+        <script type="text/javascript">
+            $("#btn_close").click(function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            });
+        </script>
+    </div>
+    <script type="text/javascript">
+        $("#btn_login").click(function () {
+            var customerPhone = $("#@Html.IdFor(m=>m.CustomerPhone)").val();
+            if (customerPhone == "") {
+                layer.msg('请填写手机号码', function () { });
+                $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                return;
+            }
+            if (!/^[1]+[3,5,8,4,6,9]+\d{9}$/.test(customerPhone)) {
+                layer.msg('手机号码格式不正确', function () { });
+                $("#@Html.IdFor(m=>m.CustomerPhone)").focus();
+                return;
+            }
+            var password = $("#@Html.IdFor(m=>m.Password)").val();
+            if (password == "") {
+                layer.msg('请填写密码', function () { });
+                $("#@Html.IdFor(m => m.Password)").focus();
+                return;
+            }
+
+            $("#login-form").ajaxSubmit({
+                url: "@Url.Action("Login","Customer")?returnUrl=@Request["returnUrl"]",
+                success: function (result) {
+                    if (result.success) {
+                        if (window.parent != window)
+                            parent.document.location.href = parent.document.location.href;
+                        else
+                            document.location.href = result.returnUrl;
+                        //refreshHeaderLinks(true, function () {
+                        //var index = parent.layer.getFrameIndex(window.name);
+                        //parent.layer.close(index);
+                        //});
+                    }
+                    else {
+                        $(".valid_info").show();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+﻿@model HomepageModuleModel
+@using Nop.Core.Domain.PageContent;
+@using Nop.Admin.Models.PageContent;
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.FieldIdFor(model => model.ModuleType)").change(toggleModelType);
+        toggleModelType();
+    });
+
+    function toggleModelType() {
+        var selectedModuleType = $('#@Html.FieldIdFor(model => model.ModuleType)').val();
+        var pictureCount = 10;
+        if (selectedModuleType == "@((int)HomepageModuleType.BigADBox)"
+            || selectedModuleType == "@((int)HomepageModuleType.Style)")
+            pictureCount = 10;
+        else if (selectedModuleType == "@((int)HomepageModuleType.Products1)"
+            || selectedModuleType == "@((int)HomepageModuleType.Products2)"
+            || selectedModuleType == "@((int)HomepageModuleType.Products3)")
+            pictureCount = 4;
+        else if (selectedModuleType == "@((int)HomepageModuleType.Products4)"
+              || selectedModuleType == "@((int)HomepageModuleType.Products5)")
+            pictureCount = 3;
+
+        for (i = 1; i <= 10; i++) {
+            if (i <= pictureCount)
+                $(".picture" + i).show();
+            else
+                $(".picture" + i).hide();
+        }
+    }
+</script>
+
+@Html.ValidationSummary(true)
+@Html.HiddenFor(model => model.Id)
+
+<div id="news-edit">
+    <ul>
+        <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
+            @T("Admin.ContentManagement.News.NewsItems.Info")
+        </li>
+    </ul>
+    <div>
+        @TabInfo()
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#news-edit").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+
+@helper TabInfo()
+{
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                模块名称:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                模块布局风格:
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.ModuleType, new SelectListItem[]{
+                new SelectListItem{Text="轮播滚动广告",Value=((int)HomepageModuleType.BigADBox).ToString()},
+                new SelectListItem{Text="2*5张小图片",Value=((int)HomepageModuleType.Style).ToString()},
+                new SelectListItem{Text="4张图片布局1",Value=((int)HomepageModuleType.Products1).ToString()},
+                new SelectListItem{Text="4张图片布局2",Value=((int)HomepageModuleType.Products2).ToString()},
+                new SelectListItem{Text="4张图片布局3",Value=((int)HomepageModuleType.Products3).ToString()},        
+                new SelectListItem{Text="3张图片布局1",Value=((int)HomepageModuleType.Products4).ToString()},
+                new SelectListItem{Text="3张图片布局2",Value=((int)HomepageModuleType.Products5).ToString()},
+           })
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                排序:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.DisplayOrder)
+                @Html.ValidationMessageFor(model => model.DisplayOrder)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                已发布:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Published)
+                @Html.ValidationMessageFor(model => model.Published)
+            </td>
+        </tr>
+        <tr class="picture1" style="display:none;">
+            <td class="adminTitle">
+                图片1:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId1)
+                @Html.ValidationMessageFor(model => model.PictureId1)
+            </td>
+        </tr>
+        <tr class="picture1" style="display:none;">
+            <td class="adminTitle">
+                链接1:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url1)
+                @Html.ValidationMessageFor(model => model.Url1)
+            </td>
+        </tr>
+        <tr class="picture2" style="display:none;">
+            <td class="adminTitle">
+                图片2:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId2)
+                @Html.ValidationMessageFor(model => model.PictureId2)
+            </td>
+        </tr>
+        <tr class="picture2" style="display:none;">
+            <td class="adminTitle">
+                链接2:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url2)
+                @Html.ValidationMessageFor(model => model.Url2)
+            </td>
+        </tr>
+        <tr class="picture3" style="display:none;">
+            <td class="adminTitle">
+                图片3:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId3)
+                @Html.ValidationMessageFor(model => model.PictureId3)
+            </td>
+        </tr>
+        <tr class="picture3" style="display:none;">
+            <td class="adminTitle">
+                链接3:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url3)
+                @Html.ValidationMessageFor(model => model.Url3)
+            </td>
+        </tr>
+        <tr class="picture4" style="display:none;">
+            <td class="adminTitle">
+                图片4:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId4)
+                @Html.ValidationMessageFor(model => model.PictureId4)
+            </td>
+        </tr>
+        <tr class="picture4" style="display:none;">
+            <td class="adminTitle">
+                链接4:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url4)
+                @Html.ValidationMessageFor(model => model.Url4)
+            </td>
+        </tr>
+        <tr class="picture5" style="display:none;">
+            <td class="adminTitle">
+                图片5:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId5)
+                @Html.ValidationMessageFor(model => model.PictureId5)
+            </td>
+        </tr>
+        <tr class="picture5" style="display:none;">
+            <td class="adminTitle">
+                链接5:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url5)
+                @Html.ValidationMessageFor(model => model.Url5)
+            </td>
+        </tr>
+        <tr class="picture6" style="display:none;">
+            <td class="adminTitle">
+                图片6:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId6)
+                @Html.ValidationMessageFor(model => model.PictureId6)
+            </td>
+        </tr>
+        <tr class="picture6" style="display:none;">
+            <td class="adminTitle">
+                链接6:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url6)
+                @Html.ValidationMessageFor(model => model.Url6)
+            </td>
+        </tr>
+        <tr class="picture7" style="display:none;">
+            <td class="adminTitle">
+                图片7:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId7)
+                @Html.ValidationMessageFor(model => model.PictureId7)
+            </td>
+        </tr>
+        <tr class="picture7" style="display:none;">
+            <td class="adminTitle">
+                链接7:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url7)
+                @Html.ValidationMessageFor(model => model.Url7)
+            </td>
+        </tr>
+        <tr class="picture8" style="display:none;">
+            <td class="adminTitle">
+                图片8:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId8)
+                @Html.ValidationMessageFor(model => model.PictureId8)
+            </td>
+        </tr>
+        <tr class="picture8" style="display:none;">
+            <td class="adminTitle">
+                链接8:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url8)
+                @Html.ValidationMessageFor(model => model.Url8)
+            </td>
+        </tr>
+        <tr class="picture9" style="display:none;">
+            <td class="adminTitle">
+                图片9:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId9)
+                @Html.ValidationMessageFor(model => model.PictureId9)
+            </td>
+        </tr>
+        <tr class="picture9" style="display:none;">
+            <td class="adminTitle">
+                链接9:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url9)
+                @Html.ValidationMessageFor(model => model.Url9)
+            </td>
+        </tr>
+        <tr class="picture10" style="display:none;">
+            <td class="adminTitle">
+                图片10:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId10)
+                @Html.ValidationMessageFor(model => model.PictureId10)
+            </td>
+        </tr>
+        <tr class="picture10" style="display:none;">
+            <td class="adminTitle">
+                链接10:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url10)
+                @Html.ValidationMessageFor(model => model.Url10)
+            </td>
+        </tr>
+    </table>
+}

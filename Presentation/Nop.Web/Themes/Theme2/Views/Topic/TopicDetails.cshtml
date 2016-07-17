@@ -1,0 +1,79 @@
+﻿@model TopicModel
+@using Nop.Core.Domain.Seo
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Topics;
+@{
+    Layout = null;
+
+    if (!Model.IsPasswordProtected)
+    {
+        Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+        Html.AddMetaDescriptionParts(Model.MetaDescription);
+        Html.AddMetaKeywordParts(Model.MetaKeywords);
+    }
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var topicUrl = Url.RouteUrl("Topic", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(topicUrl);
+    }
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@Html.NopTitle(true)</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="@(Html.NopMetaDescription())" />
+    <meta name="keywords" content="@(Html.NopMetaKeywords())" />
+    <link type="text/css" href="/content/custom/css/main.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+    <div class="heads">
+        <div class="logo"><a href="/">&nbsp;</a></div>
+        <div class="search">
+            @using (Html.BeginRouteForm("ProductSearch", FormMethod.Get))
+            {
+                <input type="text" name="q" placeholder="请输入关键词" value="@Request["q"]" />
+                <input type="submit" class="button" value="" />
+            }
+        </div>
+        @Html.Action("HeaderLinks", "Common")
+    </div>
+    <div id="wrap">
+        <div class="help">
+            <!--菜单-->
+            <div class="fl">
+                <h2>购物指南</h2>
+                <ul>
+                    <li><a class="" href="#">新手指南</a></li>
+                    <li><a class="" href="#">购物说明</a></li>
+                    <li><a class="" href="#">支付方式</a></li>
+                    <li><a class="" href="#">配送说明</a></li>
+                    <li><a href="#">退货说明</a></li>
+                    <li><a class="" href="#">发票说明</a></li>
+                </ul>
+                <h2>购物指南</h2>
+                <ul style="border:0px">
+                    <li><a class="" href="#">新手指南</a></li>
+                    <li><a class="" href="#">购物说明</a></li>
+                    <li><a class="" href="#">支付方式</a></li>
+                    <li><a class="" href="#">配送说明</a></li>
+                    <li><a class="" href="#">退货说明</a></li>
+                    <li><a class="" href="#">发票说明</a></li>
+                </ul>
+            </div>
+            <!--右边-->
+            <div class="fr">
+                <div class="menu">@Model.Title</div>
+                <div class="question">
+                    @Html.Raw(Model.Body)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--底部-->
+    @Html.Partial("Footer")
+</body>
+</html>
