@@ -19,6 +19,11 @@ namespace Nop.Core.Domain
         /// </summary>
         public string DefaultStoreTheme { get; set; }
 
+        public string DefaultMoblieTheme { get; set; }
+
+
+
+
         /// <summary>
         /// Gets or sets a value indicating whether customers are allowed to select a theme
         /// </summary>

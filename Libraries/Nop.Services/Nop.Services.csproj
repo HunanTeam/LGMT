@@ -180,7 +180,9 @@
     <Compile Include="Common\AddressAttributeService.cs" />
     <Compile Include="Common\IAddressAttributeParser.cs" />
     <Compile Include="Common\IAddressAttributeService.cs" />
+    <Compile Include="Common\IMobileDeviceHelper.cs" />
     <Compile Include="Common\ISearchTermService.cs" />
+    <Compile Include="Common\MobileDeviceHelper.cs" />
     <Compile Include="Common\SearchTermService.cs" />
     <Compile Include="Common\AddressService.cs" />
     <Compile Include="Common\AddressExtensions.cs" />
