@@ -1,0 +1,8 @@
+﻿Group: ExternalAuth methods
+FriendlyName: OAuth2 authentication
+SystemName: ExternalAuth.OAuth2
+Version: 0.1
+SupportedVersions: 3.60
+Author: lgmt
+DisplayOrder: 5
+FileName: Nop.Plugin.ExternalAuth.OAuth2.dll
