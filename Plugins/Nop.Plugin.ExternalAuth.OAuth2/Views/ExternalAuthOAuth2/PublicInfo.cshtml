@@ -1,0 +1,34 @@
+﻿@model Nop.Plugin.ExternalAuth.OAuth2.Models.PublicInfoModel
+@using Nop.Web.Framework.UI
+@{
+    Layout = "";
+
+    Html.AddCssFileParts("~/Plugins/ExternalAuth.OAuth2/Content/oauth2styles.css");
+}
+
+@if (HttpContext.Current.Request.QueryString["Plantform"] != null &&
+                            HttpContext.Current.Request.QueryString["OpenId"] != null)
+{
+    @*如果Url带有Plantform和OpenId两个参数，则认为是微信访问*@
+if (Model.QQEnabled)
+{
+    <a href="@Url.RouteUrl("Plugin.ExternalAuth.OAuth2.QQ.Login", new { ReturnUrl = HttpContext.Current.Request.QueryString["ReturnUrl"], OpenId = HttpContext.Current.Request.QueryString["OpenId"], Plantform = HttpContext.Current.Request.QueryString["Plantform"] })" class="qq-btn"><span class="otherbtn login_qq"></span></a>
+}
+if (Model.WeiBoEnabled)
+{
+    <a href="@Url.RouteUrl("Plugin.ExternalAuth.OAuth2.WeiBo.Login", new { ReturnUrl = HttpContext.Current.Request.QueryString["ReturnUrl"] })" class="weibo-btn"><span class="otherbtn login_weibo"></span></a>
+    }
+    <a href="@Url.RouteUrl("Plugin.ExternalAuth.OAuth2.WeChat.Login", new { ReturnUrl = HttpContext.Current.Request.QueryString["ReturnUrl"] })" class="weibo-btn"><span class="otherbtn login_weixin"></span></a>
+}
+else
+{
+    @T("Plugins.ExternalAuth.OAuth2.Login")<br />
+    if (Model.QQEnabled)
+    {
+        <a href="@Url.RouteUrl("Plugin.ExternalAuth.OAuth2.QQ.Login", new { ReturnUrl = HttpContext.Current.Request.QueryString["ReturnUrl"] })" class="qq-btn">&nbsp;</a>
+    }
+    if (Model.WeiBoEnabled)
+    {
+        <a href="@Url.RouteUrl("Plugin.ExternalAuth.OAuth2.WeiBo.Login", new { ReturnUrl = HttpContext.Current.Request.QueryString["ReturnUrl"] })" class="weibo-btn">&nbsp;</a>
+    }
+}

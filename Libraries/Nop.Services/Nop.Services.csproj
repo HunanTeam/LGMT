@@ -71,9 +71,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PerlRegex, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\nopCommerceCustom\PerlRegex.dll</HintPath>
+    <Reference Include="PerlRegex">
+      <HintPath>..\..\nopCommerceCustom\PerlRegex.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -113,9 +112,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UserAgentStringLibrary, Version=1.0.1211.25, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\nopCommerceCustom\UserAgentStringLibrary.dll</HintPath>
+    <Reference Include="UserAgentStringLibrary">
+      <HintPath>..\..\nopCommerceCustom\UserAgentStringLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -182,7 +180,9 @@
     <Compile Include="Common\AddressAttributeService.cs" />
     <Compile Include="Common\IAddressAttributeParser.cs" />
     <Compile Include="Common\IAddressAttributeService.cs" />
+    <Compile Include="Common\IMobileDeviceHelper.cs" />
     <Compile Include="Common\ISearchTermService.cs" />
+    <Compile Include="Common\MobileDeviceHelper.cs" />
     <Compile Include="Common\SearchTermService.cs" />
     <Compile Include="Common\AddressService.cs" />
     <Compile Include="Common\AddressExtensions.cs" />

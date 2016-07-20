@@ -22,13 +22,13 @@ namespace Nop.Web.Framework.Themes
         private const string CacheKeyFormat = ":ViewCacheEntry:{0}:{1}:{2}:{3}:{4}:{5}";
         private const string CacheKeyPrefixMaster = "Master";
         private const string CacheKeyPrefixPartial = "Partial";
-        private const string CacheKeyPrefixView = "View"; 
+        private const string CacheKeyPrefixView = "View";
         private static readonly string[] _emptyLocations = new string[0];
 
         internal Func<string, string> GetExtensionThunk = VirtualPathUtility.GetExtension;
 
         #endregion
-        
+
         #region Utilities & Methods
 
         protected virtual string GetAreaName(RouteData routeData)
@@ -56,9 +56,15 @@ namespace Nop.Web.Framework.Themes
             return null;
         }
 
-        protected virtual string GetCurrentTheme()
+        protected virtual string GetCurrentTheme(ControllerContext controllerContext)
         {
             var themeContext = EngineContext.Current.Resolve<IThemeContext>();
+            var mobileDeviceHelper = EngineContext.Current.Resolve<Services.Common.IMobileDeviceHelper>();
+            var setting = EngineContext.Current.Resolve<Core.Domain.StoreInformationSettings>();
+            if (mobileDeviceHelper.MobileDevicesSupported() && mobileDeviceHelper.IsMobileDevice(controllerContext.HttpContext))
+            {
+                return setting.DefaultMoblieTheme;
+            }
             return themeContext.WorkingThemeName;
         }
 
@@ -85,7 +91,7 @@ namespace Nop.Web.Framework.Themes
             }
 
             string[] searched;
-            var theme = GetCurrentTheme();
+            var theme = GetCurrentTheme(controllerContext);
             string controllerName = controllerContext.RouteData.GetRequiredString("controller");
             string partialPath = GetPath(controllerContext, PartialViewLocationFormats, AreaPartialViewLocationFormats, "PartialViewLocationFormats", partialViewName, controllerName, theme, CacheKeyPrefixPartial, useCache, out searched);
 
@@ -111,7 +117,7 @@ namespace Nop.Web.Framework.Themes
             string[] viewLocationsSearched;
             string[] masterLocationsSearched;
 
-            var theme = GetCurrentTheme();
+            var theme = GetCurrentTheme(controllerContext);
             string controllerName = controllerContext.RouteData.GetRequiredString("controller");
             string viewPath = GetPath(controllerContext, ViewLocationFormats, AreaViewLocationFormats, "ViewLocationFormats", viewName, controllerName, theme, CacheKeyPrefixView, useCache, out viewLocationsSearched);
             string masterPath = GetPath(controllerContext, MasterLocationFormats, AreaMasterLocationFormats, "MasterLocationFormats", masterName, controllerName, theme, CacheKeyPrefixMaster, useCache, out masterLocationsSearched);

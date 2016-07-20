@@ -1,0 +1,10 @@
+﻿.foo{}
+fieldset.oauth-login-block{display:inline;float:left;margin:5px;}
+
+.qq-btn{float:left;background-image:url('images/qq-signing.png');background-repeat:no-repeat;width:120px;height:24px;margin:5px;}
+.qq-btn:hover{}
+.qq-btn:active{}
+
+.weibo-btn{float:left;background-image:url('images/weibo-signing.png');background-repeat:no-repeat;width:100px;height:25px;margin:5px;}
+.weibo-btn:hover{}
+.weibo-btn:active{}

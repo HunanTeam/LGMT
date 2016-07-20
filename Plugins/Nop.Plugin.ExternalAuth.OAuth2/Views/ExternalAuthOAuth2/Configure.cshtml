@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.ExternalAuth.OAuth2.Models.ConfigurationModel
+@using Nop.Web.Framework;
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="adminContent">
+        <tr>
+            <td colspan="2">
+                @T("Plugins.ExternalAuth.OAuth2.QQConnect")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.QQEnabled):
+            </td>
+            <td class="adminData">
+                @Html.RadioButtonFor(model => model.QQEnabled, true)@T("Plugins.ExternalAuth.OAuth2.Enable")
+                @Html.RadioButtonFor(model => model.QQEnabled, false)@T("Plugins.ExternalAuth.OAuth2.Disable")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.QQClientKeyIdentifier):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.QQClientKeyIdentifier)
+                @Html.ValidationMessageFor(model => model.QQClientKeyIdentifier)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.QQClientSecret):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.QQClientSecret)
+                @Html.ValidationMessageFor(model => model.QQClientSecret)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @T("Plugins.ExternalAuth.OAuth2.WeiBoConnect")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeiBoEnabled):
+            </td>
+            <td class="adminData">
+                @Html.RadioButtonFor(model => model.WeiBoEnabled, true)@T("Plugins.ExternalAuth.OAuth2.Enable")
+                @Html.RadioButtonFor(model => model.WeiBoEnabled, false)@T("Plugins.ExternalAuth.OAuth2.Disable")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeiBoClientKeyIdentifier):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.WeiBoClientKeyIdentifier)
+                @Html.ValidationMessageFor(model => model.WeiBoClientKeyIdentifier)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeiBoClientSecret):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.WeiBoClientSecret)
+                @Html.ValidationMessageFor(model => model.WeiBoClientSecret)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="100%">
+                <input type="submit" name="save" class="t-button" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>
+
+}
