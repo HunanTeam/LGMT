@@ -137,8 +137,8 @@ namespace Nop.Core.Domain.Customers
 
         #region Reward points
 
-        public static void AddRewardPointsHistoryEntry(this Customer customer, 
-            int points, string message = "", 
+        public static void AddRewardPointsHistoryEntry(this Customer customer,
+            int points, string message = "",
             Order usedWithOrder = null, decimal usedAmount = 0M)
         {
             int newPointsBalance = customer.GetRewardPointsBalance() + points;
@@ -173,5 +173,23 @@ namespace Nop.Core.Domain.Customers
         }
 
         #endregion
+
+
+        #region ×¢²áÀ´Ô´
+        public static bool IsRegisterFromThirdParty(this Customer customer)
+        {
+            return customer.RegisterSource == RegisterSource.ThirdParty;
+        }
+
+        public static bool NeedBindPhone(this Customer customer)
+        {
+
+            return string.IsNullOrWhiteSpace(customer.Phone);
+
+
+        }
+
+        #endregion
+
     }
 }

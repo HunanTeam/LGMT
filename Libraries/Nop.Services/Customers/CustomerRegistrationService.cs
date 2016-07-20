@@ -141,7 +141,7 @@ namespace Nop.Services.Customers
             //    result.AddError(_localizationService.GetResource("Account.Register.Errors.EmailIsNotProvided"));
             //    return result;
             //}
-            if (!CommonHelper.IsValidPhone(request.CustomerPhone))
+            if (!CommonHelper.IsValidPhone(request.CustomerPhone) && request.RegisterSource != RegisterSource.ThirdParty)
             {
                 result.AddError("手机号码格式错误");
                 return result;
@@ -167,7 +167,7 @@ namespace Nop.Services.Customers
             //    return result;
             //}
             //validate unique user
-            if (_customerService.GetCustomerByPhone(request.CustomerPhone) != null)
+            if (_customerService.GetCustomerByPhone(request.CustomerPhone) != null && request.RegisterSource != RegisterSource.ThirdParty)
             {
                 result.AddError("手机号码已经存在");
                 return result;
@@ -186,12 +186,16 @@ namespace Nop.Services.Customers
             request.Customer.Email = request.Email;
             request.Customer.Phone = request.CustomerPhone;
             request.Customer.PasswordFormat = request.PasswordFormat;
-
+            request.Customer.RegisterSource = request.RegisterSource;
             switch (request.PasswordFormat)
             {
                 case PasswordFormat.Clear:
                     {
                         request.Customer.Password = request.Password;
+                        if (request.RegisterSource == RegisterSource.ThirdParty)
+                        {
+                            request.Customer.Password = _customerSettings.ThirdPartyDefaultPassword ?? "12345678";
+                        }
                     }
                     break;
                 case PasswordFormat.Encrypted:

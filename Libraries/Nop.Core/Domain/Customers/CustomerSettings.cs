@@ -79,7 +79,7 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a value indicating whether 'New customer' notification message should be sent to a store owner
         /// </summary>
         public bool NotifyNewCustomerRegistration { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to hide 'Downloable products' tab on 'My account' page
         /// </summary>
@@ -129,12 +129,14 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a value indicating we should store last visited page URL for each customer
         /// </summary>
         public bool StoreLastVisitedPage { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether deleted customer records should be prefixed suffixed with "-DELETED"
         /// </summary>
         public bool SuffixDeletedCustomers { get; set; }
-        
+
+        public string ThirdPartyDefaultPassword { get; set; }
+
         #region Form fields
 
         /// <summary>

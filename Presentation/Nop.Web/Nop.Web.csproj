@@ -1184,9 +1184,7 @@
     <Content Include="Content\samples\product_IfYouWait_1.zip" />
     <Content Include="Content\samples\product_NightVision_1.zip" />
     <Content Include="Content\samples\product_ScienceAndFaith_1.zip" />
-    <Content Include="App_Data\alipay_key\alipay_public_key.pem" />
-    <Content Include="App_Data\alipay_key\rsa_private_key.pem" />
-    <Content Include="App_Data\alipay_key\rsa_public_key.pem" />
+    <Content Include="App_Data\更新脚本\01.第三方登录.sql" />
     <None Include="Properties\PublishProfiles\z.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\fineuploader\iframe.xss.response-4.2.2.js" />
@@ -2074,7 +2072,6 @@
     <Content Include="Content\Images\flags\zw.png" />
     <Content Include="Content\Images\default-image.gif" />
     <Content Include="Content\install\images\install-synchronizing.gif" />
-    <Content Include="Content\Images\uploaded\placeholder.txt" />
     <Content Include="Content\install\images\bg.gif" />
     <Content Include="Content\install\images\bodybg.gif" />
     <Content Include="Content\install\images\bottom.gif" />
@@ -2087,7 +2084,6 @@
     <Content Include="Content\install\images\topright.gif" />
     <Content Include="Content\install\style.css" />
     <Content Include="Content\install\style.rtl.css" />
-    <Content Include="Content\Images\Thumbs\placeholder.txt" />
     <Content Include="ErrorPage.htm" />
     <Content Include="FileNotFound.htm" />
     <Content Include="Global.asax" />
@@ -2296,6 +2292,8 @@
     <Content Include="Themes\DefaultClean\Views\Topic\TopicDetails.NoStyle.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Images\Thumbs\" />
+    <Folder Include="Content\Images\uploaded\" />
     <Folder Include="Plugins\bin\" />
     <Folder Include="Themes\DefaultClean\Views\Checkout\" />
     <Folder Include="Themes\Mobile\Content\css\" />

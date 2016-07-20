@@ -32,6 +32,9 @@ namespace Nop.Services.Customers
         /// Password format
         /// </summary>
         public PasswordFormat PasswordFormat { get; set; }
+
+        public RegisterSource RegisterSource { get; set; }
+
         /// <summary>
         /// Is approved
         /// </summary>
@@ -47,9 +50,9 @@ namespace Nop.Services.Customers
         /// <param name="passwordFormat">Password fprmat</param>
         /// <param name="isApproved">Is approved</param>
         public CustomerRegistrationRequest(Customer customer, string customerPhone, string email, string username,
-            string password, 
+            string password,
             PasswordFormat passwordFormat,
-            bool isApproved = true)
+            bool isApproved = true, RegisterSource source = RegisterSource.System)
         {
             this.Customer = customer;
             this.CustomerPhone = customerPhone;
@@ -57,6 +60,7 @@ namespace Nop.Services.Customers
             this.Username = username;
             this.Password = password;
             this.PasswordFormat = passwordFormat;
+            this.RegisterSource = source;
             this.IsApproved = isApproved;
         }
     }

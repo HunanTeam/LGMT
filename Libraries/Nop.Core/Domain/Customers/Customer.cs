@@ -53,6 +53,8 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the password format
         /// </summary>
         public int PasswordFormatId { get; set; }
+
+       
         /// <summary>
         /// Gets or sets the password format
         /// </summary>
@@ -61,6 +63,15 @@ namespace Nop.Core.Domain.Customers
             get { return (PasswordFormat)PasswordFormatId; }
             set { this.PasswordFormatId = (int)value; }
         }
+
+        public int RegisterSourceId { get; set; }
+
+        public RegisterSource RegisterSource
+        {
+            get { return (RegisterSource)RegisterSourceId; }
+            set { this.RegisterSourceId = (int)value; }
+        }
+
         /// <summary>
         /// Gets or sets the password salt
         /// </summary>
@@ -135,6 +146,8 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the date and time of last activity
         /// </summary>
         public DateTime LastActivityDateUtc { get; set; }
+
+
         
         #region Navigation properties
 
