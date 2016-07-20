@@ -1184,7 +1184,7 @@
     <Content Include="Content\samples\product_IfYouWait_1.zip" />
     <Content Include="Content\samples\product_NightVision_1.zip" />
     <Content Include="Content\samples\product_ScienceAndFaith_1.zip" />
-    <Content Include="App_Data\更新脚本\01.第三方登录.sql" />
+	  <Content Include="App_Data\更新脚本\01.第三方登录.sql" />
     <None Include="Properties\PublishProfiles\z.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\fineuploader\iframe.xss.response-4.2.2.js" />
