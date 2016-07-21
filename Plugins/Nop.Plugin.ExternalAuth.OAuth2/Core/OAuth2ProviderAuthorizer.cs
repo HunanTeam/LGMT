@@ -74,7 +74,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         private AuthorizeState VerifyAuthentication(string returnUrl)
         {
             var authResult = ClientApplication.VerifyAuthentication(_httpContext, ClientApplication.GenerateLocalCallbackUri(_webHelper));
-
+            _logger.Debug(string.Format("µÇÂ¼authResult£º{0}", authResult.IsSuccessful));
             if (authResult.IsSuccessful)
             {
                 if (!authResult.ExtraData.ContainsKey("id"))
@@ -94,7 +94,11 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     ParseClaims(authResult, parameters);
 
                 var result = _authorizer.Authorize(parameters);
-
+                if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+                {
+                    _logger.Debug(string.Format("µÇÂ¼authResult£º{0};{1}", authResult.IsSuccessful, Newtonsoft.Json.JsonConvert.SerializeObject(parameters)));
+                }
+              
                 return new AuthorizeState(returnUrl, result);
             }
 

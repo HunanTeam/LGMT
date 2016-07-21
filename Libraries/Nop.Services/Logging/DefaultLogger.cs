@@ -22,9 +22,9 @@ namespace Nop.Services.Logging
         private readonly IDbContext _dbContext;
         private readonly IDataProvider _dataProvider;
         private readonly CommonSettings _commonSettings;
-        
+
         #endregion
-        
+
         #region Ctor
 
         /// <summary>
@@ -35,10 +35,10 @@ namespace Nop.Services.Logging
         /// <param name="dbContext">DB context</param>
         /// <param name="dataProvider">WeData provider</param>
         /// <param name="commonSettings">Common settings</param>
-        public DefaultLogger(IRepository<Log> logRepository, 
+        public DefaultLogger(IRepository<Log> logRepository,
             IWebHelper webHelper,
-            IDbContext dbContext, 
-            IDataProvider dataProvider, 
+            IDbContext dbContext,
+            IDataProvider dataProvider,
             CommonSettings commonSettings)
         {
             this._logRepository = logRepository;
@@ -81,10 +81,10 @@ namespace Nop.Services.Logging
         /// <returns>Result</returns>
         public virtual bool IsEnabled(LogLevel level)
         {
-            switch(level)
+            switch (level)
             {
                 case LogLevel.Debug:
-                    return false;
+                    return true;
                 default:
                     return true;
             }
@@ -136,7 +136,7 @@ namespace Nop.Services.Logging
         /// <param name="pageSize">Page size</param>
         /// <returns>Log item items</returns>
         public virtual IPagedList<Log> GetAllLogs(DateTime? fromUtc = null, DateTime? toUtc = null,
-            string message = "", LogLevel? logLevel = null, 
+            string message = "", LogLevel? logLevel = null,
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _logRepository.Table;
@@ -149,7 +149,7 @@ namespace Nop.Services.Logging
                 var logLevelId = (int)logLevel.Value;
                 query = query.Where(l => logLevelId == l.LogLevelId);
             }
-             if (!String.IsNullOrEmpty(message))
+            if (!String.IsNullOrEmpty(message))
                 query = query.Where(l => l.ShortMessage.Contains(message) || l.FullMessage.Contains(message));
             query = query.OrderByDescending(l => l.CreatedOnUtc);
 

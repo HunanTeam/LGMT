@@ -48,7 +48,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly ICustomerActivityService _customerActivityService;
-
+        private readonly ILogger _logger;
         public ExternalAuthOAuth2Controller(ISettingService settingService,
             OAuth2ExternalAuthSettings oAuth2ExternalAuthSettings,
             IOAuthProviderOAuth2Authorizer ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer,
@@ -62,7 +62,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
             IPictureService pictureService, IGenericAttributeService genericAttributeService,
             ILocalizationService localizationService, LocalizationSettings localizationSettings,
              CustomerSettings customerSettings, IAuthenticationService authenticationService,
-             IWorkflowMessageService workflowMessageService, ICustomerActivityService customerActivityService)
+             IWorkflowMessageService workflowMessageService, ICustomerActivityService customerActivityService,
+             ILogger logger
+            )
         {
             _settingService = settingService;
             _oAuth2ExternalAuthSettings = oAuth2ExternalAuthSettings;
@@ -84,6 +86,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
             _authenticationService = authenticationService;
             _workflowMessageService = workflowMessageService;
             _customerActivityService = customerActivityService;
+            _logger = logger;
         }
 
         [AdminAuthorize]
@@ -158,13 +161,19 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
 
             _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.ClientType = clientType;
             var result = _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.Authorize(returnUrl, verifyResponse);
+            _logger.Debug(string.Format("登录Result：{0}", result.AuthenticationStatus));
             switch (result.AuthenticationStatus)
             {
                 case OpenAuthenticationStatus.Error:
                     {
                         if (!result.Success)
+                        {
                             foreach (var error in result.Errors)
+                            {
                                 ExternalAuthorizerHelper.AddErrorsToDisplay(error);
+                            }
+                            _logger.Debug(string.Format("登录Result：{0}", string.Concat<string>(result.Errors)));
+                        }
 
                         return new RedirectResult(Url.LogOn(returnUrl));
                     }

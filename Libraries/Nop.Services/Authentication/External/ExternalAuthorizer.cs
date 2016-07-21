@@ -164,7 +164,8 @@ namespace Nop.Services.Authentication.External
                             //skip email validation
 
                             //send customer welcome message
-                            _workflowMessageService.SendCustomerWelcomeMessage(currentCustomer, _workContext.WorkingLanguage.Id);
+                            //do:删除欢迎用户的邮件
+                            //_workflowMessageService.SendCustomerWelcomeMessage(currentCustomer, _workContext.WorkingLanguage.Id);
 
                             //result
                             return new AuthorizationResult(OpenAuthenticationStatus.AutoRegisteredStandard);

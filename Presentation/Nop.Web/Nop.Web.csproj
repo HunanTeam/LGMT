@@ -1184,7 +1184,7 @@
     <Content Include="Content\samples\product_IfYouWait_1.zip" />
     <Content Include="Content\samples\product_NightVision_1.zip" />
     <Content Include="Content\samples\product_ScienceAndFaith_1.zip" />
-	  <Content Include="App_Data\更新脚本\01.第三方登录.sql" />
+    <Content Include="App_Data\更新脚本\01.第三方登录.sql" />
     <None Include="Properties\PublishProfiles\z.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\fineuploader\iframe.xss.response-4.2.2.js" />
@@ -2122,6 +2122,8 @@
     <Content Include="Themes\DefaultClean\Views\Catalog\CategoryNavigation.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Product\_ProductDetailsPictures.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Product\RelatedProducts.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.AssociateMessage.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.Errors.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />

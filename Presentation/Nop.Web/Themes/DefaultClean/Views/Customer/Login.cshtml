@@ -30,6 +30,7 @@
         @using (Html.BeginForm("Login", "Customer", FormMethod.Post, new { id = "login-form" }))
         {
             var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
+            @Html.Partial("_ExternalAuthentication.Errors")
             <div class="fl">
                 <h1>会员登录</h1>
                 <ul>

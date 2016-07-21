@@ -119,7 +119,7 @@ namespace Nop.Services.Customers
 
             if (request.Customer == null)
                 throw new ArgumentException("Can't load current customer");
-
+             
             var result = new CustomerRegistrationResult();
             if (request.Customer.IsSearchEngineAccount())
             {
