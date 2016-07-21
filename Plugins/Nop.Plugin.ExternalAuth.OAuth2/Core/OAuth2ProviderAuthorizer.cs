@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Authentication.External;
+using Nop.Services.Logging;
 
 namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 {
@@ -25,7 +26,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         private readonly HttpContextBase _httpContext;
         private readonly IWebHelper _webHelper;
         private Client _clientApplication;
-
+        private readonly ILogger _logger;
         #endregion
 
         #region Ctor
@@ -34,13 +35,16 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
             ExternalAuthenticationSettings externalAuthenticationSettings,
             OAuth2ExternalAuthSettings oAuth2ExternalAuthSettings,
             HttpContextBase httpContext,
-            IWebHelper webHelper)
+            IWebHelper webHelper,
+            ILogger logger
+            )
         {
             _authorizer = authorizer;
             _externalAuthenticationSettings = externalAuthenticationSettings;
             _oAuth2ExternalAuthSettings = oAuth2ExternalAuthSettings;
             _httpContext = httpContext;
             _webHelper = webHelper;
+            _logger = logger;
         }
 
         #endregion
@@ -143,7 +147,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         {
             //var authUrl = GenerateServiceLoginUrl().AbsoluteUri;
             var authUrl = ClientApplication.GenerateServiceLoginUrl(ClientApplication.GenerateLocalCallbackUri(_webHelper)).AbsoluteUri;
+            _logger.Information(authUrl);
             // authUrl = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101336160&redirect_uri=http://www.dmall.la/plugins/externalauthoauth2/qqlogincallback&scope=get_user_info";
+
             return new AuthorizeState("", OpenAuthenticationStatus.RequiresRedirect) { Result = new RedirectResult(authUrl) };
         }
 
