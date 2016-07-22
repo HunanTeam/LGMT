@@ -294,9 +294,12 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
         {
             var result = base.VerifyAuthentication(context, returnPageUrl);
-
-            var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            _logger.Information(resultStr);
+            if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+            {
+                var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                _logger.Information(resultStr);
+            }
+          
 
             return result;
         }

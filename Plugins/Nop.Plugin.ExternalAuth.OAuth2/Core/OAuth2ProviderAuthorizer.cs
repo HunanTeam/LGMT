@@ -174,10 +174,12 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
             if (verifyResponse.Value)
             {
+                _logger.Debug(string.Format("登录Result 返回结果 VerifyAuthentication：{0}", verifyResponse));
                 return VerifyAuthentication(returnUrl);
             }
             else
             {
+                _logger.Debug(string.Format("登录Result 返回结果 RequestAuthentication：{0}", verifyResponse));
                 return RequestAuthentication();
             }
         }

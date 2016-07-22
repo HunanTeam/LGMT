@@ -32,6 +32,8 @@ namespace Nop.Services.Authentication.External
         private readonly IShoppingCartService _shoppingCartService;
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly LocalizationSettings _localizationSettings;
+
+        private readonly ILogger _logger;
         #endregion
 
         #region Ctor
@@ -44,7 +46,9 @@ namespace Nop.Services.Authentication.External
             IWorkContext workContext, CustomerSettings customerSettings,
             ExternalAuthenticationSettings externalAuthenticationSettings,
             IShoppingCartService shoppingCartService,
-            IWorkflowMessageService workflowMessageService, LocalizationSettings localizationSettings)
+            IWorkflowMessageService workflowMessageService, LocalizationSettings localizationSettings,
+            ILogger logger
+            )
         {
             this._authenticationService = authenticationService;
             this._openAuthenticationService = openAuthenticationService;
@@ -58,6 +62,7 @@ namespace Nop.Services.Authentication.External
             this._shoppingCartService = shoppingCartService;
             this._workflowMessageService = workflowMessageService;
             this._localizationSettings = localizationSettings;
+            this._logger = logger;
         }
 
         #endregion
@@ -96,13 +101,15 @@ namespace Nop.Services.Authentication.External
         public virtual AuthorizationResult Authorize(OpenAuthenticationParameters parameters)
         {
             var userFound = _openAuthenticationService.GetUser(parameters);
-
+            _logger.Debug(string.Format("第三方：找到第三方用户{0}", userFound));
             var userLoggedIn = _workContext.CurrentCustomer.IsRegistered() ? _workContext.CurrentCustomer : null;
-
+            _logger.Debug(string.Format("第三方：第三方登录状态(userLoggedIn){0}", userLoggedIn));
             if (AccountAlreadyExists(userFound, userLoggedIn))
             {
+                _logger.Debug(string.Format("第三方：第三方登录状态(AccountAlreadyExists){0}", "-true"));
                 if (AccountIsAssignedToLoggedOnAccount(userFound, userLoggedIn))
                 {
+                    _logger.Debug(string.Format("第三方：第三方登录状态(AccountIsAssignedToLoggedOnAccount){0}", "-true"));
                     // The person is trying to log in as himself.. bit weird
                     return new AuthorizationResult(OpenAuthenticationStatus.Authenticated);
                 }
@@ -217,8 +224,13 @@ namespace Nop.Services.Authentication.External
 
             //migrate shopping cart
             _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, userFound ?? userLoggedIn, true);
+
             //authenticate
             _authenticationService.SignIn(userFound ?? userLoggedIn, false);
+            if (_logger.IsEnabled(Core.Domain.Logging.LogLevel.Debug))
+            {
+                _logger.Debug(string.Format("用户登录系统：{0}", (userFound ?? userLoggedIn).Id));
+            }
             //activity log
             _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"),
                 userFound ?? userLoggedIn);

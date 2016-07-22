@@ -149,6 +149,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         [NonAction]
         private ActionResult LoginInternal(string returnUrl, bool verifyResponse, ClientType clientType)
         {
+            _logger.Debug(string.Format("登录LoginInternal：{0}", clientType));
             var processor = _openAuthenticationService.LoadExternalAuthenticationMethodBySystemName("ExternalAuth.OAuth2");
             if (processor == null ||
                 !processor.IsMethodActive(_externalAuthenticationSettings) ||
@@ -160,8 +161,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
             TryUpdateModel(viewModel);
 
             _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.ClientType = clientType;
+            _logger.Debug(string.Format("登录Result beign：{0}", clientType));
             var result = _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.Authorize(returnUrl, verifyResponse);
-            _logger.Debug(string.Format("登录Result：{0}", result.AuthenticationStatus));
+            _logger.Debug(string.Format("登录Result after：{0}", result.AuthenticationStatus));
             switch (result.AuthenticationStatus)
             {
                 case OpenAuthenticationStatus.Error:
@@ -172,7 +174,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                             {
                                 ExternalAuthorizerHelper.AddErrorsToDisplay(error);
                             }
-                            _logger.Debug(string.Format("登录Result：{0}", string.Concat<string>(result.Errors)));
+                            _logger.Debug(string.Format("登录Result,ERROR：{0}", string.Concat<string>(result.Errors)));
                         }
 
                         return new RedirectResult(Url.LogOn(returnUrl));
