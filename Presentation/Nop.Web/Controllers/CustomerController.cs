@@ -898,7 +898,7 @@ namespace Nop.Web.Controllers
             //{
             //    ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptcha"));
             //}
-
+            ModelState.Remove("Username");
             if (ModelState.IsValid)
             {
                 if (_customerSettings.UsernamesEnabled && model.Username != null)
@@ -912,6 +912,7 @@ namespace Nop.Web.Controllers
                 var registrationResult = _customerRegistrationService.RegisterCustomer(registrationRequest);
                 if (registrationResult.Success)
                 {
+                    _customerRegistrationService.SetUsername(customer, _customerRegistrationService.GenerateUsername(customer.Id));
                     //properties
                     if (_dateTimeSettings.AllowCustomersToSetTimeZone)
                     {

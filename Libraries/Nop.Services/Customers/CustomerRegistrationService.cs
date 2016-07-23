@@ -67,11 +67,9 @@ namespace Nop.Services.Customers
         /// <returns>Result</returns>
         public virtual CustomerLoginResults ValidateCustomer(string usernameOrPhone, string password)
         {
-            Customer customer;
-            if (_customerSettings.UsernamesEnabled)
-                customer = _customerService.GetCustomerByUsername(usernameOrPhone);
-            else
-                customer = _customerService.GetCustomerByPhone(usernameOrPhone);
+            Customer customer = _customerService.GetCustomerByPhone(usernameOrPhone);
+
+
 
             if (customer == null)
                 return CustomerLoginResults.CustomerNotExist;
@@ -151,14 +149,14 @@ namespace Nop.Services.Customers
                 result.AddError(_localizationService.GetResource("Account.Register.Errors.PasswordIsNotProvided"));
                 return result;
             }
-            if (_customerSettings.UsernamesEnabled)
-            {
-                if (String.IsNullOrEmpty(request.Username))
-                {
-                    result.AddError(_localizationService.GetResource("Account.Register.Errors.UsernameIsNotProvided"));
-                    return result;
-                }
-            }
+            //if (_customerSettings.UsernamesEnabled)
+            //{
+            //    if (String.IsNullOrEmpty(request.Username))
+            //    {
+            //        result.AddError(_localizationService.GetResource("Account.Register.Errors.UsernameIsNotProvided"));
+            //        return result;
+            //    }
+            //}
 
             //validate unique user
             //if (_customerService.GetCustomerByEmail(request.Email) != null)
