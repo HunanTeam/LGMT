@@ -105,7 +105,7 @@ namespace Nop.Services.Authentication.External
             {
                 _logger.Debug(string.Format(" ExternalAuthorizer@Authorize：找到第三方用户:[{0}]", "XX"));
             }
-           
+
             var userLoggedIn = _workContext.CurrentCustomer.IsRegistered() ? _workContext.CurrentCustomer : null;
             _logger.Debug(string.Format(" ExternalAuthorizer@Authorize is null? userLoggedIn [{0}], userFound is null?[{1}]", userLoggedIn == null, userFound == null));
             if (userLoggedIn != null)
@@ -159,6 +159,8 @@ namespace Nop.Services.Authentication.External
                         if (!String.IsNullOrEmpty(details.LastName))
                             _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.LastName, details.LastName);
 
+                        var username = _customerRegistrationService.GenerateUsername(currentCustomer.Id);
+                        _customerRegistrationService.SetUsername(currentCustomer, username);
 
                         userFound = currentCustomer;
                         _openAuthenticationService.AssociateExternalAccountWithUser(currentCustomer, parameters);

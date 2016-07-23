@@ -42,5 +42,13 @@ namespace Nop.Services.Customers
         /// <param name="customer">Customer</param>
         /// <param name="newUsername">New Username</param>
         void SetUsername(Customer customer, string newUsername);
+
+
+        /// <summary>
+        /// 根据用户Id产生唯一用户名
+        /// </summary>
+        /// <param name="customerId">用户Id</param>
+        /// <returns>唯一用户名</returns>
+        string GenerateUsername(int customerId);
     }
 }

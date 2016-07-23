@@ -643,13 +643,12 @@ namespace Nop.Web.Controllers
                 {
                     model.Username = model.Username.Trim();
                 }
-                var loginResult = _customerRegistrationService.ValidateCustomer(_customerSettings.UsernamesEnabled ? model.Username : model.CustomerPhone, model.Password);
+                var loginResult = _customerRegistrationService.ValidateCustomer(model.CustomerPhone, model.Password);
                 switch (loginResult)
                 {
                     case CustomerLoginResults.Successful:
                         {
-                            var customer = _customerSettings.UsernamesEnabled ? _customerService.GetCustomerByUsername(model.Username)
-                                : _customerService.GetCustomerByPhone(model.CustomerPhone);
+                            var customer = _customerService.GetCustomerByPhone(model.CustomerPhone);
 
                             //migrate shopping cart
                             _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);

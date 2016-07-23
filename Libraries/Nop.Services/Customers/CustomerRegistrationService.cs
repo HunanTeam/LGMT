@@ -119,7 +119,7 @@ namespace Nop.Services.Customers
 
             if (request.Customer == null)
                 throw new ArgumentException("Can't load current customer");
-             
+
             var result = new CustomerRegistrationResult();
             if (request.Customer.IsSearchEngineAccount())
             {
@@ -399,6 +399,17 @@ namespace Nop.Services.Customers
             _customerService.UpdateCustomer(customer);
         }
 
+
+        /// <summary>
+        /// 根据用户Id产生唯一用户名
+        /// </summary>
+        /// <param name="customerId">用户Id</param>
+        /// <returns>唯一用户名</returns>
+        public virtual string GenerateUsername(int customerId)
+        {
+            var username = (10000000 + customerId).ToString();
+            return username;
+        }
         #endregion
     }
 }
