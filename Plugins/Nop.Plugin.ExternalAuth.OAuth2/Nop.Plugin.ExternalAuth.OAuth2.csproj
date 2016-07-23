@@ -137,8 +137,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Views\ExternalAuthOAuth2\Configure.cshtml" />
-    <None Include="Views\ExternalAuthOAuth2\PublicInfo.cshtml" />
+    <None Include="Views\ExternalAuthOAuth2\Configure.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\ExternalAuthOAuth2\PublicInfo.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +155,9 @@
     <Content Include="Content\oauth2styles.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Description.txt" />
+    <Content Include="Description.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

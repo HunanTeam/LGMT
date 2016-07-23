@@ -293,13 +293,14 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
         public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
         {
+            _logger.Debug(string.Format("登录  @QQ  VerifyAuthentication：{0}", returnPageUrl));
             var result = base.VerifyAuthentication(context, returnPageUrl);
             if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
             {
                 var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                _logger.Information(resultStr);
+                _logger.Debug( string.Format("登录  @QQ返回数据格式", resultStr));
             }
-          
+
 
             return result;
         }

@@ -73,8 +73,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
         private AuthorizeState VerifyAuthentication(string returnUrl)
         {
+            _logger.Debug(string.Format("µÇÂ¼@ VerifyAuthentication in ,returnUrl£º{0}", returnUrl));
             var authResult = ClientApplication.VerifyAuthentication(_httpContext, ClientApplication.GenerateLocalCallbackUri(_webHelper));
-            _logger.Debug(string.Format("µÇÂ¼authResult£º{0}", authResult.IsSuccessful));
+            _logger.Debug(string.Format("µÇÂ¼@ VerifyAuthentication in IsSuccessful£º{0}", authResult.IsSuccessful));
             if (authResult.IsSuccessful)
             {
                 if (!authResult.ExtraData.ContainsKey("id"))
@@ -151,7 +152,11 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         {
             //var authUrl = GenerateServiceLoginUrl().AbsoluteUri;
             var authUrl = ClientApplication.GenerateServiceLoginUrl(ClientApplication.GenerateLocalCallbackUri(_webHelper)).AbsoluteUri;
-            _logger.Information(authUrl);
+            if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+            {
+                _logger.Debug(authUrl);
+            }
+           
             // authUrl = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101336160&redirect_uri=http://www.dmall.la/plugins/externalauthoauth2/qqlogincallback&scope=get_user_info";
 
             return new AuthorizeState("", OpenAuthenticationStatus.RequiresRedirect) { Result = new RedirectResult(authUrl) };
@@ -174,12 +179,12 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
             if (verifyResponse.Value)
             {
-                _logger.Debug(string.Format("µÇÂ¼Result ·µ»Ø½á¹û VerifyAuthentication£º{0}", verifyResponse));
+                _logger.Debug(string.Format("µÇÂ¼@ VerifyAuthentication begin£º{0}", verifyResponse));
                 return VerifyAuthentication(returnUrl);
             }
             else
             {
-                _logger.Debug(string.Format("µÇÂ¼Result ·µ»Ø½á¹û RequestAuthentication£º{0}", verifyResponse));
+                _logger.Debug(string.Format("µÇÂ¼@ RequestAuthentication£º{0}", verifyResponse));
                 return RequestAuthentication();
             }
         }

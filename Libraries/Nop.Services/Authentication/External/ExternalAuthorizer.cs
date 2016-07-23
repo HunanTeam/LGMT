@@ -101,15 +101,24 @@ namespace Nop.Services.Authentication.External
         public virtual AuthorizationResult Authorize(OpenAuthenticationParameters parameters)
         {
             var userFound = _openAuthenticationService.GetUser(parameters);
-            _logger.Debug(string.Format("第三方：找到第三方用户{0}", userFound));
+            if (userFound != null)
+            {
+                _logger.Debug(string.Format(" ExternalAuthorizer@Authorize：找到第三方用户:[{0}]", "XX"));
+            }
+           
             var userLoggedIn = _workContext.CurrentCustomer.IsRegistered() ? _workContext.CurrentCustomer : null;
-            _logger.Debug(string.Format("第三方：第三方登录状态(userLoggedIn){0}", userLoggedIn));
+            _logger.Debug(string.Format(" ExternalAuthorizer@Authorize is null? userLoggedIn [{0}], userFound is null?[{1}]", userLoggedIn == null, userFound == null));
+            if (userLoggedIn != null)
+            {
+                _logger.Debug(string.Format("  ExternalAuthorizer@Authorize  (userLoggedIn) is [{0}]", "XX"));
+            }
+
             if (AccountAlreadyExists(userFound, userLoggedIn))
             {
-                _logger.Debug(string.Format("第三方：第三方登录状态(AccountAlreadyExists){0}", "-true"));
+                _logger.Debug(string.Format("  ExternalAuthorizer@Authorize  (AccountAlreadyExists){0}", "-XX"));
                 if (AccountIsAssignedToLoggedOnAccount(userFound, userLoggedIn))
                 {
-                    _logger.Debug(string.Format("第三方：第三方登录状态(AccountIsAssignedToLoggedOnAccount){0}", "-true"));
+                    _logger.Debug(string.Format("  ExternalAuthorizer@Authorize  (AccountIsAssignedToLoggedOnAccount){0}", "-XX"));
                     // The person is trying to log in as himself.. bit weird
                     return new AuthorizationResult(OpenAuthenticationStatus.Authenticated);
                 }
@@ -120,6 +129,7 @@ namespace Nop.Services.Authentication.External
             }
             if (AccountDoesNotExistAndUserIsNotLoggedOn(userFound, userLoggedIn))
             {
+                _logger.Debug(string.Format(" ExternalAuthorizer@Authorize (AccountDoesNotExistAndUserIsNotLoggedOn) is {0}", " xx "));
                 ExternalAuthorizerHelper.StoreParametersForRoundTrip(parameters);
 
                 if (AutoRegistrationIsEnabled())
@@ -221,19 +231,21 @@ namespace Nop.Services.Authentication.External
             {
                 _openAuthenticationService.AssociateExternalAccountWithUser(userLoggedIn, parameters);
             }
-
+            _logger.Debug(string.Format(" ExternalAuthorizer@Authorize  MigrateShoppingCart begin {0}", " xx "));
             //migrate shopping cart
             _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, userFound ?? userLoggedIn, true);
-
+            _logger.Debug(string.Format(" ExternalAuthorizer@Authorize  SignIn begin {0}", " xx "));
             //authenticate
             _authenticationService.SignIn(userFound ?? userLoggedIn, false);
             if (_logger.IsEnabled(Core.Domain.Logging.LogLevel.Debug))
             {
-                _logger.Debug(string.Format("用户登录系统：{0}", (userFound ?? userLoggedIn).Id));
+                _logger.Debug(string.Format("ExternalAuthorizer@Authorize SignIn end ：{0}", "XX"));
             }
+            _logger.Debug(string.Format("ExternalAuthorizer@Authorize PublicStore.Login end ID：{0}", (userFound ?? userLoggedIn).Id));
             //activity log
             _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"),
                 userFound ?? userLoggedIn);
+
 
             return new AuthorizationResult(OpenAuthenticationStatus.Authenticated);
         }

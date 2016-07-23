@@ -161,9 +161,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
             TryUpdateModel(viewModel);
 
             _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.ClientType = clientType;
-            _logger.Debug(string.Format("登录Result beign：{0}", clientType));
+            _logger.Debug(string.Format("登录Result  Authorize beign clientType：{0}", clientType));
             var result = _ioAuthProviderOAuthProviderIoAuthProviderOAuth2Authorizer.Authorize(returnUrl, verifyResponse);
-            _logger.Debug(string.Format("登录Result after：{0}", result.AuthenticationStatus));
+            _logger.Debug(string.Format("登录Result Authorize after AuthenticationStatus：{0}", result.AuthenticationStatus));
             switch (result.AuthenticationStatus)
             {
                 case OpenAuthenticationStatus.Error:
