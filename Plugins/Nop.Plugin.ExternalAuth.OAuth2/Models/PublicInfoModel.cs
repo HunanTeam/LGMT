@@ -11,5 +11,6 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Models
     {
         public bool QQEnabled { get; set; }
         public bool WeiBoEnabled { get; set; }
+        public bool WeChatEnabled { get; set; }
     }
 }

@@ -76,6 +76,47 @@
                 @Html.ValidationMessageFor(model => model.WeiBoClientSecret)
             </td>
         </tr>
+
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @T("Plugins.ExternalAuth.OAuth2.WeChatConnect")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeChatEnabled):
+            </td>
+            <td class="adminData">
+                @Html.RadioButtonFor(model => model.WeChatEnabled, true)@T("Plugins.ExternalAuth.OAuth2.Enable")
+                @Html.RadioButtonFor(model => model.WeChatEnabled, false)@T("Plugins.ExternalAuth.OAuth2.Disable")
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeChatClientKeyIdentifier):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.WeChatClientKeyIdentifier)
+                @Html.ValidationMessageFor(model => model.WeChatClientKeyIdentifier)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.WeChatClientSecret):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.WeChatClientSecret)
+                @Html.ValidationMessageFor(model => model.WeChatClientSecret)
+            </td>
+        </tr>
+
+
+
         <tr>
             <td colspan="2" width="100%">
                 <input type="submit" name="save" class="t-button" value="@T("Admin.Common.Save")" />

@@ -104,7 +104,13 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
 
                 WeiBoEnabled = _oAuth2ExternalAuthSettings.WeiBoEnabled,
                 WeiBoClientKeyIdentifier = _oAuth2ExternalAuthSettings.WeiBoClientKeyIdentifier,
-                WeiBoClientSecret = _oAuth2ExternalAuthSettings.WeiBoClientSecret
+                WeiBoClientSecret = _oAuth2ExternalAuthSettings.WeiBoClientSecret,
+
+                WeChatEnabled = _oAuth2ExternalAuthSettings.WeChatEnabled,
+                WeChatClientKeyIdentifier = _oAuth2ExternalAuthSettings.WeChatClientKeyIdentifier,
+                WeChatClientSecret = _oAuth2ExternalAuthSettings.WeChatClientSecret
+
+
             };
 
             return View("~/Plugins/ExternalAuth.OAuth2/Views/ExternalAuthOAuth2/Configure.cshtml", model);
@@ -130,6 +136,10 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
             _oAuth2ExternalAuthSettings.WeiBoClientKeyIdentifier = model.WeiBoClientKeyIdentifier;
             _oAuth2ExternalAuthSettings.WeiBoClientSecret = model.WeiBoClientSecret;
 
+
+            _oAuth2ExternalAuthSettings.WeChatEnabled = model.WeChatEnabled;
+            _oAuth2ExternalAuthSettings.WeChatClientKeyIdentifier = model.WeChatClientKeyIdentifier;
+            _oAuth2ExternalAuthSettings.WeChatClientSecret = model.WeChatClientSecret;
             _settingService.SaveSetting(_oAuth2ExternalAuthSettings);
 
             return View("~/Plugins/ExternalAuth.OAuth2/Views/ExternalAuthOAuth2/Configure.cshtml", model);
@@ -232,6 +242,15 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         public ActionResult WeiBoLoginCallback(string returnUrl)
         {
             return LoginInternal(returnUrl, true, ClientType.WeiBo);
+        }
+
+        public ActionResult WeChatLogin(string returnUrl)
+        {
+            return LoginInternal(returnUrl, false, ClientType.WeChat);
+        }
+        public ActionResult WeChatCallback(string returnUrl)
+        {
+            return LoginInternal(returnUrl, true, ClientType.WeChat);
         }
 
         #region 微信一键注册登录
