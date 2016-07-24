@@ -619,6 +619,7 @@ namespace Nop.Web.Controllers
         [NopHttpsRequirement(SslRequirement.Yes)]
         public ActionResult Login(bool? checkoutAsGuest)
         {
+           
             var model = new LoginModel();
             model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
             model.CheckoutAsGuest = checkoutAsGuest.GetValueOrDefault();
