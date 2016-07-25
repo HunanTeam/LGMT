@@ -2124,6 +2124,7 @@
     <Content Include="Themes\DefaultClean\Views\Product\RelatedProducts.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.AssociateMessage.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.Errors.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\RegisterResult.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />
