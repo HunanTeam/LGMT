@@ -619,7 +619,7 @@ namespace Nop.Web.Controllers
         [NopHttpsRequirement(SslRequirement.Yes)]
         public ActionResult Login(bool? checkoutAsGuest)
         {
-           
+
             var model = new LoginModel();
             model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
             model.CheckoutAsGuest = checkoutAsGuest.GetValueOrDefault();
@@ -1812,6 +1812,106 @@ namespace Nop.Web.Controllers
             //If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+
+        #endregion
+
+        #region 绑定手机
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult BindPhone()
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            bool needBindPhone = _workContext.CurrentCustomer.NeedBindPhone();
+            //if (!needBindPhone)
+            //{
+            //    throw new NopException("当前不需要绑定手机!");
+            //}
+            var model = new BindPhoneModel();
+            model.CustomerFrom = "QQ";
+            //   model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
+
+            return View(model);
+        }
+
+        private string GetCustomerRegisterFrom(string thirdPartyName)
+        {
+            switch (thirdPartyName)
+            {
+                case "ExternalAuth.OAuth2.QQ":
+                    return "QQ";
+
+                case "ExternalAuth.OAuth2.WeiBo":
+                    return "weibo";
+                case "ExternalAuth.OAuth2.Wechat":
+                    return "wx";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        [HttpPost]
+        [PublicAntiForgery]
+        public ActionResult BindPhone(BindPhoneModel model)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            //验证注册码
+            if (string.IsNullOrEmpty(model.PhoneAuthCode))
+            {
+                return Json(new { success = false, message = "请输入手机验证码!" });
+
+            }
+            if (model.Password.Length < 6)
+            {
+                return Json(new { success = false, message = "密码长度不能小于6位!" });
+            }
+            if (string.IsNullOrWhiteSpace(model.CustomerPhone) || model.CustomerPhone.Trim().Length != 11)
+            {
+                return Json(new { success = false, message = "手机号不合法，请重新输入!" });
+            }
+            if (model.ConfirmPassword != model.Password)
+            {
+                return Json(new { success = false, message = "两次输入的密码不一样，请重新输入!" });
+            }
+
+
+            var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, model.CustomerPhone);
+            if (code == null || code.Code != model.PhoneAuthCode || code.ExpirationTime < DateTime.Now)
+                ModelState.AddModelError("", "手机验证码错误或已经失效");
+
+            var customer = _workContext.CurrentCustomer;
+            try
+            {
+                _customerRegistrationService.BindPhone(customer, model.CustomerPhone.Trim(), model.Password);
+                return Json(new { success = true, url = Url.Action("History", "Order") });
+            }
+            catch (NopException nex)
+            {
+                return Json(new { success = false, message = nex.Message });
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("绑定用户出现错误", ex, customer);
+                return Json(new { success = false, message = ex.Message });
+            }
+
+
+
+
+
+
+
+
+
+        }
+
 
         #endregion
 

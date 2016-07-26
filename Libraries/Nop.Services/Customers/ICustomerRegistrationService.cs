@@ -50,5 +50,8 @@ namespace Nop.Services.Customers
         /// <param name="customerId">用户Id</param>
         /// <returns>唯一用户名</returns>
         string GenerateUsername(int customerId);
+
+
+        void BindPhone(Customer customer, string customerPhone, string password);
     }
 }

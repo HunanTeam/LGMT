@@ -93,6 +93,13 @@ namespace Nop.Plugin.ExternalAuth.OAuth2
             this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeiBoClientSecret", "App Secret");
             this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeiBoClientSecret.Hint", "Enter your app secret here. You can find it on your OAuth2 application page.");
 
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatConnect", "Login By WeChat");
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatEnabled", "Enable");
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientKeyIdentifier", "App ID/API Key");
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientKeyIdentifier.Hint", "Enter your app ID/API key here. You can find it on your OAuth2 application page.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientSecret", "App Secret");
+            this.AddOrUpdatePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientSecret.Hint", "Enter your app secret here. You can find it on your OAuth2 application page.");
+
             base.Install();
         }
 
@@ -119,6 +126,13 @@ namespace Nop.Plugin.ExternalAuth.OAuth2
             this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeiBoClientKeyIdentifier.Hint");
             this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeiBoClientSecret");
             this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeiBoClientSecret.Hint");
+
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatConnect");
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatEnabled");
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientKeyIdentifier");
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientKeyIdentifier.Hint");
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientSecret");
+            this.DeletePluginLocaleResource("Plugins.ExternalAuth.OAuth2.WeChatClientSecret.Hint");
 
             base.Uninstall();
         }

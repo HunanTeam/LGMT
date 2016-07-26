@@ -30,6 +30,7 @@
         @using (Html.BeginForm("Login", "Customer", FormMethod.Post, new { id = "login-form" }))
         {
             var validationSummary = Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text);
+            @Html.Partial("_ExternalAuthentication.Errors")
             <div class="fl">
                 <h1>会员登录</h1>
                 <ul>
@@ -53,9 +54,9 @@
             <h1>第三方快速登录</h1>
             <p>使用第三方登录，不用输入账号密码。</p>
             <ul>
-                <li><a href="#" class="weibo"></a></li>
-                <li><a href="#" class="qq"></a></li>
-                <li><a href="#" class="weixin"></a></li>
+                <li><a href="/Plugins/ExternalAuthOAuth2/WeiBoLogin" class="weibo"></a></li>
+                <li><a href="/Plugins/ExternalAuthOAuth2/QQLogin" class="qq"></a></li>
+                <li><a href="/Plugins/ExternalAuthOAuth2/WeChatLogin" class="weixin"></a></li>
             </ul>
             <span><a href="@Url.Action("Register")">使用手机注册</a></span>
         </div>

@@ -38,11 +38,24 @@
         <div class="account">
             <div class="infor_one">
                 <div class="first">
-                    <p>
-                        <b>@Model.FirstName</b>, 您好,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp; 您当前个人默认信息为电话 <font>@Model.CustomerPhone</font>，
-                        地址： <span>@Model.City @Model.District @Model.StreetAddress</span>
-                    </p>
+                    @if (string.IsNullOrWhiteSpace(Model.FirstName) || string.IsNullOrWhiteSpace(Model.CustomerPhone)
+                || string.IsNullOrWhiteSpace(Model.City) || string.IsNullOrWhiteSpace(Model.District)
+                || string.IsNullOrWhiteSpace(Model.StreetAddress)
+                )
+                    {
+                        <p style="color:red">
+                            您好，请完善您的个人信息。
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            <b>@Model.FirstName</b>, 您好,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp; 您当前个人默认信息为电话 <font>@Model.CustomerPhone</font>，
+                            地址： <span>@Model.City @Model.District @Model.StreetAddress</span>
+                        </p>
+                    }
+
                 </div>
                 <div class="second">个人信息</div>
                 <ul class="third">

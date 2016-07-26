@@ -11,5 +11,10 @@ namespace Nop.Plugin.ExternalAuth.OAuth2
         public bool WeiBoEnabled { get; set; }
         public string WeiBoClientKeyIdentifier { get; set; }
         public string WeiBoClientSecret { get; set; }
+
+        public bool WeChatEnabled { get; set; }
+        public string WeChatClientKeyIdentifier { get; set; }
+        public string WeChatClientSecret { get; set; }
+
     }
 }

@@ -11,12 +11,19 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Models
         public string QQClientKeyIdentifier { get; set; }
         [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.QQClientSecret")]
         public string QQClientSecret { get; set; }
-
+        
         [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeiBoEnabled")]
         public bool WeiBoEnabled { get; set; }
         [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeiBoClientKeyIdentifier")]
         public string WeiBoClientKeyIdentifier { get; set; }
         [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeiBoClientSecret")]
         public string WeiBoClientSecret { get; set; }
+
+        [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeChatEnabled")]
+        public bool WeChatEnabled { get; set; }
+        [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeChatClientKeyIdentifier")]
+        public string WeChatClientKeyIdentifier { get; set; }
+        [NopResourceDisplayName("Plugins.ExternalAuth.OAuth2.WeChatClientSecret")]
+        public string WeChatClientSecret { get; set; }
     }
 }

@@ -197,10 +197,10 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     return Provider.SystemNameQQ;
 
                 case ClientType.WeiBo:
-                    return Provider.SystemNameQQ;
+                    return Provider.SystemNameWeiBo;
 
                 case ClientType.WeChat:
-                    return Provider.SystemNameQQ;
+                    return Provider.SystemNameWechat;
 
                 default:
                     return "unkown";
