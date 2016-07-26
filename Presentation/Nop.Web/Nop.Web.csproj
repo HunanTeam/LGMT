@@ -308,6 +308,7 @@
     <Compile Include="Models\Common\StoreThemeModel.cs" />
     <Compile Include="Models\Common\LanguageSelectorModel.cs" />
     <Compile Include="Models\Common\SitemapModel.cs" />
+    <Compile Include="Models\Customer\BindPhoneMode.cs" />
     <Compile Include="Models\Customer\CustomerAttributeModel.cs" />
     <Compile Include="Models\Catalog\CustomerBackInStockSubscriptionsModel.cs" />
     <Compile Include="Models\Boards\CustomerForumSubscriptionsModel.cs" />
@@ -378,6 +379,7 @@
     <Compile Include="Validators\Catalog\ProductReviewsValidator.cs" />
     <Compile Include="Validators\Common\AddressValidator.cs" />
     <Compile Include="Validators\Common\ContactVendorValidator.cs" />
+    <Compile Include="Validators\Customer\BindPhoneValidator.cs" />
     <Compile Include="Validators\Customer\LoginValidator.cs" />
     <Compile Include="Validators\Install\InstallValidator.cs" />
     <Compile Include="Validators\News\NewsItemValidator.cs" />
@@ -2125,6 +2127,8 @@
     <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.AssociateMessage.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\_ExternalAuthentication.Errors.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\RegisterResult.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\ChangePassword.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Common\PageNotFound.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />

@@ -184,10 +184,14 @@ namespace Nop.Core.Domain.Customers
         public static bool NeedBindPhone(this Customer customer)
         {
 
-            return string.IsNullOrWhiteSpace(customer.Phone);
+            return string.IsNullOrWhiteSpace(customer.Phone) && customer.RegisterSource == RegisterSource.ThirdParty && customer.ExternalAuthenticationRecords.Count() > 0;
 
 
         }
+    
+
+
+
 
         #endregion
 

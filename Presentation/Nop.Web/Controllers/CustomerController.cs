@@ -619,7 +619,7 @@ namespace Nop.Web.Controllers
         [NopHttpsRequirement(SslRequirement.Yes)]
         public ActionResult Login(bool? checkoutAsGuest)
         {
-           
+
             var model = new LoginModel();
             model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
             model.CheckoutAsGuest = checkoutAsGuest.GetValueOrDefault();
@@ -1812,6 +1812,62 @@ namespace Nop.Web.Controllers
             //If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+
+        #endregion
+
+        #region 绑定手机
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult BindPhone()
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            bool needBindPhone = _workContext.CurrentCustomer.NeedBindPhone();
+            if (needBindPhone)
+            {
+                throw new NopException("当前不需要绑定手机!");
+            }
+            var model = new BindPhoneModel();
+            model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
+            
+            return View(model);
+        }
+
+        private string GetCustomerRegisterFrom(string thirdPartyName)
+        {
+            switch (thirdPartyName)
+            {
+                case "ExternalAuth.OAuth2.QQ":
+                    return "QQ";
+
+                case "ExternalAuth.OAuth2.WeiBo":
+                    return "weibo";
+                case "ExternalAuth.OAuth2.Wechat":
+                    return "wx";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        [HttpPost]
+        [PublicAntiForgery]
+        public ActionResult BindPhone(BindPhoneModel model)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+
+
+
+            //If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
 
         #endregion
 
