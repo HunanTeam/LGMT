@@ -1915,6 +1915,207 @@ namespace Nop.Web.Controllers
 
         #endregion
 
+        #region 忘记密码
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep1()
+        {
+            var model = new PasswordRecoveryStep1Model();
+            return View(model);
+        }
+
+        [HttpPost]
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep1(PasswordRecoveryStep1Model model)
+        {
+            var username = model.UserName;
+            var validUserName = false;
+
+            if (CommonHelper.IsValidMobile(username))
+            {
+                validUserName = _customerService.GetCustomerByPhone(username) != null;
+            }
+            else if (CommonHelper.IsValidEmail(username))
+            {
+                validUserName = _customerService.GetCustomerByEmail(username) != null;
+            }
+
+            if (validUserName)
+            {
+                this.CurrentPasswordRecoveryUserName = username;
+                this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step2;
+                return RedirectToRoute("PasswordRecoveryStep2");
+            }
+
+            model.Message = "您输入的邮箱或手机号码不存在";
+            return View(model);
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep2()
+        {
+            if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step2)
+                return RedirectToRoute("PasswordRecoveryStep1");
+
+            var model = new PasswordRecoveryStep2Model();
+            model.UserName = GetPasswordRecoveryFuzzyUserName();
+            //model.AgainGetAuthenticodeSpacingTime = _authenticodeSettings.AgainGetSpacingTime;
+            return View(model);
+        }
+
+        [HttpPost]
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep2(PasswordRecoveryStep2Model model)
+        {
+            var customer = _workContext.CurrentCustomer;
+            var userName = this.CurrentPasswordRecoveryUserName;
+
+            //if (_authenticodeService.ValidateAuthenticode(customer.Id.ToString(),
+            //    this.CurrentPasswordRecoveryUserName,
+            //    AuthenticationType.PasswordRecoveryAuthenticode,
+            //    model.Authenticode,
+            //    PlantformType.PC))
+            //{
+            //    this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step3;
+            //    return RedirectToRoute("PasswordRecoveryStep3");
+            //}
+
+            model.UserName = GetPasswordRecoveryFuzzyUserName();
+            model.Message = _localizationService.GetResource("Common.Authenticode.Invalid");
+            return View(model);
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep3()
+        {
+            if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step3)
+                return RedirectToRoute("PasswordRecoveryStep1");
+
+            var model = new PasswordRecoveryStep3Model();
+            model.UserName = GetPasswordRecoveryFuzzyUserName();
+            return View(model);
+        }
+
+        [HttpPost]
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep3(PasswordRecoveryStep3Model model)
+        {
+            //if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step3)
+            //    return RedirectToRoute("PasswordRecoveryStep1");
+
+            //if (ModelState.IsValid)
+            //{
+            //    var userName = this.CurrentPasswordRecoveryUserName;
+            //    var changePasswordRequest = new ChangePasswordRequest(null,
+            //                                                  null,
+            //                                                  false,
+            //                                                  _customerSettings.DefaultPasswordFormat,
+            //                                                  model.Password);
+
+            //    Customer customer = null;
+            //    if (CommonHelper.IsValidMobile(userName))
+            //    {
+            //        customer = _customerService.GetCustomerByMobile(userName);
+            //        changePasswordRequest.Mobile = userName;
+            //    }
+            //    else if (CommonHelper.IsValidEmail(userName))
+            //    {
+            //        customer = _customerService.GetCustomerByEmail(userName);
+            //        changePasswordRequest.Email = userName;
+            //    }
+
+            //    var changePasswordResult = _customerRegistrationService.ChangePassword(changePasswordRequest);
+            //    if (changePasswordResult.Success)
+            //    {
+            //        //migrate shopping cart
+            //        _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);
+            //        //sign in new customer
+            //        _authenticationService.SignIn(customer, false);
+            //        //activity log
+            //        _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"), customer);
+
+            //        this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step4;
+            //        return RedirectToRoute("PasswordRecoveryStep4");
+            //    }
+            //}
+
+            //model.UserName = GetPasswordRecoveryFuzzyUserName();
+            //model.Message = "修改密码失败";
+            return View("PasswordRecoveryStep4");
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult PasswordRecoveryStep4()
+        {
+            if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step4)
+                return RedirectToRoute("PasswordRecoveryStep1");
+
+            var model = new PasswordRecoveryStep4Model();
+            model.UserName = GetPasswordRecoveryFuzzyUserName();
+
+            ClearPasswordRecoverySession();
+
+            return View(model);
+        }
+        [NonAction]
+        protected string GetPasswordRecoveryFuzzyUserName()
+        {
+            var userName = this.CurrentPasswordRecoveryUserName;
+            if (CommonHelper.IsValidMobile(userName))
+                return CommonHelper.GetFuzzyMobile(userName);
+            else
+                return userName;
+        }
+        /// <summary>
+        /// 当前正在恢复密码的账号
+        /// </summary>
+        protected string CurrentPasswordRecoveryUserName
+        {
+            get
+            {
+                if (Session["PasswordRecoveryAuthenticodeUserName"] == null)
+                    return null;
+
+                var userName = Session["PasswordRecoveryAuthenticodeUserName"] as string;
+                return userName;
+            }
+            set
+            {
+                Session["PasswordRecoveryAuthenticodeUserName"] = value;
+            }
+        }
+
+        [Serializable]
+        protected enum PasswordRecoveryStep : int
+        {
+            Step1 = 1,
+            Step2 = 2,
+            Step3 = 3,
+            Step4 = 4,
+        }
+
+        protected PasswordRecoveryStep CurrentPasswordRecoveryStep
+        {
+            get
+            {
+                if (Session["CurrentPasswordRecoveryStep"] == null)
+                    Session["CurrentPasswordRecoveryStep"] = PasswordRecoveryStep.Step1;
+                return (PasswordRecoveryStep)Session["CurrentPasswordRecoveryStep"];
+            }
+            set
+            {
+                Session["CurrentPasswordRecoveryStep"] = value;
+            }
+        }
+
+        protected void ClearPasswordRecoverySession()
+        {
+            Session["CurrentPasswordRecoveryStep"] = null;
+            Session["PasswordRecoveryAuthenticodeUserName"] = null;
+        }
+
+        #endregion
+
+
         #region My account / Avatar
 
         [NopHttpsRequirement(SslRequirement.Yes)]
@@ -2019,5 +2220,7 @@ namespace Nop.Web.Controllers
         {
             return View();
         }
+
+
     }
 }

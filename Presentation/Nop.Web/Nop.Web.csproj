@@ -313,6 +313,10 @@
     <Compile Include="Models\Catalog\CustomerBackInStockSubscriptionsModel.cs" />
     <Compile Include="Models\Boards\CustomerForumSubscriptionsModel.cs" />
     <Compile Include="Models\Customer\ExternalAuthenticationMethodModel.cs" />
+    <Compile Include="Models\Customer\PaswordRecoveryStep1Model.cs" />
+    <Compile Include="Models\Customer\PaswordRecoveryStep2Model.cs" />
+    <Compile Include="Models\Customer\PaswordRecoveryStep3Model.cs" />
+    <Compile Include="Models\Customer\PaswordRecoveryStep4Model.cs" />
     <Compile Include="Models\Install\InstallModel.cs" />
     <Compile Include="Models\Cms\RenderWidgetModel.cs" />
     <Compile Include="Models\News\AddNewsCommentModel.cs" />
@@ -2130,6 +2134,7 @@
     <Content Include="Themes\DefaultClean\Views\Customer\ChangePassword.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Common\PageNotFound.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\BindPhone.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\Login - 复制.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />

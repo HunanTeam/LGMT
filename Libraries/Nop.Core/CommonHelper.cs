@@ -345,5 +345,32 @@ namespace Nop.Core
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }
+
+
+        /// <summary>
+        /// Verifies that a string is in valid mobile format
+        /// </summary>
+        /// <param name="mobile">Mobile to verify</param>
+        /// <returns>true if the string is a valid mobile number and false if it's not</returns>
+        public static bool IsValidMobile(string mobile)
+        {
+            if (String.IsNullOrEmpty(mobile))
+                return false;
+
+            mobile = mobile.Trim();
+            //var result = Regex.IsMatch(mobile, @"^(13[0-9]|14[5|7]|15[0-9]|18[0-9])\d{8}$", RegexOptions.IgnoreCase);
+            var result = Regex.IsMatch(mobile, @"^1\d{10}$", RegexOptions.IgnoreCase);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取模糊后的手机号码
+        /// </summary>
+        public static string GetFuzzyMobile(string mobile)
+        {
+            if (string.IsNullOrEmpty(mobile) || mobile.Length < 11)
+                return "";
+            return string.Format("{0}****{1}", mobile.Substring(0, 3), mobile.Substring(7));
+        }
     }
 }
