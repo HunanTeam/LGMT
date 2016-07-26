@@ -408,6 +408,48 @@ namespace Nop.Services.Customers
             var username = (10000000 + customerId).ToString();
             return username;
         }
+
+
+        public virtual void BindPhone(Customer customer, string customerPhone, string password)
+        {
+            if (!customer.IsRegistered())
+            {
+                throw new NopException("未注册用户不能绑定手机！");
+            }
+            if (!customer.NeedBindPhone())
+            {
+                throw new NopException("该用户已经绑定了手机！");
+            }
+            var phoneHasBindUser = _customerService.GetCustomerByPhone(customerPhone);
+            if (phoneHasBindUser != null)
+            {
+                throw new NopException(string.Format("手机:[{0}]已经绑定了一位用户!", customerPhone));
+            }
+            switch (_customerSettings.DefaultPasswordFormat)
+            {
+                case PasswordFormat.Clear:
+                    {
+                        customer.Password = password;
+                    }
+                    break;
+                case PasswordFormat.Encrypted:
+                    {
+                        customer.Password = _encryptionService.EncryptText(password);
+                    }
+                    break;
+                case PasswordFormat.Hashed:
+                    {
+                        string saltKey = _encryptionService.CreateSaltKey(5);
+                        customer.PasswordSalt = saltKey;
+                        customer.Password = _encryptionService.CreatePasswordHash(password, saltKey, _customerSettings.HashedPasswordFormat);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            customer.PasswordFormat = _customerSettings.DefaultPasswordFormat;
+            _customerService.UpdateCustomer(customer);
+        }
         #endregion
     }
 }

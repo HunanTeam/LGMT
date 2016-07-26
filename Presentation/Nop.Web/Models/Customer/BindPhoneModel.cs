@@ -18,16 +18,21 @@ namespace Nop.Web.Models.Customer
 
         [AllowHtml]
         [DataType(DataType.Password)]
-        [NopResourceDisplayName("Account.ChangePassword.Fields.NewPassword")]
-        public string NewPassword { get; set; }
+        [NopResourceDisplayName("Account.ChangePassword.Fields.Password")]
+        public string Password { get; set; }
 
         [AllowHtml]
         [DataType(DataType.Password)]
-        [NopResourceDisplayName("Account.ChangePassword.Fields.ConfirmNewPassword")]
-        public string ConfirmNewPassword { get; set; }
+        [NopResourceDisplayName("Account.ChangePassword.Fields.ConfirmPassword")]
+        public string ConfirmPassword { get; set; }
 
         public string Result { get; set; }
 
         public string CustomerFrom { get; set; }
+
+        /// <summary>
+        /// 手机验证码
+        /// </summary>
+        public string PhoneAuthCode { get; set; }
     }
 }

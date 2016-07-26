@@ -195,16 +195,19 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                     }
                 case OpenAuthenticationStatus.AutoRegisteredEmailValidation:
                     {
+                        return RedirectToRoute("HomePage");
                         //result
-                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
+                       // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredAdminApproval:
                     {
-                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.AdminApproval });
+                        return RedirectToRoute("HomePage");
+                        // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.AdminApproval });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredStandard:
                     {
-                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard });
+                        return RedirectToRoute("HomePage");
+                        //return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard });
                     }
                 default:
                     break;
