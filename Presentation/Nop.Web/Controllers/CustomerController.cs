@@ -1899,6 +1899,7 @@ namespace Nop.Web.Controllers
             catch (Exception ex)
             {
                 _logger.Error("绑定用户出现错误", ex, customer);
+                return Json(new { success = false, message = ex.Message });
             }
 
 
