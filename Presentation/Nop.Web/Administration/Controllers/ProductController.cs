@@ -238,6 +238,29 @@ namespace Nop.Admin.Controllers
             }
         }
 
+        /// <summary>
+        /// 窗帘商品，当修改尺寸后，更新商品标价（尺码最低价格）
+        /// </summary>
+        protected virtual void UpdateProductPrice(ProductAttributeValue pav)
+        {
+            var product = pav.ProductAttributeMapping.Product;
+            var pavNames = new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "X(300cm-360cm)", "XL(360cm-420cm)" };
+            if (product.AttributeTemplateId == (int)AttributeTemplate.ChuangLian
+                && pavNames.Contains(pav.Name))
+            {
+                var pam = product.ProductAttributeMappings.FirstOrDefault(m => m.ProductAttribute.Name == "尺寸");
+                if (pam != null)
+                {
+                    var minPricePav = pam.ProductAttributeValues.OrderBy(m => m.Price).FirstOrDefault();
+                    if (minPricePav != null && minPricePav.Price != 0 && product.Price != minPricePav.Price)
+                    {
+                        product.Price = minPricePav.Price;
+                        _productService.UpdateProduct(product);
+                    }
+                }
+            }
+        }
+
         [NonAction]
         protected virtual void UpdatePictureSeoNames(Product product)
         {
@@ -3797,7 +3820,7 @@ namespace Nop.Admin.Controllers
                         AssociatedProductName = associatedProduct != null ? associatedProduct.Name : "",
                         Name = x.ProductAttributeMapping.AttributeControlType != AttributeControlType.ColorSquares ? x.Name : string.Format("{0} - {1}", x.Name, x.ColorSquaresRgb),
                         ColorSquaresRgb = x.ColorSquaresRgb,
-                        PriceAdjustment = x.PriceAdjustment,          
+                        PriceAdjustment = x.PriceAdjustment,
                         Price = x.Price,
                         PriceS = x.PriceS,
                         PriceM = x.PriceM,
@@ -4083,7 +4106,7 @@ namespace Nop.Admin.Controllers
                 pav.PriceS = model.PriceS;
                 pav.PriceM = model.PriceM;
                 pav.PriceX = model.PriceX;
-                pav.PriceXL = model.PriceXL;    
+                pav.PriceXL = model.PriceXL;
                 pav.WeightAdjustment = model.WeightAdjustment;
                 pav.Cost = model.Cost;
                 pav.Quantity = model.Quantity;
@@ -4103,9 +4126,8 @@ namespace Nop.Admin.Controllers
                 }
 
                 _productAttributeService.UpdateProductAttributeValue(pav);
-
-
                 UpdateLocales(pav, model);
+                UpdateProductPrice(pav);
 
                 ViewBag.RefreshPage = true;
                 ViewBag.btnId = btnId;

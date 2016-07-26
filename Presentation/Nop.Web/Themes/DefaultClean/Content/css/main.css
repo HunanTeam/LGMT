@@ -236,8 +236,12 @@ a:hover { color:#f00; text-decoration: none; }
 .product_details .first .fr_01 .product-size,.product-size:hover{background:url('../images/icon_size.png') no-repeat 0;display:inline-block;padding-left:29px;margin-left:30px;color:#858585;text-decoration:none}
 .product_details .first .fr_01 span.product-keep{color: #858585;display: inline-block;margin-right: 0;line-height: 30px; background: url('../images/star_hollow.png') no-repeat 0 4px;padding-left: 24px;cursor: pointer;}
 .product_details .first .fr_01 .addcart {margin-bottom: 20px; width:100%; float:left}
-.product_details .first .fr_01 .addcart .btn_addcart {background: url('../images/btn_addshoppingcart.gif') no-repeat 28% 50%;width: 138px;height: 25px;padding: 5px 0 0 47px;}
+.product_details .first .fr_01 .addcart .btn_addcart {background: #E5002D; width: 138px;height: 25px;padding: 5px 0 0 47px;}
 .product_details .first .fr_01 .addcart a, .addcart a:hover {color: #fff;letter-spacing: 1px;text-decoration: none;display: inline-block;vertical-align: middle;font-size: 18px;line-height: 21px;float:right}
+
+
+.product_details .first .fr ul li p a.want { float: right; background: #E5002D; line-height: 36px; color: #fff; font-size: 14px; text-align: center; height: 36px; width: 130px; }
+.product_details .first .fr ul li p a.want:hover { background: #BF0026; }
 
 .add_shop01{ width:100%; float:left}
 .add_shop01 ul li { width: 100%; float: left; margin-bottom: 10px; position: relative; }

@@ -78,7 +78,7 @@ img#navLogo{position:absolute;top:55px;left:0}
 #b04.banner ul li{float:left;}
 #b04.banner ul li img{float:left}
 
-#sidenav{height:100%;width:165px; font-size:8px; float:left;}
+#sidenav{height:100%;width:165px; float:left;}
 #sidenav h2{color:#555;padding:0px 0 3px 10px;font-weight:bolder;background:url('../images/sidenav_h2icon.gif') no-repeat 0 8px;margin-top:10px}
 .sale{padding:0;font-style:normal;line-height:1.7;height:100%; margin-top:-10px}
 .menu_onsale{border-bottom:1px #f0f0f0 solid;padding:10px 0;margin-right:20px}

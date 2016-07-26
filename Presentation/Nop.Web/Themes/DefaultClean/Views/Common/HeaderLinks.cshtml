@@ -10,15 +10,15 @@
         }
         else
         {
-            <li class="epaper"><span class="login"><a id="btn_login" class="fancyLogin" href="@Url.RouteUrl("Login")">登录</a></span></li>
-            <li class="member"><a id="btn_register" class="fancyEpaper" href="@Url.RouteUrl("Register")">注册</a></li>
+            <li class="epaper"><span class="login"><a id="btn_login" class="fancyLogin" href="javascript:void(0);">登录</a></span></li>
+            <li class="member"><a id="btn_register" class="fancyEpaper" href="javascript:void(0);">注册</a></li>
         }
         <li id="cart"><a class="fancyLogin" href="@Url.Action("cart", "shoppingcart")"><span>@(Model.ShoppingCartItems)</span>个商品</a></li>
     </ul>
 </div>
 @if (!Model.IsAuthenticated)
 {
-    @*<script type="text/javascript">
+    <script type="text/javascript">
         $(function () {
             $("#btn_login").click(function () {
                 layer.open({
@@ -41,5 +41,5 @@
                 content: ['@Url.RouteUrl("Register")', 'no']
             });
         });
-    </script>*@
+    </script>
 }
