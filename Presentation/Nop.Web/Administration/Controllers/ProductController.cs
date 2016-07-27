@@ -244,7 +244,7 @@ namespace Nop.Admin.Controllers
         protected virtual void UpdateProductPrice(ProductAttributeValue pav)
         {
             var product = pav.ProductAttributeMapping.Product;
-            var pavNames = new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "X(300cm-360cm)", "XL(360cm-420cm)" };
+            var pavNames = new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "L(300cm-360cm)", "XL(360cm-420cm)" };
             if (product.AttributeTemplateId == (int)AttributeTemplate.ChuangLian
                 && pavNames.Contains(pav.Name))
             {

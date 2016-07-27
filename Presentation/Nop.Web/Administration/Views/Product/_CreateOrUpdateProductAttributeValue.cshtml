@@ -39,13 +39,13 @@
         </text>
         }
 
-        @if (new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "X(300cm-360cm)", "XL(360cm-420cm)" }.Contains(Model.Name))
+        @if (new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "L(300cm-360cm)", "XL(360cm-420cm)" }.Contains(Model.Name))
         {
         <text>
         $("#product-price").show();
         </text>
         }
-        else if (new string[] { "轨道", "窗纱", "遮光布", "抽带式", "打褶式", "波浪式" }.Contains(Model.Name))
+        else if (new string[] { "轨道", "窗纱", "遮光布", "平板式", "打褶式", "水波帘" }.Contains(Model.Name))
         {
         <text>
         $(".price-size").show();
@@ -207,7 +207,7 @@
     </tr>
     <tr class="price-size" style="display:none;">
         <td class="adminTitle">
-            <img src="/Administration/Content/images/ico-help.gif"> 价格（X）:
+            <img src="/Administration/Content/images/ico-help.gif"> 价格（L）:
         </td>
         <td class="adminData">
             @Html.EditorFor(model => model.PriceX)

@@ -584,7 +584,7 @@ namespace Nop.Services.Catalog
 
                                 break;
                             }
-                        case "X(300cm-360cm)":
+                        case "L(300cm-360cm)":
                             {
                                 if (guiDaoAttribute != null)
                                     pricePeiJian = pricePeiJian + guiDaoAttribute.PriceX;
