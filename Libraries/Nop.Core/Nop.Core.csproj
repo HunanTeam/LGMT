@@ -96,6 +96,7 @@
     <Compile Include="Domain\Catalog\ProductType.cs" />
     <Compile Include="Domain\Common\AddressAttribute.cs" />
     <Compile Include="Domain\Common\AddressAttributeValue.cs" />
+    <Compile Include="Domain\Common\PlantformType.cs" />
     <Compile Include="Domain\Common\SearchTermReportLine.cs" />
     <Compile Include="Domain\Common\SearchTerm.cs" />
     <Compile Include="Domain\Customers\CustomerAttribute.cs" />
@@ -117,6 +118,8 @@
     <Compile Include="Domain\Topics\TopicTemplate.cs" />
     <Compile Include="Domain\Vendors\VendorSettings.cs" />
     <Compile Include="Domain\Vendors\Vendor.cs" />
+    <Compile Include="Domain\VerificationCode\VerificationCodeType.cs" />
+    <Compile Include="Domain\VerificationCode\PhoneVerificationSettings.cs" />
     <Compile Include="Domain\VerificationCode\PhoneVerificationCode.cs" />
     <Compile Include="IStoreContext.cs" />
     <Compile Include="Domain\Catalog\BackInStockSubscription.cs" />

@@ -13,5 +13,17 @@ namespace Nop.Core.Domain.VerificationCode
         public string ClientIp { get; set; }
         public DateTime ExpirationTime { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int VerificationType { get; set; }
+        public VerificationCodeType VerificationTypeEnum
+        {
+            get
+            {
+                return (VerificationCodeType)VerificationType;
+            }
+            set
+            {
+                this.VerificationType = (int)value;
+            }
+        }
     }
 }

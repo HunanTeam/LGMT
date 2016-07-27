@@ -285,10 +285,33 @@ namespace Nop.Web.Infrastructure
                             new[] { "Nop.Web.Controllers" });
 
             //passwordrecovery
+            //routes.MapLocalizedRoute("PasswordRecovery",
+            //                "passwordrecovery",
+            //                new { controller = "Customer", action = "PasswordRecovery" },
+            //                new[] { "Nop.Web.Controllers" });
             routes.MapLocalizedRoute("PasswordRecovery",
-                            "passwordrecovery",
-                            new { controller = "Customer", action = "PasswordRecovery" },
+                         "passwordrecovery",
+                         new { controller = "Customer", action = "PasswordRecoveryStep1" },
+                         new[] { "Nop.Web.Controllers" });
+            routes.MapLocalizedRoute("PasswordRecoveryStep1",
+                            "passwordrecoverystep1",
+                            new { controller = "Customer", action = "PasswordRecoveryStep1" },
                             new[] { "Nop.Web.Controllers" });
+            routes.MapLocalizedRoute("PasswordRecoveryStep2",
+                            "passwordrecoverystep2",
+                            new { controller = "Customer", action = "PasswordRecoveryStep2" },
+                            new[] { "Nop.Web.Controllers" });
+            routes.MapLocalizedRoute("PasswordRecoveryStep3",
+                            "passwordrecoverystep3",
+                            new { controller = "Customer", action = "PasswordRecoveryStep3" },
+                            new[] { "Nop.Web.Controllers" });
+            routes.MapLocalizedRoute("PasswordRecoveryStep4",
+                            "passwordrecoverystep4",
+                            new { controller = "Customer", action = "PasswordRecoveryStep4" },
+                            new[] { "Nop.Web.Controllers" });
+
+
+
             //password recovery confirmation
             routes.MapLocalizedRoute("PasswordRecoveryConfirm",
                             "passwordrecovery/confirm",

@@ -8,6 +8,7 @@ namespace Nop.Data.Mapping.VerificationCode
         {
             this.ToTable("PhoneVerificationCode");
             this.HasKey(t => t.Id);
+            this.Ignore(t => t.VerificationTypeEnum);
         }
     }
 }

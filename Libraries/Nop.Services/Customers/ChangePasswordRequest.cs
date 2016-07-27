@@ -11,6 +11,8 @@ namespace Nop.Services.Customers
         /// Email
         /// </summary>
         public string Email { get; set; }
+
+        public string Phone { get; set; }
         /// <summary>
         /// A value indicating whether we should validate request
         /// </summary>
@@ -36,10 +38,23 @@ namespace Nop.Services.Customers
         /// <param name="newPasswordFormat">Password format</param>
         /// <param name="newPassword">New password</param>
         /// <param name="oldPassword">Old password</param>
-        public ChangePasswordRequest(string email, bool validateRequest, 
+        public ChangePasswordRequest(string email, bool validateRequest,
             PasswordFormat newPasswordFormat, string newPassword, string oldPassword = "")
         {
             this.Email = email;
+            this.ValidateRequest = validateRequest;
+            this.NewPasswordFormat = newPasswordFormat;
+            this.NewPassword = newPassword;
+            this.OldPassword = oldPassword;
+          
+        }
+
+
+        public ChangePasswordRequest(string email, string phone, bool validateRequest,
+          PasswordFormat newPasswordFormat, string newPassword, string oldPassword = "")
+        {
+            this.Email = email;
+            this.Phone = phone;
             this.ValidateRequest = validateRequest;
             this.NewPasswordFormat = newPasswordFormat;
             this.NewPassword = newPassword;

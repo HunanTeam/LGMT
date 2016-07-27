@@ -6,7 +6,7 @@ using Nop.Web.Validators.Customer;
 
 namespace Nop.Web.Models.Customer
 {
-    //[Validator(typeof(PasswordRecoveryStep3Validator))]
+    [Validator(typeof(PasswordRecoveryStep3Validator))]
     public partial class PasswordRecoveryStep3Model : BaseNopModel
     {
         public string UserName { get; set; }

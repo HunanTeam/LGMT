@@ -42,7 +42,7 @@
                         <input id="Password" name="Password" type="password" placeholder="密码" maxlength=20 />
                         @Html.ValidationMessageFor(m => m.Password)
                     </li>
-                    <li><a href="#">忘记密码?</a></li>
+                    <li><a href="@Url.RouteUrl("PasswordRecovery")" target="_self">忘记密码?</a></li>
                     <li>
                         <input id="btn_login" class="butn" type="button" value="@T("Account.Login.LoginButton")" />
                         <p class="valid_info" style="display:none;">手机号码或密码错误，请重试！</p>

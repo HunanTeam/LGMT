@@ -244,18 +244,27 @@ namespace Nop.Services.Customers
                 throw new ArgumentNullException("request");
 
             var result = new ChangePasswordResult();
-            if (String.IsNullOrWhiteSpace(request.Email))
-            {
-                result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.EmailIsNotProvided"));
-                return result;
-            }
+            //if (String.IsNullOrWhiteSpace(request.Email))
+            //{
+            //    result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.EmailIsNotProvided"));
+            //    return result;
+            //}
             if (String.IsNullOrWhiteSpace(request.NewPassword))
             {
                 result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.PasswordIsNotProvided"));
                 return result;
             }
 
-            var customer = _customerService.GetCustomerByEmail(request.Email);
+            Customer customer = null;
+            if (!string.IsNullOrWhiteSpace(request.Phone))
+            {
+                customer = _customerService.GetCustomerByPhone(request.Phone);
+            }
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                customer = _customerService.GetCustomerByPhone(request.Email);
+            }
+
             if (customer == null)
             {
                 result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.EmailNotFound"));
@@ -295,6 +304,7 @@ namespace Nop.Services.Customers
             //at this point request is valid
             if (requestIsValid)
             {
+
                 switch (request.NewPasswordFormat)
                 {
                     case PasswordFormat.Clear:

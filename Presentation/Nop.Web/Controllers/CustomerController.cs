@@ -42,6 +42,7 @@ using Nop.Web.Framework.Security.Honeypot;
 using Nop.Web.Models.Common;
 using Nop.Web.Models.Customer;
 using WebGrease.Css.Extensions;
+using Nop.Core.Domain.VerificationCode;
 
 namespace Nop.Web.Controllers
 {
@@ -92,6 +93,8 @@ namespace Nop.Web.Controllers
 
         private readonly ILogger _logger;
 
+        private readonly PhoneVerificationSettings _phoneVerificationSettings;
+
         #endregion
 
         #region Ctor
@@ -136,6 +139,7 @@ namespace Nop.Web.Controllers
             SecuritySettings securitySettings,
             ExternalAuthenticationSettings externalAuthenticationSettings,
             IPhoneVerificationCodeService phoneVerificationCodeService,
+            PhoneVerificationSettings phoneVerificationSettings,
             ILogger logger)
         {
             this._authenticationService = authenticationService;
@@ -179,6 +183,7 @@ namespace Nop.Web.Controllers
             this._externalAuthenticationSettings = externalAuthenticationSettings;
             this._phoneVerificationCodeService = phoneVerificationCodeService;
             this._logger = logger;
+            this._phoneVerificationSettings = phoneVerificationSettings;
         }
 
         #endregion
@@ -871,7 +876,7 @@ namespace Nop.Web.Controllers
             }
             else
             {
-                var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, model.CustomerPhone);
+                var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, model.CustomerPhone, VerificationCodeType.Register);
                 if (code == null || code.Code != model.PhoneAuthCode || code.ExpirationTime < DateTime.Now)
                     ModelState.AddModelError("", "手机验证码错误或已经失效");
             }
@@ -1184,12 +1189,16 @@ namespace Nop.Web.Controllers
             model.Result = _localizationService.GetResource("Account.AccountActivation.Activated");
             return View(model);
         }
-
+        public ActionResult GetVerificationCodeRegister(string phone, string validateCode)
+        {
+            return GetVerificationCode(phone, validateCode, VerificationCodeType.Register);
+        }
         /// <summary>
         /// 获取手机验证码
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetVerificationCode(string phone, string validateCode)
+        [NonAction]
+        private ActionResult GetVerificationCode(string phone, string validateCode, VerificationCodeType verificationType)
         {
             if (string.IsNullOrEmpty(phone))
                 return Json(new { success = false, message = "请输入手机号码" });
@@ -1200,10 +1209,10 @@ namespace Nop.Web.Controllers
             if (validateCode.ToLower() != Session["ValidateCode"].ToString().ToLower())
                 return Json(new { success = false, message = "图形验证码输入错误" });
 
-            var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, phone);
+            var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, phone, verificationType);
             if (code == null || code.ExpirationTime < DateTime.Now) //未发送过验证码或验证码已经失效了，则发送验证码短信
             {
-                code = _phoneVerificationCodeService.InsertVerificationCode(_workContext.CurrentCustomer.CustomerGuid, phone);
+                code = _phoneVerificationCodeService.InsertVerificationCode(_workContext.CurrentCustomer.CustomerGuid, phone, verificationType);
                 if (SendVerificationCodeMessage(phone, code.Code))
                 {
                     Session["ValidateCode"] = null;
@@ -1213,10 +1222,10 @@ namespace Nop.Web.Controllers
             else
             {
                 var ts = DateTime.Now - code.CreatedDate;
-                if (ts.TotalSeconds <= 60)
+                if (ts.TotalSeconds <= _phoneVerificationSettings.AgainGetSpacingTime)
                     return Json(new { success = false, message = "获取手机验证码频率太快" });
 
-                code = _phoneVerificationCodeService.InsertVerificationCode(_workContext.CurrentCustomer.CustomerGuid, phone);
+                code = _phoneVerificationCodeService.InsertVerificationCode(_workContext.CurrentCustomer.CustomerGuid, phone, verificationType);
                 if (SendVerificationCodeMessage(phone, code.Code))
                 {
                     Session["ValidateCode"] = null;
@@ -1881,7 +1890,7 @@ namespace Nop.Web.Controllers
             }
 
 
-            var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, model.CustomerPhone);
+            var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, model.CustomerPhone, VerificationCodeType.ExternalAuthBind);
             if (code == null || code.Code != model.PhoneAuthCode || code.ExpirationTime < DateTime.Now)
                 ModelState.AddModelError("", "手机验证码错误或已经失效");
 
@@ -1911,7 +1920,10 @@ namespace Nop.Web.Controllers
 
 
         }
-
+        public ActionResult GetVerificationCodeBindPhone(string phone, string validateCode)
+        {
+            return GetVerificationCode(phone, validateCode, VerificationCodeType.ExternalAuthBind);
+        }
 
         #endregion
 
@@ -1958,7 +1970,7 @@ namespace Nop.Web.Controllers
 
             var model = new PasswordRecoveryStep2Model();
             model.UserName = GetPasswordRecoveryFuzzyUserName();
-            //model.AgainGetAuthenticodeSpacingTime = _authenticodeSettings.AgainGetSpacingTime;
+            model.AgainGetAuthenticodeSpacingTime = _phoneVerificationSettings.AgainGetSpacingTime;
             return View(model);
         }
 
@@ -1969,18 +1981,17 @@ namespace Nop.Web.Controllers
             var customer = _workContext.CurrentCustomer;
             var userName = this.CurrentPasswordRecoveryUserName;
 
-            //if (_authenticodeService.ValidateAuthenticode(customer.Id.ToString(),
-            //    this.CurrentPasswordRecoveryUserName,
-            //    AuthenticationType.PasswordRecoveryAuthenticode,
-            //    model.Authenticode,
-            //    PlantformType.PC))
-            //{
-            //    this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step3;
-            //    return RedirectToRoute("PasswordRecoveryStep3");
-            //}
+            if (_phoneVerificationCodeService.ValidatePhoneVerificationCode(customer.CustomerGuid,
+                this.CurrentPasswordRecoveryUserName,
+               VerificationCodeType.PasswordRecoveryAuthenticode,
+                model.Authenticode))
+            {
+                this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step3;
+                return RedirectToRoute("PasswordRecoveryStep3");
+            }
 
             model.UserName = GetPasswordRecoveryFuzzyUserName();
-            model.Message = _localizationService.GetResource("Common.Authenticode.Invalid");
+            model.Message = "您输入的验证码无效";
             return View(model);
         }
 
@@ -1999,48 +2010,48 @@ namespace Nop.Web.Controllers
         [NopHttpsRequirement(SslRequirement.Yes)]
         public ActionResult PasswordRecoveryStep3(PasswordRecoveryStep3Model model)
         {
-            //if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step3)
-            //    return RedirectToRoute("PasswordRecoveryStep1");
+            if (this.CurrentPasswordRecoveryStep < PasswordRecoveryStep.Step3)
+                return RedirectToRoute("PasswordRecoveryStep1");
 
-            //if (ModelState.IsValid)
-            //{
-            //    var userName = this.CurrentPasswordRecoveryUserName;
-            //    var changePasswordRequest = new ChangePasswordRequest(null,
-            //                                                  null,
-            //                                                  false,
-            //                                                  _customerSettings.DefaultPasswordFormat,
-            //                                                  model.Password);
+            if (ModelState.IsValid)
+            {
+                var userName = this.CurrentPasswordRecoveryUserName;
+                var changePasswordRequest = new ChangePasswordRequest(null,
+                                                              null,
+                                                              false,
+                                                              _customerSettings.DefaultPasswordFormat,
+                                                              model.Password);
 
-            //    Customer customer = null;
-            //    if (CommonHelper.IsValidMobile(userName))
-            //    {
-            //        customer = _customerService.GetCustomerByMobile(userName);
-            //        changePasswordRequest.Mobile = userName;
-            //    }
-            //    else if (CommonHelper.IsValidEmail(userName))
-            //    {
-            //        customer = _customerService.GetCustomerByEmail(userName);
-            //        changePasswordRequest.Email = userName;
-            //    }
+                Customer customer = null;
+                if (CommonHelper.IsValidMobile(userName))
+                {
+                    customer = _customerService.GetCustomerByPhone(userName);
+                    changePasswordRequest.Phone = userName;
+                }
+                else if (CommonHelper.IsValidEmail(userName))
+                {
+                    customer = _customerService.GetCustomerByEmail(userName);
+                    changePasswordRequest.Email = userName;
+                }
 
-            //    var changePasswordResult = _customerRegistrationService.ChangePassword(changePasswordRequest);
-            //    if (changePasswordResult.Success)
-            //    {
-            //        //migrate shopping cart
-            //        _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);
-            //        //sign in new customer
-            //        _authenticationService.SignIn(customer, false);
-            //        //activity log
-            //        _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"), customer);
+                var changePasswordResult = _customerRegistrationService.ChangePassword(changePasswordRequest);
+                if (changePasswordResult.Success)
+                {
+                    //migrate shopping cart
+                    _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, customer, true);
+                    //sign in new customer
+                    _authenticationService.SignIn(customer, false);
+                    //activity log
+                    _customerActivityService.InsertActivity("PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"), customer);
 
-            //        this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step4;
-            //        return RedirectToRoute("PasswordRecoveryStep4");
-            //    }
-            //}
+                    this.CurrentPasswordRecoveryStep = PasswordRecoveryStep.Step4;
+                    return RedirectToRoute("PasswordRecoveryStep4");
+                }
+            }
 
-            //model.UserName = GetPasswordRecoveryFuzzyUserName();
-            //model.Message = "修改密码失败";
-            return View("PasswordRecoveryStep4");
+            model.UserName = GetPasswordRecoveryFuzzyUserName();
+            model.Message = "修改密码失败";
+            return View(model);
         }
 
         [NopHttpsRequirement(SslRequirement.Yes)]

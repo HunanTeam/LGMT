@@ -385,6 +385,7 @@
     <Compile Include="Validators\Common\ContactVendorValidator.cs" />
     <Compile Include="Validators\Customer\BindPhoneValidator.cs" />
     <Compile Include="Validators\Customer\LoginValidator.cs" />
+    <Compile Include="Validators\Customer\PasswordRecoveryStep3Validator.cs" />
     <Compile Include="Validators\Install\InstallValidator.cs" />
     <Compile Include="Validators\News\NewsItemValidator.cs" />
     <Compile Include="Validators\Customer\PasswordRecoveryConfirmValidator.cs" />
@@ -441,6 +442,7 @@
     <Content Include="App_Data\Install\SqlServer.Indexes.sql" />
     <Content Include="App_Data\Settings_bak.txt" />
     <Content Include="App_Data\Settings.txt" />
+    <Content Include="App_Data\更新脚本\02.发送验证码.sql" />
     <Content Include="Content\BBEditor\ed.js" />
     <Content Include="Content\BBEditor\images\bold.gif" />
     <Content Include="Content\BBEditor\images\code.gif" />
@@ -2134,7 +2136,10 @@
     <Content Include="Themes\DefaultClean\Views\Customer\ChangePassword.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Common\PageNotFound.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\BindPhone.cshtml" />
-    <Content Include="Themes\DefaultClean\Views\Customer\Login - 复制.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep1.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep2.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep3.cshtml" />
+    <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep4.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />

@@ -1,5 +1,6 @@
 ﻿@model RegisterModel
 @using Nop.Web.Models.Customer;
+@using Nop.Core.Domain.VerificationCode;
 @{
     Layout = null;
 }
@@ -133,8 +134,12 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "@Url.Action("GetVerificationCode", "Customer")",
-                    data: "phone=" + customerPhone + "&validateCode=" + validateCode,
+                    url: "@Url.Action("GetVerificationCodeRegister", "Customer")",
+                    data: {
+                        phone: customerPhone,
+                        validateCode: validateCode 
+
+                    },
                     success: function (d) {
                         if (d.success) {
                             //$("#gc").click();
