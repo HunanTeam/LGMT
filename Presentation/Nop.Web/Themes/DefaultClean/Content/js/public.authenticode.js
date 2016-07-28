@@ -36,12 +36,12 @@
             url: Authenticode.getAuthenticodeUrl,
             data: data,
             success: function (d) {
-                if (d.Data.Success) {
-                    alert(d.Data.Message);
+                if (d.success) {
+                    alert(d.message);
                     Authenticode.preventInterval();
                 }
                 else {
-                    alert(d.Data.Message);
+                    alert(d.message);
                     Authenticode.enableButton();
                 }
             },

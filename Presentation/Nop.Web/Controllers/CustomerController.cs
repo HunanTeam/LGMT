@@ -1198,15 +1198,15 @@ namespace Nop.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [NonAction]
-        private ActionResult GetVerificationCode(string phone, string validateCode, VerificationCodeType verificationType)
+        private ActionResult GetVerificationCode(string phone, string validateCode, VerificationCodeType verificationType, bool needValidateCode = true)
         {
             if (string.IsNullOrEmpty(phone))
                 return Json(new { success = false, message = "请输入手机号码" });
-            if (string.IsNullOrEmpty(validateCode))
+            if (string.IsNullOrEmpty(validateCode) && needValidateCode)
                 return Json(new { success = false, message = "请输入图形验证码" });
-            if (Session["ValidateCode"] == null)
+            if (needValidateCode && Session["ValidateCode"] == null)
                 return Json(new { success = false, message = "图形验证码已经失效，请点击刷新" });
-            if (validateCode.ToLower() != Session["ValidateCode"].ToString().ToLower())
+            if (needValidateCode && validateCode.ToLower() != Session["ValidateCode"].ToString().ToLower())
                 return Json(new { success = false, message = "图形验证码输入错误" });
 
             var code = _phoneVerificationCodeService.GetCodeByPhone(_workContext.CurrentCustomer.CustomerGuid, phone, verificationType);
@@ -1216,7 +1216,7 @@ namespace Nop.Web.Controllers
                 if (SendVerificationCodeMessage(phone, code.Code))
                 {
                     Session["ValidateCode"] = null;
-                    return Json(new { success = true });
+                    return Json(new { success = true, message = "验证码已发送到您的手机" });
                 }
             }
             else
@@ -2068,9 +2068,9 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public ActionResult GetVerificationCodePasswordRecovery(string phone, string validateCode)
+        public ActionResult GetVerificationCodePasswordRecovery(string validateCode)
         {
-            return GetVerificationCode(phone, validateCode, VerificationCodeType.PasswordRecoveryAuthenticode);
+            return GetVerificationCode(GetPasswordRecoveryFuzzyUserName(), validateCode, VerificationCodeType.PasswordRecoveryAuthenticode, false);
         }
 
 
