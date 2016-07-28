@@ -487,53 +487,53 @@
         </tr>
     </table>
                 ,
-                @<table class="adminContent">
-                    <tr>
-                        <td class="adminTitle">
-                            @Html.NopLabelFor(model => model.Name):
-                        </td>
-                        <td class="adminData">
-                            @Html.EditorFor(model => model.Name, new { style = "Width:250px;" })
-                            @Html.ValidationMessageFor(model => model.Name)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="adminTitle">
-                            @Html.NopLabelFor(model => model.ShortDescription):
-                        </td>
-                        <td class="adminData">
-                            @Html.TextAreaFor(x => x.ShortDescription, new { style = "Width: 250px; Height: 150px;" })
-                            @Html.ValidationMessageFor(model => model.ShortDescription)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="adminTitle">
-                            @Html.NopLabelFor(model => model.FullDescription):
-                        </td>
-                        <td class="adminData">
-                            @Html.EditorFor(x => x.FullDescription, "RichEditor")
-                            @Html.ValidationMessageFor(model => model.FullDescription)
-                        </td>
-                    </tr>
-                     <tr>
-                         <td class="adminTitle">
-                             <img src="/Administration/Content/images/ico-help.gif"> 尺码信息:
-                         </td>
-                         <td class="adminData">
-                             @Html.EditorFor(x => x.ExtendInfo1, "RichEditor")
-                             @Html.ValidationMessageFor(model => model.ExtendInfo1)
-                         </td>
-                     </tr>
-                     <tr>
-                         <td class="adminTitle">
-                             <img src="/Administration/Content/images/ico-help.gif"> 窗帘与配件:
-                         </td>
-                         <td class="adminData">
-                             @Html.EditorFor(x => x.ExtendInfo2, "RichEditor")
-                             @Html.ValidationMessageFor(model => model.ExtendInfo2)
-                         </td>
-                     </tr>
-                </table>
+    @<table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Name):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Name, new { style = "Width:250px;" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ShortDescription):
+            </td>
+            <td class="adminData">
+                @Html.TextAreaFor(x => x.ShortDescription, new { style = "Width: 250px; Height: 150px;" })
+                @Html.ValidationMessageFor(model => model.ShortDescription)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FullDescription):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.FullDescription, "RichEditor")
+                @Html.ValidationMessageFor(model => model.FullDescription)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                <img src="/Administration/Content/images/ico-help.gif"> 尺码信息:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.ExtendInfo1, "RichEditor")
+                @Html.ValidationMessageFor(model => model.ExtendInfo1)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                <img src="/Administration/Content/images/ico-help.gif"> 窗帘与配件:
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.ExtendInfo2, "RichEditor")
+                @Html.ValidationMessageFor(model => model.ExtendInfo2)
+            </td>
+        </tr>
+    </table>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ))
 <table class="adminContent">
     <tr>
@@ -631,6 +631,10 @@
         <td class="adminData">
             @Html.EditorFor(model => model.Price) [@Model.PrimaryStoreCurrencyCode]
             @Html.ValidationMessageFor(model => model.Price)
+            @if (Model.Id > 0 && Model.AttributeTemplateId == (int)AttributeTemplate.ChuangLian)
+            {
+                <input type="submit" id="generate-price" name="generate-price" value="自动生成属性价格" onclick="return confirm('该操作将会覆盖之前的属性价格，确定执行吗?');return false;" />
+            }
         </td>
     </tr>
     <tr>

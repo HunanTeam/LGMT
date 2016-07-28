@@ -1264,6 +1264,7 @@ namespace Nop.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        [FormValueRequired("save-continue", "save")]
         public ActionResult Edit(ProductModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
@@ -1364,6 +1365,111 @@ namespace Nop.Admin.Controllers
             PrepareAclModel(model, product, true);
             PrepareStoresMappingModel(model, product, true);
             return View(model);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [FormValueRequired("generate-price")]
+        public ActionResult GenerateAttributePrice(ProductModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            var product = _productService.GetProductById(model.Id);
+            if (product == null || product.Deleted)
+                //No product found with the specified id
+                return RedirectToAction("List");
+
+            //a vendor should have access only to his products
+            if (_workContext.CurrentVendor != null && product.VendorId != _workContext.CurrentVendor.Id)
+                return RedirectToAction("List");
+
+            //selected tab
+            SaveSelectedTabIndex();
+            GenerateAttributePrices(product);
+            SuccessNotification("自动生成属性价格成功");
+            return RedirectToAction("Edit", new { id = product.Id });
+        }
+
+        /// <summary>
+        /// 根据商品标价生成属性价格
+        /// </summary>
+        /// <param name="product"></param>
+        private void GenerateAttributePrices(Product product)
+        {
+            if (product.AttributeTemplateId == (int)AttributeTemplate.ChuangLian
+                && product.Price > 0)
+            {
+                #region 修改尺寸属性价格
+                var chiCunAttr = product.ProductAttributeMappings.FirstOrDefault(m => m.ProductAttribute.Name == "尺寸");
+                if (chiCunAttr != null)
+                {
+                    var attrValues = chiCunAttr.ProductAttributeValues.ToList();
+                    foreach (var attrValue in attrValues)
+                    {
+                        var attrPrice = 0.00M;
+                        if (attrValue.Name == "S(180cm-200cm)")
+                            attrPrice = (product.Price / 0.4M) * 3;
+                        else if (attrValue.Name == "M(200cm-300cm)")
+                            attrPrice = (product.Price / 0.4M) * 4.8M;
+                        else if (attrValue.Name == "L(300cm-360cm)")
+                            attrPrice = (product.Price / 0.4M) * 6.6M;
+                        else if (attrValue.Name == "XL(360cm-420cm)")
+                            attrPrice = (product.Price / 0.4M) * 8.6M;
+                        if (attrPrice != 0 && attrPrice != attrValue.Price)
+                        {
+                            attrValue.Price = attrPrice;
+                            _productAttributeService.UpdateProductAttributeValue(attrValue);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 修改帘头属性价格
+                var lianTouAttr = product.ProductAttributeMappings.FirstOrDefault(m => m.ProductAttribute.Name == "帘头");
+                if (lianTouAttr != null)
+                {
+                    var attrValues = lianTouAttr.ProductAttributeValues.ToList();
+                    foreach (var attrValue in attrValues)
+                    {
+                        var attrPriceS = 0.00M;
+                        var attrPriceM = 0.00M;
+                        var attrPriceL = 0.00M;
+                        var attrPriceXL = 0.00M;
+                        if (attrValue.Name == "平板式")
+                        {
+                            attrPriceS = (product.Price / 0.4M) * 0.5M + 100;
+                            attrPriceM = (product.Price / 0.4M) * 1M + 100;
+                            attrPriceL = (product.Price / 0.4M) * 1M + 100;
+                            attrPriceXL = (product.Price / 0.4M) * 1.5M + 100;
+                        }
+                        else if (attrValue.Name == "打褶式")
+                        {
+                            attrPriceS = (product.Price / 0.4M) * 0.8M + 100;
+                            attrPriceM = (product.Price / 0.4M) * 1.2M + 100;
+                            attrPriceL = (product.Price / 0.4M) * 1.2M + 100;
+                            attrPriceXL = (product.Price / 0.4M) * 1.6M + 100;
+                        }
+                        else if (attrValue.Name == "水波帘")
+                        {
+                            attrPriceS = (product.Price / 0.4M) * 3.25M + 100;
+                            attrPriceM = (product.Price / 0.4M) * 4M + 100;
+                            attrPriceL = (product.Price / 0.4M) * 4.75M + 100;
+                            attrPriceXL = (product.Price / 0.4M) * 5.5M + 100;
+                        }
+
+                        if (attrPriceS != attrValue.PriceS || attrPriceM != attrValue.PriceM
+                            || attrPriceL != attrValue.PriceX || attrPriceXL != attrValue.PriceXL)
+                        {
+                            attrValue.PriceS = attrPriceS;
+                            attrValue.PriceM = attrPriceM;
+                            attrValue.PriceX = attrPriceL;
+                            attrValue.PriceXL = attrPriceXL;
+                            _productAttributeService.UpdateProductAttributeValue(attrValue);
+                        }
+                    }
+                }
+                #endregion
+            }
         }
 
         //delete product
