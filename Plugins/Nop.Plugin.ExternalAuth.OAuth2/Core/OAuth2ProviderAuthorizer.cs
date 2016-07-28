@@ -66,7 +66,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     case ClientType.WeiBo:
                         return _clientApplication ?? (_clientApplication = new WeiBoClient(_oAuth2ExternalAuthSettings.WeiBoClientKeyIdentifier, _oAuth2ExternalAuthSettings.WeiBoClientSecret));
                     default:
-                        return _clientApplication ?? (_clientApplication = new QQClient(_oAuth2ExternalAuthSettings.QQClientKeyIdentifier, _oAuth2ExternalAuthSettings.QQClientSecret));
+                        return _clientApplication ?? (_clientApplication = new WeChatClient(_oAuth2ExternalAuthSettings.QQClientKeyIdentifier, _oAuth2ExternalAuthSettings.QQClientSecret));
                 }
             }
         }
