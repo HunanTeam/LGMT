@@ -2070,7 +2070,7 @@ namespace Nop.Web.Controllers
 
         public ActionResult GetVerificationCodePasswordRecovery(string validateCode)
         {
-            return GetVerificationCode(GetPasswordRecoveryFuzzyUserName(), validateCode, VerificationCodeType.PasswordRecoveryAuthenticode, false);
+            return GetVerificationCode(CurrentPasswordRecoveryUserName, validateCode, VerificationCodeType.PasswordRecoveryAuthenticode, false);
         }
 
 
