@@ -70,7 +70,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// The app secret.
         /// </param>
         public WeChatClient(string appId, string appSecret)
-            : this(appId, appSecret, "get_user_info")
+            : this(appId, appSecret, "snsapi_login")
         {
         }
 
@@ -210,23 +210,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     };
             }
 
-            //FacebookGraphData graphData;
-            //var request = WebRequest.Create(builder.Uri);
-            //using (var response = request.GetResponse()) {
-            //    using (var responseStream = response.GetResponseStream()) {
-            //        graphData = JsonHelper.Deserialize<FacebookGraphData>(responseStream);
-            //    }
-            //}
 
-            //// this dictionary must contains 
-            //var userData = new Dictionary<string, string>();
-            //userData.AddItemIfNotEmpty("id", graphData.Id);
-            //userData.AddItemIfNotEmpty("username", graphData.Email);
-            //userData.AddItemIfNotEmpty("name", graphData.Name);
-            //userData.AddItemIfNotEmpty("link", graphData.Link == null ? null : graphData.Link.AbsoluteUri);
-            //userData.AddItemIfNotEmpty("gender", graphData.Gender);
-            //userData.AddItemIfNotEmpty("birthday", graphData.Birthday);
-            //return userData;
         }
 
         /// <summary>
@@ -243,6 +227,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// </returns>
         protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
         {
+           
+            
+
 
             var builder = new UriBuilder(TokenEndpoint);
             builder.AppendQueryArgs(
@@ -301,7 +288,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
 
             var result2 = OAuthApi.GetAccessToken(_appId, _appSecret, code);
-          
+
 
 
 
