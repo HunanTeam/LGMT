@@ -181,7 +181,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
                 #endregion
 
-                uid = "WeiBo_" + uid;
+                
                 return new Dictionary<string, string>
                     {
                         {"openid", uid},

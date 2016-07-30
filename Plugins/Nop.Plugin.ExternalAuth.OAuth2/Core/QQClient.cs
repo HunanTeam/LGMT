@@ -196,7 +196,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
                 #endregion
 
-                openid = "QQ_" + openid;
+                 
                 return new Dictionary<string, string>
                     {
                         {"openid", openid},

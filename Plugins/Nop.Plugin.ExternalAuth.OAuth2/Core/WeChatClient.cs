@@ -55,6 +55,8 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
         private readonly ILogger _logger;
 
+
+
         #endregion
 
         #region Constructors and Destructors
@@ -126,10 +128,13 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                 new Dictionary<string, string> {
                     { "response_type", "code"},
                     { "appid", _appId },
-                    { "redirect_uri", returnUrl.AbsoluteUri },
+                    { "redirect_uri",HttpUtility.UrlEncode( returnUrl.AbsoluteUri )},
                     { "scope", string.Join(" ", _scope) },
                     { "state", "lgmt" }
                 });
+
+
+
             return builder.Uri;
         }
 
@@ -142,74 +147,34 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// <returns>A dictionary of profile data.</returns>
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
-            var builder = new UriBuilder(UserDataEndPoint);
-            builder.AppendQueryArgs(
-                new Dictionary<string, string>
-                    {
-                        {"access_token", MessagingUtilities.EscapeUriDataStringRfc3986(accessToken)},
-                        { "state", "lgmt" }
-                    });
 
-            using (var client = new WebClient())
+            //  OAuthApi.GetUserInfo(accessToken)
+            if (HttpContext.Current.Session["OAuth2.Weixin.openid"] != null)
             {
-                client.Encoding = System.Text.Encoding.UTF8;
+                var openId = HttpContext.Current.Session["OAuth2.Weixin.openid"].ToString();
+                var result = OAuthApi.GetUserInfo(accessToken, openId);
 
-                string data = client.DownloadString(builder.Uri);
-                if (string.IsNullOrEmpty(data))
-                {
-                    return null;
-                }
 
-                if (data.StartsWith("callback( "))
-                {
-                    data = data.Substring("callback( ".Length);
-                    data = data.Substring(0, data.Length - 3);
-                }
+                HttpContext.Current.Session.Remove("OAuth2.Weixin.openid");
 
-                var obj = JObject.Parse(data);
-                var openid = (obj["openid"] == null) ? null : obj["openid"].ToString();
-                if (string.IsNullOrEmpty(openid))
-                    return null;
-
-                #region 获取QQ昵称、头像、性别
-
-                var nickname = "";
-                var figureurl = "";
-                var gender = "";
-                var client_id = (obj["client_id"] == null) ? null : obj["client_id"].ToString();
-
-                var getInfoBuilder = new UriBuilder(UserInfoEndpoint);
-                getInfoBuilder.AppendQueryArgs(
-                    new Dictionary<string, string>
-                    {
-                        {"access_token", MessagingUtilities.EscapeUriDataStringRfc3986(accessToken)},
-                        {"oauth_consumer_key",MessagingUtilities.EscapeUriDataStringRfc3986(client_id)},
-                        {"openid",MessagingUtilities.EscapeUriDataStringRfc3986(openid)},
-                    });
-
-                string info = client.DownloadString(getInfoBuilder.Uri);
-                if (!string.IsNullOrEmpty(info))
-                {
-                    var infoObj = JObject.Parse(info);
-                    nickname = (infoObj["nickname"] == null) ? "" : infoObj["nickname"].ToString();
-                    figureurl = (infoObj["figureurl_2"] == null) ? "" : infoObj["figureurl_2"].ToString();
-                    gender = (infoObj["gender"] == null) ? "" : infoObj["gender"].ToString();
-                }
-
-                #endregion
-
-                openid = "QQ_" + openid;
                 return new Dictionary<string, string>
-                    {
-                        {"openid", openid},
-                        {"id", openid},
-                        {"name", openid},
-                        {"nickname",nickname},
-                        {"figureurl",figureurl},
-                        {"gender",gender},
-                    };
+                        {
+                            {"openid", openId},
+                            {"id", openId},
+                            {"name", openId},
+                            {"nickname",result.nickname},
+                            {"figureurl",result.headimgurl},
+                            {"gender",result.sex.ToString()},
+                        };
+
+
+            }
+            else
+            {
+                _logger.Debug(string.Format("wx: GetUserData 没有包含openid;accessToken:[{0}]", accessToken));
             }
 
+            return null;
 
         }
 
@@ -227,10 +192,6 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// </returns>
         protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
         {
-           
-            
-
-
             var builder = new UriBuilder(TokenEndpoint);
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
@@ -250,6 +211,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                 }
 
                 var parsedQueryString = HttpUtility.ParseQueryString(data);
+
+                HttpContext.Current.Session["OAuth2.Weixin.openid"] = parsedQueryString["openid"];
+
                 return parsedQueryString["access_token"];
             }
         }
