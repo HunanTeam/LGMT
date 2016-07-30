@@ -159,6 +159,8 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         [NonAction]
         private ActionResult LoginInternal(string returnUrl, bool verifyResponse, ClientType clientType)
         {
+            _logger.Debug(string.Format("LoginInternal returnUrl：[{0}],clientType :[{1}], url:[{2}]", returnUrl, clientType, this.Request.RawUrl));
+
             _logger.Debug(string.Format("登录LoginInternal：{0}", clientType));
             var processor = _openAuthenticationService.LoadExternalAuthenticationMethodBySystemName("ExternalAuth.OAuth2");
             if (processor == null ||
@@ -197,7 +199,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                     {
                         return RedirectToRoute("HomePage");
                         //result
-                       // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
+                        // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredAdminApproval:
                     {
@@ -253,6 +255,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         }
         public ActionResult WeChatCallback(string returnUrl)
         {
+
             return LoginInternal(returnUrl, true, ClientType.WeChat);
         }
 
