@@ -1789,6 +1789,7 @@ namespace Nop.Web.Controllers
                 return new HttpUnauthorizedResult();
 
             var model = new ChangePasswordModel();
+
             return View(model);
         }
 
@@ -1803,7 +1804,7 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var changePasswordRequest = new ChangePasswordRequest(customer.Email,
+                var changePasswordRequest = new ChangePasswordRequest(null, customer.Phone,
                     true, _customerSettings.DefaultPasswordFormat, model.NewPassword, model.OldPassword);
                 var changePasswordResult = _customerRegistrationService.ChangePassword(changePasswordRequest);
                 if (changePasswordResult.Success)
