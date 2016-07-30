@@ -36,7 +36,15 @@ namespace Nop.Plugin.ExternalAuth.OAuth2
                 "Plugins/ExternalAuthOAuth2/WeChatLogin",
                 new { controller = "ExternalAuthOAuth2", action = "WeChatLogin" },
                 new[] { "Nop.Plugin.ExternalAuth.OAuth2.Controllers" }
+
             );
+
+            routes.MapRoute("Plugin.ExternalAuth.OAuth2.WeChat.WeChatCallback",
+            "Plugins/ExternalAuthOAuth2/WeChatCallback",
+            new { controller = "ExternalAuthOAuth2", action = "WeChatCallback" },
+            new[] { "Nop.Plugin.ExternalAuth.OAuth2.Controllers" }
+
+        );
         }
         public int Priority
         {
