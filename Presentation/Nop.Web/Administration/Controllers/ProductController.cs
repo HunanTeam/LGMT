@@ -1418,7 +1418,14 @@ namespace Nop.Admin.Controllers
                         if (attrPrice != 0 && attrPrice != attrValue.Price)
                         {
                             attrValue.Price = Round(attrPrice);
+
                             _productAttributeService.UpdateProductAttributeValue(attrValue);
+                            if (attrValue.Name == "S(180cm-200cm)")//将最小价格设置到产品价格里去。
+                            {
+                                product.Price = attrValue.Price;
+                                _productService.UpdateProduct(product);
+                            }
+
                         }
                     }
                 }
