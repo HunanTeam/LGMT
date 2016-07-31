@@ -23,6 +23,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Senparc.Weixin.MP.AdvancedAPI;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
 {
@@ -197,7 +199,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                     {
                         return RedirectToRoute("HomePage");
                         //result
-                       // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
+                        // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredAdminApproval:
                     {
@@ -255,6 +257,13 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         {
             return LoginInternal(returnUrl, true, ClientType.WeChat);
         }
+        private ActionResult LoginInternalForWx(string code, string state, string returnUrl)
+        {
+            
+          
+            return null;
+        }
+
 
         #region 微信一键注册登录
 

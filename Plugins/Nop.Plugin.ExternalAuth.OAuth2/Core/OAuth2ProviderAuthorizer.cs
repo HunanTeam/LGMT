@@ -73,9 +73,9 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
         private AuthorizeState VerifyAuthentication(string returnUrl)
         {
-            _logger.Debug(string.Format("µÇÂ¼@ VerifyAuthentication in ,returnUrl£º{0}", returnUrl));
+            _logger.Debug(string.Format("µÇÂ¼ÁË @ VerifyAuthentication in ,returnUrl£º{0}", returnUrl));
             var authResult = ClientApplication.VerifyAuthentication(_httpContext, ClientApplication.GenerateLocalCallbackUri(_webHelper));
-            _logger.Debug(string.Format("µÇÂ¼@ VerifyAuthentication in IsSuccessful£º{0}", authResult.IsSuccessful));
+            _logger.Debug(string.Format("µÇÂ¼ÁË @ VerifyAuthentication in IsSuccessful£º{0}", authResult.IsSuccessful));
             if (authResult.IsSuccessful)
             {
                 if (!authResult.ExtraData.ContainsKey("id"))
