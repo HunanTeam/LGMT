@@ -6,6 +6,7 @@ using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Services.Events;
+using Nop.Data;
 
 namespace Nop.Services.Catalog
 {
@@ -93,7 +94,7 @@ namespace Nop.Services.Catalog
         private readonly IRepository<PredefinedProductAttributeValue> _predefinedProductAttributeValueRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICacheManager _cacheManager;
-
+        private readonly IDbContext _DbContext;
 
         #endregion
 
@@ -115,7 +116,9 @@ namespace Nop.Services.Catalog
             IRepository<ProductAttributeCombination> productAttributeCombinationRepository,
             IRepository<ProductAttributeValue> productAttributeValueRepository,
             IRepository<PredefinedProductAttributeValue> predefinedProductAttributeValueRepository,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            IDbContext dbContext
+            )
         {
             this._cacheManager = cacheManager;
             this._productAttributeRepository = productAttributeRepository;
@@ -124,6 +127,7 @@ namespace Nop.Services.Catalog
             this._productAttributeValueRepository = productAttributeValueRepository;
             this._predefinedProductAttributeValueRepository = predefinedProductAttributeValueRepository;
             this._eventPublisher = eventPublisher;
+            this._DbContext = dbContext;
         }
 
         #endregion
@@ -382,9 +386,9 @@ namespace Nop.Services.Catalog
         {
             if (productAttributeValueId == 0)
                 return null;
-            
-           string key = string.Format(PRODUCTATTRIBUTEVALUES_BY_ID_KEY, productAttributeValueId);
-           return _cacheManager.Get(key, () => _productAttributeValueRepository.GetById(productAttributeValueId));
+
+            string key = string.Format(PRODUCTATTRIBUTEVALUES_BY_ID_KEY, productAttributeValueId);
+            return _cacheManager.Get(key, () => _productAttributeValueRepository.GetById(productAttributeValueId));
         }
 
         /// <summary>
@@ -581,7 +585,7 @@ namespace Nop.Services.Catalog
         {
             if (productAttributeCombinationId == 0)
                 return null;
-            
+
             return _productAttributeCombinationRepository.GetById(productAttributeCombinationId);
         }
 
@@ -604,7 +608,7 @@ namespace Nop.Services.Catalog
             var combination = query.FirstOrDefault();
             return combination;
         }
-        
+
         /// <summary>
         /// Inserts a product attribute combination
         /// </summary>
@@ -649,6 +653,29 @@ namespace Nop.Services.Catalog
 
         #endregion
 
+        #endregion
+
+        #region 扩展方法
+        public virtual int SetProductAttributePriceBatch(ProductAttributePriceSetSetting setting)
+        {
+            if (_DbContext == null)
+            {
+                return 0;
+            }
+
+            string updateSqlBaseFormat = "update ProductAttributeValue set PriceS={0} ,PriceM={1},PriceX={2},PriceXL={3} where Name='{4}' ";
+            string updateSql_GuiDao = string.Format(updateSqlBaseFormat, setting.GuiDaoPriceS, setting.GuiDaoPriceM, setting.GuiDaoPriceX, setting.GuiDaoPriceXL, "轨道");
+            string updateSql_ChuangSha = string.Format(updateSqlBaseFormat, setting.ChuangShaPriceS, setting.ChuangShaPriceM, setting.ChuangShaPriceX, setting.ChuangShaPriceXL, "窗纱");
+            string updateSql_ZheGuangBu = string.Format(updateSqlBaseFormat, setting.ZheGuangBuPriceS, setting.ZheGuangBuPriceM, setting.ZheGuangBuPriceX, setting.ZheGuangBuPriceXL, "遮光布");
+            var result = 0;
+
+
+            result = _DbContext.ExecuteSqlCommand(updateSql_GuiDao, false);
+            result += _DbContext.ExecuteSqlCommand(updateSql_ChuangSha, false);
+            result += _DbContext.ExecuteSqlCommand(updateSql_ZheGuangBu, false);
+
+            return result;
+        }
         #endregion
     }
 }

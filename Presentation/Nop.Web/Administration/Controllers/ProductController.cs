@@ -36,6 +36,7 @@ using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
 using Nop.Web.Framework.Mvc;
+using Nop.Services.Configuration;
 
 namespace Nop.Admin.Controllers
 {
@@ -85,6 +86,9 @@ namespace Nop.Admin.Controllers
         private readonly IProductAttributeParser _productAttributeParser;
         private readonly IDownloadService _downloadService;
 
+        private readonly ProductAttributePriceSetSetting _productAttributePriceSetSetting;
+        private readonly ISettingService _settingService;
+        private readonly ILogger _logger;
         #endregion
 
         #region Constructors
@@ -129,7 +133,11 @@ namespace Nop.Admin.Controllers
             IShoppingCartService shoppingCartService,
             IProductAttributeFormatter productAttributeFormatter,
             IProductAttributeParser productAttributeParser,
-            IDownloadService downloadService)
+            IDownloadService downloadService,
+            ProductAttributePriceSetSetting productAttributePriceSetSetting,
+            ISettingService settingService,
+            ILogger logger
+            )
         {
             this._productService = productService;
             this._productTemplateService = productTemplateService;
@@ -172,6 +180,11 @@ namespace Nop.Admin.Controllers
             this._productAttributeFormatter = productAttributeFormatter;
             this._productAttributeParser = productAttributeParser;
             this._downloadService = downloadService;
+
+            this._productAttributePriceSetSetting = productAttributePriceSetSetting;
+            this._settingService = settingService;
+
+            this._logger = logger;
         }
 
         #endregion
@@ -1420,7 +1433,7 @@ namespace Nop.Admin.Controllers
                             attrValue.Price = Round(attrPrice);
 
                             _productAttributeService.UpdateProductAttributeValue(attrValue);
-                           
+
                         }
                         if (attrValue.Name.Trim() == "S(180cm-200cm)")//将最小价格设置到产品价格里去。
                         {
@@ -5088,6 +5101,49 @@ namespace Nop.Admin.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region ProductAttributePriceSet(商品属性的价格设置)
+        public ActionResult ProductAttributePriceSet()
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+            ProductAttributePriceSetModel model = new ProductAttributePriceSetModel();
+            ProductAttributePriceSetModel.LoadData(model, _productAttributePriceSetSetting);
+            return View(model);
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost, ParameterBasedOnFormName("save-andset", "saveAndSet")]
+        public ActionResult ProductAttributePriceSet(ProductAttributePriceSetModel model, bool saveAndSet)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+            try
+            {
+                ProductAttributePriceSetModel.SetData( _productAttributePriceSetSetting, model);
+                _settingService.SaveSetting<ProductAttributePriceSetSetting>(_productAttributePriceSetSetting);
+                if (saveAndSet)
+                {
+                    var updateCount = _productAttributeService.SetProductAttributePriceBatch(_productAttributePriceSetSetting);
+                    SuccessNotification(string.Format("保存并设置成功!总计更新记录数:[{0}]条", updateCount));
+                }
+                else
+                {
+                    SuccessNotification("保存成功!");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                ErrorNotification("保存或设置失败:" + ex.Message);
+
+                _logger.Error("保存或设置失败,ProductAttributePriceSet", ex);
+
+            }
+
+            return View(model);
+        }
         #endregion
 
         #endregion

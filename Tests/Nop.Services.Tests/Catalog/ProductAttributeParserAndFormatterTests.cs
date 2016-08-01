@@ -45,7 +45,7 @@ namespace Nop.Services.Tests.Catalog
         private ProductAttribute pa1, pa2, pa3;
         private ProductAttributeMapping pam1_1, pam2_1, pam3_1;
         private ProductAttributeValue pav1_1, pav1_2, pav2_1, pav2_2;
-        
+
         [SetUp]
         public new void SetUp()
         {
@@ -73,7 +73,7 @@ namespace Nop.Services.Tests.Catalog
                 Id = 11,
                 Name = "Green",
                 DisplayOrder = 1,
-                ProductAttributeMapping= pam1_1,
+                ProductAttributeMapping = pam1_1,
                 ProductAttributeMappingId = pam1_1.Id
             };
             pav1_2 = new ProductAttributeValue
@@ -143,7 +143,7 @@ namespace Nop.Services.Tests.Catalog
 
 
             #endregion
-            
+
             _productAttributeRepo = MockRepository.GenerateMock<IRepository<ProductAttribute>>();
             _productAttributeRepo.Expect(x => x.Table).Return(new List<ProductAttribute> { pa1, pa2, pa3 }.AsQueryable());
             _productAttributeRepo.Expect(x => x.GetById(pa1.Id)).Return(pa1);
@@ -173,13 +173,13 @@ namespace Nop.Services.Tests.Catalog
 
             var cacheManager = new NopNullCache();
 
-            _productAttributeService = new ProductAttributeService(cacheManager, 
+            _productAttributeService = new ProductAttributeService(cacheManager,
                 _productAttributeRepo,
                 _productAttributeMappingRepo,
                 _productAttributeCombinationRepo,
                 _productAttributeValueRepo,
                 _predefinedProductAttributeValueRepo,
-                _eventPublisher);
+                _eventPublisher, null);
 
             _productAttributeParser = new ProductAttributeParser(_productAttributeService);
 
@@ -213,7 +213,7 @@ namespace Nop.Services.Tests.Catalog
                 _priceCalculationService,
                 _shoppingCartSettings);
         }
-        
+
         [Test]
         public void Can_add_and_parse_productAttributes()
         {
@@ -244,11 +244,11 @@ namespace Nop.Services.Tests.Catalog
         {
             string attributes = "";
             attributes = _productAttributeParser.AddGiftCardAttribute(attributes,
-                "recipientName 1", "recipientEmail@gmail.com", 
+                "recipientName 1", "recipientEmail@gmail.com",
                 "senderName 1", "senderEmail@gmail.com", "custom message");
 
             string recipientName, recipientEmail, senderName, senderEmail, giftCardMessage;
-            _productAttributeParser.GetGiftCardAttribute(attributes, 
+            _productAttributeParser.GetGiftCardAttribute(attributes,
                 out recipientName,
                 out recipientEmail,
                 out senderName,

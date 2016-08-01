@@ -1,0 +1,191 @@
+﻿@model ProductAttributePriceSetModel
+@{
+    ViewBag.Title = "商品属性价格统一设置";
+
+
+
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "product-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            商品属性价格统一设置
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            <input type="submit" name="save-andset" class="k-button" value="保存并设置" />
+        </div>
+    </div>
+    <div id="setInfo">
+        <ul>
+            <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
+               设置
+            </li>
+        </ul>
+        <div>
+            @TabInfo()
+        </div>
+    </div>
+
+
+}
+<script>
+    $(document).ready(function () {
+        $("#setInfo").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+
+
+@helper TabInfo()
+{
+   
+    <table class="adminContent" >
+        <tr class="adminSeparator">
+            <td colspan="2" align="center" > 
+                <h2>   轨道预设价格</h2>
+                <hr>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.GuiDao.PriceS)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.GuiDao.PriceS)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.GuiDao.PriceM)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.GuiDao.PriceM)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.GuiDao.PriceX)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.GuiDao.PriceX)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.GuiDao.PriceXL)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.GuiDao.PriceXL)
+
+            </td>
+        </tr>
+
+
+        <tr class="adminSeparator">
+            <td colspan="2"  align="center">
+                <h2>   窗纱预设价格</h2>
+                <hr>
+                 
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ChuangSha.PriceS)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ChuangSha.PriceS)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ChuangSha.PriceM)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ChuangSha.PriceM)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ChuangSha.PriceX)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ChuangSha.PriceX)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ChuangSha.PriceXL)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ChuangSha.PriceXL)
+
+            </td>
+        </tr>
+
+        <tr class="adminSeparator">
+            <td colspan="2" align="center">
+                <h2>   遮光布预设价格</h2>
+                <hr>
+
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ZheGuangBu.PriceS)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ZheGuangBu.PriceS)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ZheGuangBu.PriceM)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ZheGuangBu.PriceM)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ZheGuangBu.PriceX)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ZheGuangBu.PriceX)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.LabelFor(m => m.ZheGuangBu.PriceXL)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(m => m.ZheGuangBu.PriceXL)
+
+            </td>
+        </tr>
+    </table>
+    
+ 
+ 
+}

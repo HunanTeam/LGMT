@@ -26,6 +26,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -199,6 +200,7 @@
     <Compile Include="Models\Catalog\BulkEditListModel.cs" />
     <Compile Include="Models\Catalog\CategoryListModel.cs" />
     <Compile Include="Models\Catalog\ManufacturerListModel.cs" />
+    <Compile Include="Models\Catalog\ProductAttributePriceSetModel.cs" />
     <Compile Include="Models\Catalog\ProductReviewListModel.cs" />
     <Compile Include="Models\Catalog\ManufacturerModel.cs" />
     <Compile Include="Models\Catalog\CopyProductModel.cs" />
@@ -1318,7 +1320,9 @@
   <ItemGroup>
     <Content Include="Views\Order\_CreateOrUpdateLiveScene.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Product\ProductAttributePriceSet.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\PageContent\List.cshtml" />
   </ItemGroup>

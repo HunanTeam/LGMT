@@ -116,6 +116,8 @@ namespace Nop.Services.Catalog
         /// <param name="productAttributeValue">The product attribute value</param>
         void UpdateProductAttributeValue(ProductAttributeValue productAttributeValue);
 
+
+        int SetProductAttributePriceBatch(ProductAttributePriceSetSetting setting);
         #endregion
 
         #region Predefined product attribute values
