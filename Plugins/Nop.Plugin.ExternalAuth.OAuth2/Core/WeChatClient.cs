@@ -147,17 +147,22 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// <returns>A dictionary of profile data.</returns>
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
-
-            //  OAuthApi.GetUserInfo(accessToken)
-            if (HttpContext.Current.Session["OAuth2.Weixin.openid"] != null)
+            try
             {
-                var openId = HttpContext.Current.Session["OAuth2.Weixin.openid"].ToString();
-                var result = OAuthApi.GetUserInfo(accessToken, openId);
+                _logger.Debug(string.Format("wx: GetUserData enter, accessToken :[{0}]", accessToken));
+
+                //  OAuthApi.GetUserInfo(accessToken)
+                if (HttpContext.Current.Session["OAuth2.Weixin.openid"] != null)
+                {
 
 
-                HttpContext.Current.Session.Remove("OAuth2.Weixin.openid");
+                    var openId = HttpContext.Current.Session["OAuth2.Weixin.openid"].ToString();
+                    var result = OAuthApi.GetUserInfo(accessToken, openId);
+                    _logger.Debug(string.Format("wx: GetUserData, openId :[{0}]", openId));
 
-                return new Dictionary<string, string>
+                    HttpContext.Current.Session.Remove("OAuth2.Weixin.openid");
+
+                    return new Dictionary<string, string>
                         {
                             {"openid", openId},
                             {"id", openId},
@@ -168,10 +173,17 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                         };
 
 
+                }
+                else
+                {
+                    _logger.Debug(string.Format("wx: GetUserData 没有包含openid;accessToken:[{0}]", accessToken));
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                _logger.Debug(string.Format("wx: GetUserData 没有包含openid;accessToken:[{0}]", accessToken));
+
+                _logger.Error("GetUserData", ex);
             }
 
             return null;
@@ -192,14 +204,16 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
         /// </returns>
         protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
         {
+            _logger.Debug(string.Format("wx: QueryAccessToken, code :[{0}]", authorizationCode));
             var builder = new UriBuilder(TokenEndpoint);
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
                     {"grant_type", "authorization_code"},
-                    { "client_id", _appId },
-                    { "client_secret", _appSecret },
+                    { "appid", _appId },
+                    { "secret", _appSecret },
                     { "code", authorizationCode },
                     { "redirect_uri", NormalizeHexEncoding(returnUrl.AbsoluteUri) },
+
                 });
 
             using (var client = new WebClient())
@@ -209,12 +223,14 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                 {
                     return null;
                 }
-
-                var parsedQueryString = HttpUtility.ParseQueryString(data);
-
-                HttpContext.Current.Session["OAuth2.Weixin.openid"] = parsedQueryString["openid"];
-
-                return parsedQueryString["access_token"];
+                var resultData = Newtonsoft.Json.JsonConvert.DeserializeObject<WxAccessTokenJsonResult>(data);
+                if (resultData == null)
+                {
+                    return null;
+                }
+                _logger.Debug(string.Format("wx: QueryAccessToken, resultData :[{0}]", resultData.access_token));
+                HttpContext.Current.Session["OAuth2.Weixin.openid"] = resultData.openid;
+                return resultData.access_token;
             }
         }
 
@@ -246,31 +262,65 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
         public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
         {
-            var code = context.Request.QueryString["code"];
-            var state = context.Request.QueryString["state"];
 
+            _logger.Debug(string.Format("wx:登录ABC[{0}]", 1));
 
-
-            var result2 = OAuthApi.GetAccessToken(_appId, _appSecret, code);
-
-
-
-
-            _logger.Debug(string.Format("登录  @WX  VerifyAuthentication：{0}", returnPageUrl));
-            var result = base.VerifyAuthentication(context, returnPageUrl);
-            if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+            string code = context.Request.QueryString["code"];
+            if (string.IsNullOrEmpty(code))
             {
-                var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                _logger.Debug(string.Format("登录  @WX返回数据格式", resultStr));
+                return AuthenticationResult.Failed;
+            }
+            _logger.Debug(string.Format("wx:登录ABC[{0}]", 2));
+            string accessToken = this.QueryAccessToken(returnPageUrl, code);
+            if (accessToken == null)
+            {
+                return AuthenticationResult.Failed;
+            }
+            _logger.Debug(string.Format("wx:登录ABC[{0}]", 3));
+            IDictionary<string, string> userData = this.GetUserData(accessToken);
+            if (userData == null)
+            {
+                return AuthenticationResult.Failed;
+            }
+            _logger.Debug(string.Format("wx:登录ABC[{0}]", 4));
+            string id = userData["id"];
+            string name;
+
+            // Some oAuth providers do not return value for the 'username' attribute. 
+            // In that case, try the 'name' attribute. If it's still unavailable, fall back to 'id'
+            if (!userData.TryGetValue("username", out name) && !userData.TryGetValue("name", out name))
+            {
+                name = id;
             }
 
+            // add the access token to the user data dictionary just in case page developers want to use it
+            userData["accesstoken"] = accessToken;
 
-            return result;
+            return new AuthenticationResult(
+                isSuccessful: true, provider: this.ProviderName, providerUserId: id, userName: name, extraData: userData);
+
+            //_logger.Debug(string.Format("登录了 @WX  VerifyAuthentication：{0}", returnPageUrl));
+            //var result = base.VerifyAuthentication(context, returnPageUrl);
+            //if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+            //{
+            //    var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            //    _logger.Debug(string.Format("登录了  @WX返回数据格式", resultStr));
+            //}
+
+
+            //return result;
         }
 
         #endregion
 
-
+        private class WxAccessTokenJsonResult
+        {
+            public string access_token { get; set; }
+            public int expires_in { get; set; }
+            public string refresh_token { get; set; }
+            public string openid { get; set; }
+            public string scope { get; set; }
+        }
 
     }
 }

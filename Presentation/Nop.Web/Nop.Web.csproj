@@ -1127,6 +1127,7 @@
     <Content Include="Content\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\tinymce\tinymce.min.js" />
     <Content Include="Scripts\AjaxUpload.3.5.js" />
+    <Content Include="Scripts\baiduhm.js" />
     <Content Include="Scripts\city.min.js" />
     <Content Include="Scripts\fineuploader\edit.gif" />
     <Content Include="Scripts\fineuploader\fineuploader-4.2.2.css" />

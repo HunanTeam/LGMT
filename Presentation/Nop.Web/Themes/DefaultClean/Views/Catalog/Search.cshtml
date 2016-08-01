@@ -14,87 +14,10 @@
 
 <div id="sidenav">
     <ul class="sale">
-        <li><a href="#"><h2>女装上新</h2></a></li>
-        <li><a href="#" target="_blank"><h2>非买不可</h2></a></li>
-        <li><a href="#" target="_blank"><h2>授权T恤系列</h2></a></li>
-        <li><a href="#" target="_blank"><h2>USA Pima</h2></a></li>
-        <li><a href="#" target="_blank"><h2>亲子系列</h2></a></li>
-        <li><a href="#" target="_blank"><h2>抗UV系列</h2></a></li>
-        <li><a href="#" target="_blank"><h2>SPORT 全新进化</h2></a></li>
-        <li><a href="#" target="_blank"><h2>设计图T系列</h2></a></li>
-        <li class="category_special_last"><a href="#" target="_blank"><h2>风衣系列</h2></a></li>
-        <li class="menu_onsale">
-            <ul class="sale_news">
-                <li><a href="#" target="_blank">缤纷派对．1件¥ 19</a></li>
-                <li><a href="#" target="_blank">夏日派对．1件¥ 45</a></li>
-                <li><a href="#" target="_blank">超值组合．2件¥ 78</a></li>
-                <li><a href="#" target="_blank">必备单品．1件¥ 59</a></li>
-                <li><a href="#" target="_blank">推荐单品．1件¥ 79</a></li>
-                <li><a href="#" target="_blank">夏日限定．2件 75折</a></li>
-                <li><a href="#" target="_blank">精选新品．2件 88折</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>换季优惠</h2>
-            <ul class="sale_category">
-                <li><a alt="SALE" href="#" title="">SALE</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>上衣类</h2>
-            <ul class="sale_category">
-                <li><a href="#" title="">印花T恤</a></li>
-                <li><a href="#" title="">吊带衫/背心</a></li>
-                <li><a href="#" title="">短袖上衣</a></li>
-                <li><a href="#" title="">中袖/七分袖</a></li>
-                <li><a href="#" title="">POLO衫</a></li>
-                <li><a href="#" title="">针织衫</a></li>
-                <li><a href="#" title="">长袖上衣</a></li>
-                <li><a href="#" title="">高领/两翻领</a></li>
-                <li><a href="#" title="">雪纺/轻柔上衣</a></li>
-                <li><a href="#" title="">长版上衣 / 连衣裙</a></li>
-                <li><a href="#" title="">休闲衬衫</a></li>
-                <li><a href="#" title="">商务衬衫</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>外套类</h2>
-            <ul class="sale_category">
-                <li><a href="#" title="">休闲/机能外套</a></li>
-                <li><a href="#" title="">风衣/铺棉/西装外套</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>下装类</h2>
-            <ul class="sale_category">
-                <li><a href="#" title="">牛仔裤</a></li>
-                <li><a href="#" title="">短裤/七分裤</a></li>
-                <li><a href="#" title="">裙类</a></li>
-                <li><a href="#" title="">长裤</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>内着起居类</h2>
-            <ul class="sale_category">
-                <li><a href="#" title="">无钢圈文胸</a></li>
-                <li><a href="#" title="">Bra_内置罩杯内衣</a></li>
-                <li><a href="#" title="">紧身裤</a></li>
-                <li><a href="#" title="">内裤</a></li>
-                <li><a href="#" title="">起居服/套装</a></li>
-                <li><a href="#" title="">COOL_轻凉系列</a></li>
-            </ul>
-        </li>
-        <li>
-            <h2>配件类</h2>
-            <ul class="sale_category">
-                <li><a href="#" title="">围巾</a></li>
-                <li><a href="#" title="">腰带</a></li>
-                <li><a href="#" title="">袜子</a></li>
-                <li><a href="#" title="">鞋类</a></li>
-            </ul>
-        </li>
+        @Html.Action("CategoryNavigation", "Catalog", new { currentCategoryId = 0, currentProductId = 0 })
     </ul>
 </div>
+
 <!--end-->
 <!--右边-->
 <div class="grid_38">

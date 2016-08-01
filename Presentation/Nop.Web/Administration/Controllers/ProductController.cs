@@ -1408,17 +1408,24 @@ namespace Nop.Admin.Controllers
                     {
                         var attrPrice = 0.00M;
                         if (attrValue.Name == "S(180cm-200cm)")
-                            attrPrice = (product.Price / 0.4M) * 3;
+                            attrPrice = (product.ProductCost / 0.4M) * 3;
                         else if (attrValue.Name == "M(200cm-300cm)")
-                            attrPrice = (product.Price / 0.4M) * 4.8M;
+                            attrPrice = (product.ProductCost / 0.4M) * 4.8M;
                         else if (attrValue.Name == "L(300cm-360cm)")
-                            attrPrice = (product.Price / 0.4M) * 6.6M;
+                            attrPrice = (product.ProductCost / 0.4M) * 6.6M;
                         else if (attrValue.Name == "XL(360cm-420cm)")
-                            attrPrice = (product.Price / 0.4M) * 8.6M;
+                            attrPrice = (product.ProductCost / 0.4M) * 8.6M;
                         if (attrPrice != 0 && attrPrice != attrValue.Price)
                         {
-                            attrValue.Price = attrPrice;
+                            attrValue.Price = Round(attrPrice);
+
                             _productAttributeService.UpdateProductAttributeValue(attrValue);
+                            if (attrValue.Name == "S(180cm-200cm)")//将最小价格设置到产品价格里去。
+                            {
+                                product.Price = attrValue.Price;
+                                _productService.UpdateProduct(product);
+                            }
+
                         }
                     }
                 }
@@ -1437,33 +1444,33 @@ namespace Nop.Admin.Controllers
                         var attrPriceXL = 0.00M;
                         if (attrValue.Name == "平板式")
                         {
-                            attrPriceS = (product.Price / 0.4M) * 0.5M + 100;
-                            attrPriceM = (product.Price / 0.4M) * 1M + 100;
-                            attrPriceL = (product.Price / 0.4M) * 1M + 100;
-                            attrPriceXL = (product.Price / 0.4M) * 1.5M + 100;
+                            attrPriceS = (product.ProductCost / 0.4M) * 0.5M + 100;
+                            attrPriceM = (product.ProductCost / 0.4M) * 1M + 100;
+                            attrPriceL = (product.ProductCost / 0.4M) * 1M + 100;
+                            attrPriceXL = (product.ProductCost / 0.4M) * 1.5M + 100;
                         }
                         else if (attrValue.Name == "打褶式")
                         {
-                            attrPriceS = (product.Price / 0.4M) * 0.8M + 100;
-                            attrPriceM = (product.Price / 0.4M) * 1.2M + 100;
-                            attrPriceL = (product.Price / 0.4M) * 1.2M + 100;
-                            attrPriceXL = (product.Price / 0.4M) * 1.6M + 100;
+                            attrPriceS = (product.ProductCost / 0.4M) * 0.8M + 100;
+                            attrPriceM = (product.ProductCost / 0.4M) * 1.2M + 100;
+                            attrPriceL = (product.ProductCost / 0.4M) * 1.2M + 100;
+                            attrPriceXL = (product.ProductCost / 0.4M) * 1.6M + 100;
                         }
                         else if (attrValue.Name == "水波帘")
                         {
-                            attrPriceS = (product.Price / 0.4M) * 3.25M + 100;
-                            attrPriceM = (product.Price / 0.4M) * 4M + 100;
-                            attrPriceL = (product.Price / 0.4M) * 4.75M + 100;
-                            attrPriceXL = (product.Price / 0.4M) * 5.5M + 100;
+                            attrPriceS = (product.ProductCost / 0.4M) * 3.25M + 100;
+                            attrPriceM = (product.ProductCost / 0.4M) * 4M + 100;
+                            attrPriceL = (product.ProductCost / 0.4M) * 4.75M + 100;
+                            attrPriceXL = (product.ProductCost / 0.4M) * 5.5M + 100;
                         }
 
                         if (attrPriceS != attrValue.PriceS || attrPriceM != attrValue.PriceM
                             || attrPriceL != attrValue.PriceX || attrPriceXL != attrValue.PriceXL)
                         {
-                            attrValue.PriceS = attrPriceS;
-                            attrValue.PriceM = attrPriceM;
-                            attrValue.PriceX = attrPriceL;
-                            attrValue.PriceXL = attrPriceXL;
+                            attrValue.PriceS = Round(attrPriceS);
+                            attrValue.PriceM = Round(attrPriceM);
+                            attrValue.PriceX = Round(attrPriceL);
+                            attrValue.PriceXL = Round(attrPriceXL);
                             _productAttributeService.UpdateProductAttributeValue(attrValue);
                         }
                     }
@@ -1471,6 +1478,16 @@ namespace Nop.Admin.Controllers
                 #endregion
             }
         }
+        /// <summary>
+        /// 四舍五入取0个小数
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        private decimal Round(decimal val)
+        {
+            return Math.Round(val, 0, MidpointRounding.AwayFromZero);
+        }
+
 
         //delete product
         [HttpPost]

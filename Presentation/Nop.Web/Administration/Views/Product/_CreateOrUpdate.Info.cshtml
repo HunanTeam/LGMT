@@ -631,10 +631,7 @@
         <td class="adminData">
             @Html.EditorFor(model => model.Price) [@Model.PrimaryStoreCurrencyCode]
             @Html.ValidationMessageFor(model => model.Price)
-            @if (Model.Id > 0 && Model.AttributeTemplateId == (int)AttributeTemplate.ChuangLian)
-            {
-                <input type="submit" id="generate-price" name="generate-price" value="自动生成属性价格" onclick="return confirm('该操作将会覆盖之前的属性价格，确定执行吗?');return false;" />
-            }
+            
         </td>
     </tr>
     <tr>
@@ -653,6 +650,10 @@
         <td class="adminData">
             @Html.EditorFor(model => model.ProductCost) [@Model.PrimaryStoreCurrencyCode]
             @Html.ValidationMessageFor(model => model.ProductCost)
+            @if (Model.Id > 0 && Model.AttributeTemplateId == (int)AttributeTemplate.ChuangLian)
+            {
+                <input type="submit" id="generate-price" name="generate-price" value="自动生成属性价格" onclick="return confirm('该操作将会覆盖之前的属性价格，确定执行吗?');return false;" />
+            }
         </td>
     </tr>
     <tr style="display:none;">
