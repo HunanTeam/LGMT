@@ -45,7 +45,7 @@ build/
 *.pidb
 *.log
 *.scc
-
+applicationhost.config
 # Visual C++ cache files
 ipch/
 *.aps
