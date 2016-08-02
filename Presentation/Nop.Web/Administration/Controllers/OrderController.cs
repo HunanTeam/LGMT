@@ -274,7 +274,7 @@ namespace Nop.Admin.Controllers
             model.StoreName = store != null ? store.Name : "Unknown";
             model.CustomerId = order.CustomerId;
             var customer = order.Customer;
-            model.CustomerInfo = customer.IsRegistered() ? customer.Phone : _localizationService.GetResource("Admin.Customers.Guest");
+            model.CustomerInfo = customer.IsRegistered() ? (customer.Phone ?? customer.Username) : _localizationService.GetResource("Admin.Customers.Guest");
             model.CustomerIp = order.CustomerIp;
             model.VatNumber = order.VatNumber;
             model.CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc);
@@ -1800,7 +1800,7 @@ namespace Nop.Admin.Controllers
             order.OrderTotal = model.OrderTotalValue;
 
             //订单押金
-            if (order.OrderDepositPaymentStatus == null 
+            if (order.OrderDepositPaymentStatus == null
                 || order.OrderDepositPaymentStatus.Value == (int)OrderDepositPaymentStatus.Pending)
                 order.OrderDeposit = RoundingHelper.RoundPrice(order.OrderTotal * 0.3M);
 
