@@ -264,7 +264,7 @@ namespace Nop.Admin.Controllers
 
             if (model == null)
                 throw new ArgumentNullException("model");
-
+              
             model.Id = order.Id;
             model.OrderNumber = order.OrderNumber;
             model.OrderStatus = order.OrderStatus.GetLocalizedEnum(_localizationService, _workContext);
