@@ -1837,13 +1837,14 @@ namespace Nop.Web.Controllers
                 return new HttpUnauthorizedResult();
 
             bool needBindPhone = _workContext.CurrentCustomer.NeedBindPhone();
-            //if (!needBindPhone)
-            //{
-            //    throw new NopException("当前不需要绑定手机!");
-            //}
+            if (!needBindPhone)
+            {
+                ModelState.AddModelError("", "当前不需要绑定手机!");
+
+            }
             var model = new BindPhoneModel();
-            model.CustomerFrom = "QQ";
-            //   model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
+
+          //  model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
 
             return View(model);
         }
