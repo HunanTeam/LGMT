@@ -36,14 +36,14 @@ namespace Nop.Services.Catalog
         public CopyProductService(IProductService productService,
             IProductAttributeService productAttributeService,
             ILanguageService languageService,
-            ILocalizedEntityService localizedEntityService, 
+            ILocalizedEntityService localizedEntityService,
             IPictureService pictureService,
-            ICategoryService categoryService, 
+            ICategoryService categoryService,
             IManufacturerService manufacturerService,
             ISpecificationAttributeService specificationAttributeService,
             IDownloadService downloadService,
             IProductAttributeParser productAttributeParser,
-            IUrlRecordService urlRecordService, 
+            IUrlRecordService urlRecordService,
             IStoreMappingService storeMappingService)
         {
             this._productService = productService;
@@ -222,7 +222,8 @@ namespace Nop.Services.Catalog
                 Published = isPublished,
                 Deleted = product.Deleted,
                 CreatedOnUtc = DateTime.UtcNow,
-                UpdatedOnUtc = DateTime.UtcNow
+                UpdatedOnUtc = DateTime.UtcNow,
+                AttributeTemplateId = product.AttributeTemplateId
             };
 
             //validate search engine name
