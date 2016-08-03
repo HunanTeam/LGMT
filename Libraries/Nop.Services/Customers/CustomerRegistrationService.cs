@@ -419,8 +419,13 @@ namespace Nop.Services.Customers
             return username;
         }
 
-
-        public virtual void BindPhone(Customer customer, string customerPhone, string password)
+        /// <summary>
+        /// 第三方用户绑定手机
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="customerPhone"></param>
+        /// <param name="password"></param>
+        public virtual void BindPhone(Customer customer, string customerPhone, string password = null)
         {
             if (!customer.IsRegistered())
             {
@@ -435,6 +440,9 @@ namespace Nop.Services.Customers
             {
                 throw new NopException(string.Format("手机:[{0}]已经绑定了一位用户!", customerPhone));
             }
+
+            customer.Phone = customerPhone;
+
             switch (_customerSettings.DefaultPasswordFormat)
             {
                 case PasswordFormat.Clear:
@@ -457,7 +465,9 @@ namespace Nop.Services.Customers
                 default:
                     break;
             }
+
             customer.PasswordFormat = _customerSettings.DefaultPasswordFormat;
+
             _customerService.UpdateCustomer(customer);
         }
         #endregion
