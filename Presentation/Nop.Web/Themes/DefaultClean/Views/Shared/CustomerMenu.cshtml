@@ -10,13 +10,17 @@
             <li id="btn_logout2">注销</li>
             @if (needBindPhone)
             {
-                <li @if (ViewBag.Menu == "bindPhone") { <text> class="select" </text>      } onclick="document.location.href='@Url.Action("BindPhone", "Customer")'">绑定手机</li>
+                <li @if (ViewBag.Menu == "bindPhone") { <text> class="select" </text>       } onclick="document.location.href='@Url.Action("BindPhone", "Customer")'">绑定手机</li>
+            }
+            else
+            {
+                <li @if (ViewBag.Menu == "changepassword") { <text> class="select" </text>      } onclick="document.location.href='@Url.Action("ChangePassword","Customer")'">修改密码</li>
             }
 
-            <li @if (ViewBag.Menu == "changepassword") { <text> class="select" </text>    } onclick="document.location.href='@Url.Action("ChangePassword","Customer")'">修改密码</li>
-            <li @if (ViewBag.Menu == "info") { <text> class="select" </text>  } onclick="document.location.href='@Url.Action("Info", "Customer")'">个人信息</li>
-            <li @if (ViewBag.Menu == null || ViewBag.Menu == "orders") { <text> class="select" </text>       } onclick="document.location.href='@Url.Action("CustomerOrders", "Order")'">我的订单</li>
-            <li @if (ViewBag.Menu == "wishlist") { <text> class="select" </text>  } onclick="document.location.href='@Url.Action("Wishlist","ShoppingCart")'">我的收藏</li>
+
+            <li @if (ViewBag.Menu == "info") { <text> class="select" </text>   } onclick="document.location.href='@Url.Action("Info", "Customer")'">个人信息</li>
+            <li @if (ViewBag.Menu == null || ViewBag.Menu == "orders") { <text> class="select" </text>        } onclick="document.location.href='@Url.Action("CustomerOrders", "Order")'">我的订单</li>
+            <li @if (ViewBag.Menu == "wishlist") { <text> class="select" </text>   } onclick="document.location.href='@Url.Action("Wishlist","ShoppingCart")'">我的收藏</li>
 
         </ul>
     </div>

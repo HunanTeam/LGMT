@@ -1787,7 +1787,10 @@ namespace Nop.Web.Controllers
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return new HttpUnauthorizedResult();
-
+            if (_workContext.CurrentCustomer.IsRegisterFromThirdParty())
+            {
+                return RedirectToRoute("HomePage");
+            }
             var model = new ChangePasswordModel();
 
             return View(model);
@@ -1797,9 +1800,13 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
+
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return new HttpUnauthorizedResult();
-
+            if (_workContext.CurrentCustomer.IsRegisterFromThirdParty())
+            {
+                return RedirectToRoute("HomePage");
+            }
             var customer = _workContext.CurrentCustomer;
 
             if (ModelState.IsValid)
@@ -1844,7 +1851,7 @@ namespace Nop.Web.Controllers
             }
             var model = new BindPhoneModel();
 
-          //  model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
+            //  model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
 
             return View(model);
         }
