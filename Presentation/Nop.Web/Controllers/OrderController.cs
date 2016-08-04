@@ -1096,31 +1096,37 @@ namespace Nop.Web.Controllers
                 //if (order.PaymentStatus != (int)PaymentStatus.Pending)
                 //    throw new BusinessException("订单当前状态不允许进行支付操作");   
 
-                var trade_no_prex = ""; //订单号前缀 D表示支付定金  B表示支付余额
+                ////////////////////////////////////////////请求参数////////////////////////////////////////////
+                var subject = "";//订单名称，必填                
+                var trade_no_prex = ""; //订单号前缀 D表示支付定金  B表示支付余额                                        
+                var total_fee = "";//付款金额，必填
+                //total_fee = "0.01";
+
                 if (order.OrderDepositPaymentStatus == null || order.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.Pending)
+                {
+                    subject = "心愿单定金";
                     trade_no_prex = "D";
+                    total_fee = order.OrderDeposit.Value.ToString("f2");//付款金额，必填
+                    //total_fee = "0.01";
+                }
                 else if (order.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.ConfirmPaid &&
                     (order.OrderBalancePaymentStatus == null || order.OrderBalancePaymentStatus == (int)OrderBalancePaymentStatus.Pending))
+                {
+                    subject = "心愿单尾款";
                     trade_no_prex = "B";
+                    total_fee = (order.OrderTotal - order.OrderDeposit ?? 0M).ToString("f2");//付款金额，必填
+                }
+
                 if (string.IsNullOrEmpty(trade_no_prex))
                     throw new Exception(string.Format("订单当前状态不允许进行支付(order={0})", order.Id));
 
-                ////////////////////////////////////////////请求参数////////////////////////////////////////////
                 //商户订单号，商户网站订单系统中唯一订单号，必填
                 var out_trade_no = trade_no_prex + order.OrderNumber;
-
-                //订单名称，必填
-                var subject = "心愿单定金";
-
-                //付款金额，必填
-                var total_fee = order.OrderDeposit.Value.ToString("f2");
-                //total_fee = "0.01";
-
                 //收银台页面上，商品展示的超链接，必填      
                 var show_url = "http://www.lgmt.cn" + "/order/alipayreturn";
-
                 //商品描述，可空
                 var body = "";
+
                 ////////////////////////////////////////////////////////////////////////////////////////////////
 
                 //把请求参数打包成数组

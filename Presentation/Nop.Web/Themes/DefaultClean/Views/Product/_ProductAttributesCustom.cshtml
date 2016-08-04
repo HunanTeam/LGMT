@@ -16,8 +16,8 @@
 @*尺寸，款式*@
 @helper attrHtml1(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
 {
-    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
-    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
     <div class="size" id="container_@(attribute.Id)">
         <input type="hidden" id="attr_@(attribute.Id)" name="@(controlId)">
         <span class="picksize">
@@ -49,7 +49,7 @@
 @*颜色*@
 @helper attrHtml2(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
 {
-    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
     <style type="text/css">
         #container_@(attribute.Id) div.selected{ border: 1px solid #ff0000;}
     </style>
@@ -94,13 +94,10 @@
             string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
             priceAttributeScripts.AppendFormat("$('#{0}').change(function(){{{1}();}});\n", controlId, priceAdjustmentFuncName);
             <select name="@(controlId)" id="@(controlId)">
-                @if (!attribute.IsRequired)
-                {
-                    <option value="0">---</option>
-                }
+                <option value="0" selected="selected">-选择@(attribute.Name)-</option>
                 @foreach (var attributeValue in attribute.Values)
                 {
-                    <option selected="@attributeValue.IsPreSelected" value="@attributeValue.Id">@attributeValue.Name</option>
+                    <option value="@attributeValue.Id">@attributeValue.Name</option>
                 }
             </select>
         }
@@ -110,17 +107,17 @@
 @*加购窗帘*@
 @helper attrHtml5(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
 {
-    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
-    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
     <label>
         加购帘头
     </label>
-    if (!string.IsNullOrEmpty(attribute.Description))
-    {
+if (!string.IsNullOrEmpty(attribute.Description))
+{
         <div class="des">
             @Html.Raw(attribute.Description)
         </div>
-    }
+}
     <p>
         @foreach (var attributeValue in attribute.Values)
         {
@@ -152,15 +149,15 @@
 @*加购帘头*@
 @helper attrHtml7(ProductDetailsModel.ProductAttributeModel attribute, StringBuilder priceAttributeScripts, string priceAdjustmentFuncName)
 {
-    string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
-    string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.ProductId, attribute.ProductAttributeId, attribute.Id);
+string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
     <label>加购帘头<a href="javascript:void(0);" onclick="OpenWindow('/%E5%8A%A0%E8%B4%AD%E5%B8%98%E5%A4%B4',700,800)">&nbsp;</a></label>
-    if (!string.IsNullOrEmpty(attribute.Description))
-    {
+if (!string.IsNullOrEmpty(attribute.Description))
+{
         <div class="des">
             @Html.Raw(attribute.Description)
         </div>
-    }
+}
     <p data-id="attr_@(attribute.Id)">
         @foreach (var attributeValue in attribute.Values)
         {
@@ -229,33 +226,33 @@
     <div class="add_shop01">
         <ul>
             @{
-    attribute = Model.FirstOrDefault(m => m.Name == "轨道");
-    attribute2 = Model.FirstOrDefault(m => m.Name == "窗纱");
-    attribute3 = Model.FirstOrDefault(m => m.Name == "遮光布");
-    if (attribute != null && attribute2 != null && attribute3 != null)
-    {
-        <li>@attrHtml6(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2, attribute3 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
-    }
+                attribute = Model.FirstOrDefault(m => m.Name == "轨道");
+                attribute2 = Model.FirstOrDefault(m => m.Name == "窗纱");
+                attribute3 = Model.FirstOrDefault(m => m.Name == "遮光布");
+                if (attribute != null && attribute2 != null && attribute3 != null)
+                {
+                    <li>@attrHtml6(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2, attribute3 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+                }
 
-    attribute = Model.FirstOrDefault(m => m.Name == "帘头");
-    if (attribute != null)
-    {
-        <li>@attrHtml7(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
-    }
+                attribute = Model.FirstOrDefault(m => m.Name == "帘头");
+                if (attribute != null)
+                {
+                    <li>@attrHtml7(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+                }
 
-    attribute = Model.FirstOrDefault(m => m.Name == "长度");
-    attribute2 = Model.FirstOrDefault(m => m.Name == "高度");
-    if (attribute != null || attribute2 != null)
-    {
-        <li style="margin:20px 0px;">@attrHtml8(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
-    }
+                attribute = Model.FirstOrDefault(m => m.Name == "长度");
+                attribute2 = Model.FirstOrDefault(m => m.Name == "高度");
+                if (attribute != null || attribute2 != null)
+                {
+                    <li style="margin:20px 0px;">@attrHtml8(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+                }
 
-    attribute = Model.FirstOrDefault(m => m.Name == "房间");
-    attribute2 = Model.FirstOrDefault(m => m.Name == "序号");
-    if (attribute != null && attribute2 != null)
-    {
-        <li>@attrHtml3(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
-    }
+                attribute = Model.FirstOrDefault(m => m.Name == "房间");
+                attribute2 = Model.FirstOrDefault(m => m.Name == "序号");
+                if (attribute != null && attribute2 != null)
+                {
+                    <li>@attrHtml3(new List<ProductDetailsModel.ProductAttributeModel>() { attribute, attribute2 }, priceAttributeScripts, priceAdjustmentFuncName)</li>
+                }
             }
         </ul>
     </div>
@@ -280,7 +277,7 @@
             @Html.Raw(priceAttributeScripts.ToString())
         });
     </script>
-}
+                }
 
 @if (Model.Count > 0)
 {

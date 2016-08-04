@@ -525,7 +525,7 @@ a:hover { color:#f00; text-decoration: none; }
 .shop_type .go_shop a:hover { background: #A60021; }
 
 /**登录注册弹出**/
-.login_pop { float: left; position: relative; background: #fff; width: 720px; height: 330px; padding: 50px 30px; }
+.login_pop { position: relative; background: #fff; width: 720px; height: 330px; padding: 50px 30px; }
 .login_pop .fl { float: left; border-right: 1px dotted #ccc; width: 290px; padding: 0px 40px 0 0; }
 .login_pop .fl h1 { width: 100%; float: left; font-size: 24px; font-size: 20px; color: #333; text-align: center; line-height: 40px; }
 .login_pop .fl ul { width: 100%; float: left; padding-bottom: 20px; }
