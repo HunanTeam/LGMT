@@ -41,5 +41,9 @@ namespace Nop.Core.Domain.Catalog
         /// Read-only checkboxes
         /// </summary>
         ReadonlyCheckboxes = 50,
+        /// <summary>
+        /// Í¼Æ¬Ñ¡Ôñ¿Ø¼þ
+        /// </summary>
+        Image = 60,
     }
 }

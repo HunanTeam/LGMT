@@ -91,7 +91,7 @@ namespace Nop.Web.MVC.Tests.Public.Infrastructure
             "~/login/checkoutasguest/".ShouldMapTo<CustomerController>(c => c.Login(true));
             //"~/register/".ShouldMapTo<CustomerController>(c => c.Register(null, false));
             "~/logout/".ShouldMapTo<CustomerController>(c => c.Logout());
-            "~/registerresult/2".ShouldMapTo<CustomerController>(c => c.RegisterResult(2));
+            "~/registerresult/2".ShouldMapTo<CustomerController>(c => c.RegisterResult(2,null));
             "~/passwordrecovery/".ShouldMapTo<CustomerController>(c => c.PasswordRecovery());
             "~/passwordrecovery/confirm".ShouldMapTo<CustomerController>(c => c.PasswordRecoveryConfirm(null, null));
 

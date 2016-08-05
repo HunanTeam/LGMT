@@ -1108,7 +1108,7 @@ namespace Nop.Web.Controllers
             //return View(model);
         }
 
-        public ActionResult RegisterResult(int resultId)
+        public ActionResult RegisterResult(int resultId, int? regfrom = null)
         {
             var resultText = "";
             switch ((UserRegistrationType)resultId)
@@ -1128,11 +1128,32 @@ namespace Nop.Web.Controllers
                 default:
                     break;
             }
+
             var model = new RegisterResultModel
             {
-                Result = resultText
+                Result = resultText,
+                RegFrom = GetRegFromText(regfrom)
             };
             return View(model);
+        }
+
+        private string GetRegFromText(int? regfrom)
+        {
+            if (regfrom.HasValue)
+            {
+                switch (regfrom.Value)
+                {
+                    case 0:
+                        return "QQ";
+                    case 1:
+                        return "微博";
+                    case 2:
+                        return "微信";
+                    default:
+                        break;
+                }
+            }
+            return string.Empty;
         }
 
         [HttpPost]

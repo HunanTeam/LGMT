@@ -199,19 +199,19 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                     }
                 case OpenAuthenticationStatus.AutoRegisteredEmailValidation:
                     {
-                        return RedirectToRoute("HomePage");
-                        //result
-                        // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
+                        //return RedirectToRoute("HomePage");
+                        ////result
+                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.EmailValidation });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredAdminApproval:
                     {
-                        return RedirectToRoute("HomePage");
-                        // return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.AdminApproval });
+                        // return RedirectToRoute("HomePage");
+                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.AdminApproval });
                     }
                 case OpenAuthenticationStatus.AutoRegisteredStandard:
                     {
-                        return RedirectToRoute("HomePage");
-                        //return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard });
+                        // return RedirectToRoute("HomePage");
+                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard, regfrom = (int)clientType });
                     }
                 default:
                     break;
@@ -262,8 +262,8 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
         }
         private ActionResult LoginInternalForWx(string code, string state, string returnUrl)
         {
-            
-          
+
+
             return null;
         }
 
