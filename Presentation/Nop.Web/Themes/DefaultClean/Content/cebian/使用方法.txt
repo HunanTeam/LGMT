@@ -1,0 +1,18 @@
+带微信和移动两种二维码的返回顶部代码，另可内嵌网页指南，兼容主流浏览器，懒人图库推荐下载！
+
+使用方法：
+1、在head区域引入样式表文件lrtk.css
+2、在head区域引入jquery.js和popwin.js
+3、在head区域添加弹窗配置
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$("a.moquu_wmaps").on('click', function(){
+		popWin.showWin("800", "475", "懒人图库", "http://www.lanrentuku.com");
+	});
+	
+});
+</script>
+4、在你的网页中加入<!-- 代码 开始 --><!-- 代码 结束 -->注释区域代码即可
+5、图片路径在css文件lrtk.css里修改，相关PSD文件在images里。
+

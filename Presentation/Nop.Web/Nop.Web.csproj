@@ -1719,6 +1719,16 @@
     <Content Include="Scripts\kendo\2014.1.318\kendo.autocomplete.min.js.map" />
     <Content Include="Scripts\kendo\2014.1.318\jquery.min.map" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Themes\DefaultClean\Content\cebian\css\lrtk.css" />
+    <Content Include="Themes\DefaultClean\Content\cebian\images\closehdtipper.png" />
+    <Content Include="Themes\DefaultClean\Content\cebian\images\hbbg.png" />
+    <Content Include="Themes\DefaultClean\Content\cebian\images\lrtk_weixin.png" />
+    <Content Include="Themes\DefaultClean\Content\cebian\images\sbtn.png" />
+    <Content Include="Themes\DefaultClean\Content\cebian\index.html" />
+    <Content Include="Themes\DefaultClean\Content\cebian\index.jpg" />
+    <Content Include="Themes\DefaultClean\Content\cebian\js\popwin.js" />
+    <Content Include="Themes\DefaultClean\Content\cebian\readme.html" />
+    <Content Include="Themes\DefaultClean\Content\cebian\使用方法.txt" />
     <Content Include="Themes\DefaultClean\Content\css\bundle.css" />
     <Content Include="Themes\DefaultClean\Content\css\main.css" />
     <Content Include="Themes\DefaultClean\Content\images\05_2.jpg" />
@@ -2142,6 +2152,8 @@
     <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep2.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep3.cshtml" />
     <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep4.cshtml" />
+    <Content Include="Themes\DefaultClean\Content\cebian\懒人图库.url" />
+    <Content Include="Themes\DefaultClean\Content\cebian\images\lrtk_weixin.psd" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />
