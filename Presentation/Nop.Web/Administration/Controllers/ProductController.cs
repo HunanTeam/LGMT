@@ -257,7 +257,7 @@ namespace Nop.Admin.Controllers
         protected virtual void UpdateProductPrice(ProductAttributeValue pav)
         {
             var product = pav.ProductAttributeMapping.Product;
-            var pavNames = new string[] { "S(180cm-200cm)", "M(200cm-300cm)", "L(300cm-360cm)", "XL(360cm-420cm)" };
+            var pavNames = new string[] { "S(140cm-200cm)", "M(210cm-300cm)", "L(310cm-400cm)", "XL(410cm-500cm)" };
             if (product.AttributeTemplateId == (int)AttributeTemplate.ChuangLian
                 && pavNames.Contains(pav.Name))
             {
@@ -1420,13 +1420,13 @@ namespace Nop.Admin.Controllers
                     foreach (var attrValue in attrValues)
                     {
                         var attrPrice = 0.00M;
-                        if (attrValue.Name == "S(180cm-200cm)")
+                        if (attrValue.Name == "S(140cm-200cm)")
                             attrPrice = (product.ProductCost / 0.4M) * 3;
-                        else if (attrValue.Name == "M(200cm-300cm)")
+                        else if (attrValue.Name == "M(210cm-300cm)")
                             attrPrice = (product.ProductCost / 0.4M) * 4.8M;
-                        else if (attrValue.Name == "L(300cm-360cm)")
+                        else if (attrValue.Name == "L(310cm-400cm)")
                             attrPrice = (product.ProductCost / 0.4M) * 6.6M;
-                        else if (attrValue.Name == "XL(360cm-420cm)")
+                        else if (attrValue.Name == "XL(410cm-500cm)")
                             attrPrice = (product.ProductCost / 0.4M) * 8.6M;
                         if (attrPrice != 0 && attrPrice != attrValue.Price)
                         {
@@ -1435,7 +1435,7 @@ namespace Nop.Admin.Controllers
                             _productAttributeService.UpdateProductAttributeValue(attrValue);
 
                         }
-                        if (attrValue.Name.Trim() == "S(180cm-200cm)")//将最小价格设置到产品价格里去。
+                        if (attrValue.Name.Trim() == "S(140cm-200cm)")//将最小价格设置到产品价格里去。
                         {
                             product.Price = attrValue.Price;
                             _productService.UpdateProduct(product);

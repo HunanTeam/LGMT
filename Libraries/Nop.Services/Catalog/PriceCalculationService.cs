@@ -556,7 +556,7 @@ namespace Nop.Services.Catalog
 
                     switch (chiCunAttribute.Name)
                     {
-                        case "S(180cm-200cm)":
+                        case "S(140cm-200cm)":
                             {
                                 if (guiDaoAttribute != null)
                                     pricePeiJian = pricePeiJian + guiDaoAttribute.PriceS;
@@ -570,7 +570,7 @@ namespace Nop.Services.Catalog
 
                                 break;
                             }
-                        case "M(200cm-300cm)":
+                        case "M(210cm-300cm)":
                             {
                                 if (guiDaoAttribute != null)
                                     pricePeiJian = pricePeiJian + guiDaoAttribute.PriceM;
@@ -584,7 +584,7 @@ namespace Nop.Services.Catalog
 
                                 break;
                             }
-                        case "L(300cm-360cm)":
+                        case "L(310cm-400cm)":
                             {
                                 if (guiDaoAttribute != null)
                                     pricePeiJian = pricePeiJian + guiDaoAttribute.PriceX;
@@ -598,7 +598,7 @@ namespace Nop.Services.Catalog
 
                                 break;
                             }
-                        case "XL(360cm-420cm)":
+                        case "XL(410cm-500cm)":
                             {
                                 if (guiDaoAttribute != null)
                                     pricePeiJian = pricePeiJian + guiDaoAttribute.PriceXL;

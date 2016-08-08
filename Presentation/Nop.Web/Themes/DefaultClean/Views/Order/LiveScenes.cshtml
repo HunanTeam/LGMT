@@ -3,20 +3,24 @@
 
 @if (Model.LiveScenes.Count > 0)
 {
+    <script type="text/javascript">
+        var originalPictureJson = "";
+        var effectPictureeJson = "";
+    </script>
     <div class="uploads">
         <h1>实景设计</h1>
         <div class="upload_pic">
             <h2>实景图</h2>
-            <ul>
+            <ul id="original-pictures">
                 @foreach (var lc in Model.LiveScenes)
                 {
-                    <li><p>@lc.Room  @lc.Window</p><img src="@lc.OriginalPictureUrl"></li>
+                    <li><p>@lc.Room  @lc.Window</p><img src="@lc.OriginalPictureUrl" layer-src="@lc.OriginalPictureUrl" alt=""></li>
                 }
             </ul>
         </div>
         <div class="upload_pic">
             <h2>设计图</h2>
-            <ul>
+            <ul id="effect-pictures">
                 @foreach (var lc in Model.LiveScenes)
                 {
                     <li><img src="@lc.EffectPictureUrl"></li>
@@ -24,4 +28,14 @@
             </ul>
         </div>
     </div>
+    <script type="text/javascript">
+        layer.ready(function () { 
+            layer.photos({
+                photos: '#original-pictures'
+            });
+            layer.photos({
+                photos: '#effect-pictures'
+            });
+        });
+    </script>
 }

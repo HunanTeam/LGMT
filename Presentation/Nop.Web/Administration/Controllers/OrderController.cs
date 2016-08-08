@@ -4099,9 +4099,9 @@ namespace Nop.Admin.Controllers
                     liveSceneModel.Room = x.Room;
                     liveSceneModel.Window = x.Window;
                     liveSceneModel.OriginalPictureId = x.OriginalPictureId;
-                    liveSceneModel.OriginalPictureUrl = _pictureService.GetPictureUrl(x.OriginalPictureId, 75);
+                    liveSceneModel.OriginalPictureUrl = _pictureService.GetPictureUrl(x.OriginalPictureId);
                     liveSceneModel.EffectPictureId = x.EffectPictureId;
-                    liveSceneModel.EffectPictureUrl = _pictureService.GetPictureUrl(x.EffectPictureId, 75);
+                    liveSceneModel.EffectPictureUrl = _pictureService.GetPictureUrl(x.EffectPictureId);
                     liveSceneModel.DisplayOrder = x.DisplayOrder;
                     return liveSceneModel;
                 })
