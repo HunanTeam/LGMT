@@ -125,7 +125,7 @@ namespace Nop.Services.Authentication.External
     {
         public string Gender { get; set; }
         public string Biography { get; set; }
-        public string FigureUrl { get; internal set; }
+        public string FigureUrl { get;  set; }
     }
 
     /// <summary>

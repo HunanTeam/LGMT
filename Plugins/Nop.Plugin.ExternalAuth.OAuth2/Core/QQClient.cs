@@ -210,7 +210,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                         {"id", openid},
                         {"name", openid},
                         {"nickname",nickname},
-                        {"figureurl",figureurqql},
+                        {"figureurl",figureurl},
                         {"gender",gender},
                     };
             }

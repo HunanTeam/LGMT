@@ -141,7 +141,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
             claims.Person = new PersonClaims();
             if (authenticationResult.ExtraData.ContainsKey("figureurl"))
-               // claims.Person.FigureUrl = authenticationResult.ExtraData["figureurl"];
+                claims.Person.FigureUrl = authenticationResult.ExtraData["figureurl"];
             if (authenticationResult.ExtraData.ContainsKey("gender"))
                 claims.Person.Gender = authenticationResult.ExtraData["gender"];
 
