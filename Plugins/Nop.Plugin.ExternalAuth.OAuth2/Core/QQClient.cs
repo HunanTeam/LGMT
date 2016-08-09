@@ -187,10 +187,14 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     });
 
                 string info = client.DownloadString(getInfoBuilder.Uri);
+                if (!string.IsNullOrWhiteSpace(info) && _logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
+                {
+                    _logger.Debug(string.Format("QQ 登录 GetUserData【{0}】", info));
+                }
                 if (!string.IsNullOrEmpty(info))
                 {
                     var infoObj = JObject.Parse(info);
-          
+
                     nickname = (infoObj["nickname"] == null) ? "" : infoObj["nickname"].ToString();
                     figureurl = (infoObj["figureurl_2"] == null) ? "" : infoObj["figureurl_2"].ToString();
                     figureurqql = (infoObj["figureurl_qq_1"] == null) ? "" : infoObj["figureurl_qq_1"].ToString();
@@ -199,7 +203,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
                 #endregion
 
-                 
+
                 return new Dictionary<string, string>
                     {
                         {"openid", openid},
@@ -211,7 +215,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                     };
             }
 
-        
+
         }
 
         /// <summary>
@@ -285,7 +289,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
             if (_logger.IsEnabled(Nop.Core.Domain.Logging.LogLevel.Debug))
             {
                 var resultStr = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                _logger.Debug( string.Format("登录  @QQ返回数据格式", resultStr));
+                _logger.Debug(string.Format("登录  @QQ返回数据格式", resultStr));
             }
 
 
