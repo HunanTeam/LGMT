@@ -10,6 +10,7 @@ using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
+using Nop.Services.Media;
 
 namespace Nop.Services.Authentication.External
 {
@@ -33,6 +34,7 @@ namespace Nop.Services.Authentication.External
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly LocalizationSettings _localizationSettings;
 
+        private readonly IPictureService _pictureService;
         private readonly ILogger _logger;
         #endregion
 
@@ -47,7 +49,8 @@ namespace Nop.Services.Authentication.External
             ExternalAuthenticationSettings externalAuthenticationSettings,
             IShoppingCartService shoppingCartService,
             IWorkflowMessageService workflowMessageService, LocalizationSettings localizationSettings,
-            ILogger logger
+            ILogger logger,
+             IPictureService pictureService
             )
         {
             this._authenticationService = authenticationService;
@@ -63,6 +66,7 @@ namespace Nop.Services.Authentication.External
             this._workflowMessageService = workflowMessageService;
             this._localizationSettings = localizationSettings;
             this._logger = logger;
+            this._pictureService = pictureService;
         }
 
         #endregion
@@ -153,11 +157,51 @@ namespace Nop.Services.Authentication.External
                     var registrationResult = _customerRegistrationService.RegisterCustomer(registrationRequest);
                     if (registrationResult.Success)
                     {
-                        //store other parameters (form fields)
-                        if (!String.IsNullOrEmpty(details.FirstName))
-                            _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.FirstName, details.FirstName);
-                        if (!String.IsNullOrEmpty(details.LastName))
-                            _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.LastName, details.LastName);
+
+
+                        #region 保存从QQ返回的用户信息
+
+                        //昵称
+                        if (!String.IsNullOrEmpty(details.Nickname))
+                            _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.FirstName, details.Nickname);
+                        else
+                            _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.FirstName, currentCustomer.Username);
+                        //性别
+                        if (!String.IsNullOrEmpty(details.Gender))
+                        {
+                            var genderStr = string.Empty;
+                            if (details.Gender == "男" || string.Compare(details.Gender, "male",true) == 0
+                                || string.Compare(details.Gender, "male", true) == 0
+                                || string.Compare(details.Gender, "m", true) == 0
+                                || string.Compare(details.Gender, "man", true) == 0
+                                )
+                            {
+                                genderStr = "M";
+                            }
+                            else
+                            {
+                                genderStr = "F";
+                            }
+                            
+                            _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.Gender, genderStr);
+                        }
+                        //头像
+                        if (!String.IsNullOrEmpty(details.FigureUrl))
+                        {
+                            var fileBinary = CommonHelper.GetRemotePictureBytes(details.FigureUrl);
+                            if (fileBinary != null)
+                            {
+                                try
+                                {
+                                    var mimeType = CommonHelper.GetPictureMimeType(fileBinary);
+                                    var picture = _pictureService.InsertPicture(fileBinary, mimeType, null);
+                                    _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.AvatarPictureId, picture.Id);
+                                }
+                                catch { }
+                            }
+                        }
+
+                        #endregion
 
                         var username = _customerRegistrationService.GenerateUsername(currentCustomer.Id);
                         _customerRegistrationService.SetUsername(currentCustomer, username);

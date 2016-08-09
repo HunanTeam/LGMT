@@ -173,6 +173,7 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
 
                 var nickname = "";
                 var figureurl = "";
+                var figureurqql = "";
                 var gender = "";
                 var client_id = (obj["client_id"] == null) ? null : obj["client_id"].ToString();
 
@@ -189,8 +190,10 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                 if (!string.IsNullOrEmpty(info))
                 {
                     var infoObj = JObject.Parse(info);
+          
                     nickname = (infoObj["nickname"] == null) ? "" : infoObj["nickname"].ToString();
                     figureurl = (infoObj["figureurl_2"] == null) ? "" : infoObj["figureurl_2"].ToString();
+                    figureurqql = (infoObj["figureurl_qq_1"] == null) ? "" : infoObj["figureurl_qq_1"].ToString();
                     gender = (infoObj["gender"] == null) ? "" : infoObj["gender"].ToString();
                 }
 
@@ -203,28 +206,12 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Core
                         {"id", openid},
                         {"name", openid},
                         {"nickname",nickname},
-                        {"figureurl",figureurl},
+                        {"figureurl",figureurqql},
                         {"gender",gender},
                     };
             }
 
-            //FacebookGraphData graphData;
-            //var request = WebRequest.Create(builder.Uri);
-            //using (var response = request.GetResponse()) {
-            //    using (var responseStream = response.GetResponseStream()) {
-            //        graphData = JsonHelper.Deserialize<FacebookGraphData>(responseStream);
-            //    }
-            //}
-
-            //// this dictionary must contains 
-            //var userData = new Dictionary<string, string>();
-            //userData.AddItemIfNotEmpty("id", graphData.Id);
-            //userData.AddItemIfNotEmpty("username", graphData.Email);
-            //userData.AddItemIfNotEmpty("name", graphData.Name);
-            //userData.AddItemIfNotEmpty("link", graphData.Link == null ? null : graphData.Link.AbsoluteUri);
-            //userData.AddItemIfNotEmpty("gender", graphData.Gender);
-            //userData.AddItemIfNotEmpty("birthday", graphData.Birthday);
-            //return userData;
+        
         }
 
         /// <summary>
