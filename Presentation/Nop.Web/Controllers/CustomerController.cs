@@ -1219,7 +1219,7 @@ namespace Nop.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [NonAction]
-        private ActionResult GetVerificationCode(string phone, string validateCode, VerificationCodeType verificationType, bool needValidateCode = true)
+        private ActionResult GetVerificationCode(string phone, string validateCode, VerificationCodeType verificationType, bool needValidateCode = false)
         {
             if (string.IsNullOrEmpty(phone))
                 return Json(new { success = false, message = "请输入手机号码" });
