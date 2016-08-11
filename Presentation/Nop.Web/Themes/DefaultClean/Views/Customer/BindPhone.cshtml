@@ -162,11 +162,11 @@
 
     function runStopGetAuthCode() {
         time = 60; //获取验证码时间间隔
-        $("#getAuthCode").addClass("disabled");
+        $("#getAuthCode").attr("disabled", true);
         var intervalProcess = setInterval(function () {
             $("#getAuthCode").val(time + "s后再获取");
             if (time == 0) {
-                $("#getAuthCode").removeClass("disabled");
+                $("#getAuthCode").attr("disabled", false);
                 $("#getAuthCode").html("获取验证码");
                 clearInterval(intervalProcess);
                 return;
