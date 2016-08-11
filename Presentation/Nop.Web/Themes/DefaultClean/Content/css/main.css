@@ -472,7 +472,7 @@ a:hover { color:#f00; text-decoration: none; }
 .account .infor_one .second{ width:100%; float:left; font-size:14px; padding:25px 0px; border-top:1px solid #ccc; border-bottom:1px solid #ccc; text-indent:40px; background:url(../images/infor.jpg) left center no-repeat; margin:25px 0}
 .account .infor_one .third{ width:100%; float:left; font-size:14px}
 .account .infor_one .third li{ width:100%; float:left; margin-top:15px; margin-bottom:5px}
-.account .infor_one .third li label{ float:left; width:70px; line-height:32px; padding-left:40px}
+.account .infor_one .third li label{ float:left; width:80px; line-height:32px; padding-left:40px}
 .account .infor_one .third li input{ float:left; width:160px; border:1px solid #ccc; height:32px; line-height:32px}
 .account .infor_one .third li select{ float:left; width:168px; border:1px solid #ccc; height:34px; line-height:34px; margin-right:10px}
 .account .infor_one .third li input.checkbox{ width:16px; height:16px; margin-top:8px}

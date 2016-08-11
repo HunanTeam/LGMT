@@ -28,31 +28,28 @@
         }
         <div class="account">
             <div class="infor_one">
-
+                <div class="second" style="border-top:none">绑定手机</div>
                 <ul class="third">
                     <li>
-                        <label>手机：</label>
+                        <label>手机</label>
                         <input id="CustomerPhone" name="CustomerPhone" type="text" maxlength="11" />
                     </li>
+                 
                     <li>
-
-                        <input id="validateCode" name="validateCode" type="text" placeholder="验证码" maxlength="4" style="width: 80px; float: left;" />
-                        <img id="gc" src="@Url.Action("GetValidateCode")" onclick="this.src = '@Url.Action("GetValidateCode")?r=' + Math.random()" style="height: 40px; margin-top: 10px; margin-left: 10px; float: left;" />
-                    </li>
-                    <li>
+                        <label>手机验证码</label>
                         <input id="PhoneAuthCode" name="PhoneAuthCode" type="text" placeholder="手机验证码" maxlength="6" />
-                        <a id="getAuthCode" href="javascript:void(0);">获取验证码</a>
+                        <input type="button" id="getAuthCode" value="获取验证码" style="width:90px"> 
                     </li>
                     <li>
-                        <label>密码：</label>
+                        <label>密码</label>
                         <input id="Password" name="Password" type="password" maxlength="20" />
                     </li>
                     <li>
-                        <label>确认密码：</label>
+                        <label>确认密码</label>
                         <input id="ConfirmPassword" name="ConfirmPassword" type="password" maxlength="20" />
                     </li>
                     <li>
-                        <input type="button" id="bind-button" class="butn" value="绑定手机" />
+                        <a id="bind-button" href="javascript:$('bind-form').submit();">绑定手机</a>
                         <p class="valid_info" style="display:none;">绑定失败，请重试！</p>
                     </li>
                 </ul>

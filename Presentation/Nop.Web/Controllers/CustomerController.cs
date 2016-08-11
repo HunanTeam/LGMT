@@ -1901,11 +1901,11 @@ namespace Nop.Web.Controllers
                 return new HttpUnauthorizedResult();
 
             //验证注册码
-            if (string.IsNullOrEmpty(model.PhoneAuthCode))
-            {
-                return Json(new { success = false, message = "请输入手机验证码!" });
+            //if (string.IsNullOrEmpty(model.PhoneAuthCode))
+            //{
+            //    return Json(new { success = false, message = "请输入手机验证码!" });
 
-            }
+            //}
             if (model.Password.Length < 6)
             {
                 return Json(new { success = false, message = "密码长度不能小于6位!" });
