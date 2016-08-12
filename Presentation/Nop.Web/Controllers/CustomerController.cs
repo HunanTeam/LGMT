@@ -1988,7 +1988,7 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("PasswordRecoveryStep2");
             }
 
-            model.Message = "您输入的邮箱或手机号码不存在";
+            model.Message = "您输入的手机号码不存在";
             return View(model);
         }
 
