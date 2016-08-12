@@ -373,13 +373,17 @@ namespace Nop.Web.Controllers
             var model = new HeaderLinksModel
             {
                 IsAuthenticated = customer.IsRegistered(),
-                CustomerEmailUsername = customer.IsRegistered() ? (_customerSettings.UsernamesEnabled ? customer.Username : customer.Phone) : "",
+                CustomerEmailUsername = customer.Phone,
                 ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
                 WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
                 AllowPrivateMessages = customer.IsRegistered() && _forumSettings.AllowPrivateMessages,
                 UnreadPrivateMessages = unreadMessage,
                 AlertMessage = alertMessage,
             };
+            if (string.IsNullOrWhiteSpace(model.CustomerEmailUsername))
+            {
+                model.CustomerEmailUsername = customer.GetAttribute<string>(SystemCustomerAttributeNames.FirstName);
+            }
             //performance optimization (use "HasShoppingCartItems" property)
             if (customer.HasShoppingCartItems)
             {

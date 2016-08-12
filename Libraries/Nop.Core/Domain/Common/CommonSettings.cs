@@ -61,5 +61,7 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets a ignore words (phrases) to be ignored when logging errors/messages
         /// </summary>
         public List<string> IgnoreLogWordlist { get; set; }
+
+        public bool IsDebug { get; set; }
     }
 }

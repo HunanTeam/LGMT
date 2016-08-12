@@ -1870,9 +1870,14 @@ namespace Nop.Web.Controllers
                 ModelState.AddModelError("", "当前不需要绑定手机!");
 
             }
+            var cutomer = _workContext.CurrentCustomer;
             var model = new BindPhoneModel();
-
-            //  model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
+            model.NikeName = _workContext.CurrentCustomer.GetAttribute<string>(SystemCustomerAttributeNames.FirstName);
+            model.AvatarUrl = _pictureService.GetPictureUrl(
+                        cutomer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId),
+                        _mediaSettings.AvatarPictureSize,
+                        false);
+             model.CustomerFrom = GetCustomerRegisterFrom(_workContext.CurrentCustomer.ExternalAuthenticationRecords.FirstOrDefault().ProviderSystemName);
 
             return View(model);
         }
@@ -1883,11 +1888,10 @@ namespace Nop.Web.Controllers
             {
                 case "ExternalAuth.OAuth2.QQ":
                     return "QQ";
-
                 case "ExternalAuth.OAuth2.WeiBo":
-                    return "weibo";
+                    return "微博";
                 case "ExternalAuth.OAuth2.Wechat":
-                    return "wx";
+                    return "微信";
                 default:
                     return string.Empty;
             }

@@ -5,7 +5,7 @@
         @*<li class="epaper"><a class="fancyEpaper" href="#">订阅邮件</a></li>*@
         @if (Model.IsAuthenticated)
         {
-            <li class="epaper"><span class="login"><a class="fancyLogin" href="@Url.Action("CustomerOrders","Order")">我的账户</a></span></li>
+            <li class="epaper"><span class="login"><a class="fancyLogin" href="@Url.Action("CustomerOrders","Order")">我的帐户(@Model.CustomerEmailUsername)</a></span></li>
             <li class="member"><a class="fancyEpaper" href="@Url.Action("Logout","Customer")">退出</a></li>
         }
         else
@@ -16,4 +16,3 @@
         <li id="cart"><a class="fancyLogin" href="@Url.Action("cart", "shoppingcart")"><span>@(Model.ShoppingCartItems)</span>个商品</a></li>
     </ul>
 </div>
- 

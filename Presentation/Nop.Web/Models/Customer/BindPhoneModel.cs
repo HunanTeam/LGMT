@@ -30,6 +30,10 @@ namespace Nop.Web.Models.Customer
 
         public string CustomerFrom { get; set; }
 
+        public string NikeName { get; set; }
+
+        public string AvatarUrl { get; set; }
+
         /// <summary>
         /// 手机验证码
         /// </summary>

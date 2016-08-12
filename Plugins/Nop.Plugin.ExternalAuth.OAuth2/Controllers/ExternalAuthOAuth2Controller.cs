@@ -211,7 +211,8 @@ namespace Nop.Plugin.ExternalAuth.OAuth2.Controllers
                 case OpenAuthenticationStatus.AutoRegisteredStandard:
                     {
                         // return RedirectToRoute("HomePage");
-                        return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard, regfrom = (int)clientType });
+                        return RedirectToAction("BindPhone", "Customer");
+                        //return RedirectToRoute("RegisterResult", new { resultId = (int)UserRegistrationType.Standard, regfrom = (int)clientType });
                     }
                 default:
                     break;

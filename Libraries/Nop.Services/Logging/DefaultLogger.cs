@@ -84,7 +84,7 @@ namespace Nop.Services.Logging
             switch (level)
             {
                 case LogLevel.Debug:
-                    return true;
+                    return _commonSettings.IsDebug;
                 default:
                     return true;
             }
