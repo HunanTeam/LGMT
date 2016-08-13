@@ -21,6 +21,8 @@ string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.Text
     <div class="size" id="container_@(attribute.Id)">
         <input type="hidden" id="attr_@(attribute.Id)" name="@(controlId)">
         <span class="picksize">
+            
+            <label >适用窗宽</label>
             @foreach (var attributeValue in attribute.Values)
             {
                 priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
@@ -34,7 +36,7 @@ string textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.Text
             }
         </span>
         <div class="size2">
-            <a class="product-size" href="javascript:void(0);" onclick="OpenWindow('/%E6%9F%A5%E7%9C%8B%E5%B0%BA%E7%A0%81%E8%A1%A8',700,800)">查看尺码表</a>
+            <a class="product-size" href="javascript:void(0);" onclick="OpenWindow('/%E6%9F%A5%E7%9C%8B%E5%B0%BA%E7%A0%81%E8%A1%A8',700,800)">如何选尺码</a>
         </div>
     </div>
     <script type="text/javascript">
@@ -53,9 +55,12 @@ string controlId = string.Format("product_attribute_{0}_{1}_{2}", attribute.Prod
     <style type="text/css">
         #container_@(attribute.Id) div.selected{ border: 1px solid #ff0000;}
     </style>
+   
     <div class="color" id="container_@(attribute.Id)">
+        <label>颜色款式</label>
         <div class="clear"></div>
         <input type="hidden" id="attr_@(attribute.Id)" name="@(controlId)">
+        
         @foreach (var attributeValue in attribute.Values)
         {
             priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
@@ -141,6 +146,7 @@ if (!string.IsNullOrEmpty(attribute.Description))
                 priceAttributeScripts.AppendFormat("$('#{0}_{1}').click(function(){{{2}();}});\n", controlId, attributeValue.Id, priceAdjustmentFuncName);
                 <input id="@(controlId)_@(attributeValue.Id)" type="checkbox" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" @(attribute.AttributeControlType == AttributeControlType.ReadonlyCheckboxes ? Html.Raw(" disabled=\"disabled\"") : null) />
                 <label class="em" for="@(controlId)_@(attributeValue.Id)">@attributeValue.Name</label>
+             
             }
         }
     </p>
@@ -215,7 +221,7 @@ if (!string.IsNullOrEmpty(attribute.Description))
     attribute = Model.FirstOrDefault(m => m.Name == "尺寸");
     if (attribute != null)
     {
-        <li>@attrHtml1(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
+        <li>  @attrHtml1(attribute, priceAttributeScripts, priceAdjustmentFuncName)</li>
     }
 
     @*attribute = Model.FirstOrDefault(m => m.TextPrompt == "款式");

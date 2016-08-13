@@ -105,6 +105,7 @@ img#navLogo{position:absolute;top:55px;left:0}
 .list_display li .productname,.list_display_5 li .productname{width:140px;line-height:3.5}
 .list_display .picksize a,.list_display_5 .picksize a{width:23px;line-height:23px;white-space:nowrap}
 .picksize{text-align:center;padding-top:5px;width:155px;margin:5px auto 0}
+.picksize label{float: left; width: 100px;font-size: 14px;color: #666;line-height: 30px;position: relative;margin-top:15px;}
 .picksize a{text-decoration:none;width:auto;min-width:23px;line-height:35px;display:inline-block;background-color:#e7e7e7;border:1px solid #eee;color:#575757;-webkit-text-size-adjust:none;font-size:12px;font-family:Arial;margin:16px 16px 0 0;text-align:center;letter-spacing:0}
 .picksize a.current{text-decoration:none;border:1px solid #555}
 .picksize .lack,.picksize .lack:hover,#exhibit .lack,#exhibit .lack:hover,#sizelist .lack,#sizelist .lack:hover{text-decoration:none;color:#dadada;border:1px dashed #eee;background-color:transparent}

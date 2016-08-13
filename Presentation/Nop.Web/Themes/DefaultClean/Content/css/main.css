@@ -224,8 +224,9 @@ a:hover { color:#f00; text-decoration: none; }
 .product_details .first .fr_01 .price{font-size:60px;line-height:1;color:#e33}
 .product_details .first .fr_01 .activities{text-decoration:line-through}
 .product_details .first .fr_01 .color{margin:10px 0 0;border-top:1px solid #eee;padding-top:30px}
+.product_details .first .fr_01 .color label{float: left; width: 100px;font-size: 14px;color: #666;line-height: 30px;position: relative;}
 .product_details .first .fr_01 .color img{margin-right:10px;margin-bottom:15px;width:24px;height:24px;padding:3px}
-.product_details .first .fr_01 .size{margin-top:10px;margin-bottom:30px;padding-bottom:30px;border-bottom:1px solid #eee;vertical-align:middle}
+.product_details .first .fr_01 .size{float:left; margin-top:10px;margin-bottom:30px;padding-bottom:30px;border-bottom:1px solid #eee;vertical-align:middle}
 .product_details .first .fr_01 .size2{margin-top:15px;text-align:right}
 .product_details .first .fr_01 .addcart{margin-bottom:20px}
 .product_details .first .fr_01 .addcart span{margin-right:26px}
@@ -246,12 +247,12 @@ a:hover { color:#f00; text-decoration: none; }
 .add_shop01{ width:100%; float:left}
 .add_shop01 ul li { width: 100%; float: left; margin-bottom: 10px; position: relative; }
 .add_shop01 ul li .des { color: #E5002D; font-style: italic; position: absolute; left: 0px; top: 25px; width: 60px; }
-.add_shop01 ul li label{float:left;width:120px;font-size:14px;color:#666;line-height:30px; position:relative}
-.add_shop01 ul li label a{ position:absolute; background: url(../images/quester.png)  center no-repeat; width:16px; height:16px; left:60px; top:6px }
-.add_shop01 ul li p { margin-left: 120px; line-height: 30px; }
+.add_shop01 ul li label{float:left;width:100px;font-size:14px;color:#666;line-height:30px; position:relative}
+.add_shop01 ul li label a{ position:absolute; background: url(../images/quester.png)  center no-repeat; width:16px; height:16px;  top:6px }
+.add_shop01 ul li p { float:left}
 .add_shop01 ul li p label { width: auto; }
 .add_shop01 ul li p em { font-style: normal; float: left; padding: 0px 0px 0px 5px; width: 60px; }
-.add_shop01 ul li p label.em { font-style: normal; float: left; padding: 0px 0px 0px 5px; width: 60px; font-size: 12px; color: #333; }
+.add_shop01 ul li p label.em { font-style: normal; float: left; padding: 0px 10px 0px 2px; font-size: 12px; color: #333; }
 .add_shop01 ul li p input { width: 18px; height: 18px; float: left; margin-top: 5px; }
 .add_shop01 ul li select{ margin-top:2px; border:1px solid #ccc; height:30px; margin-right:20px}
 
