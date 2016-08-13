@@ -79,10 +79,10 @@ img#navLogo{position:absolute;top:55px;left:0}
 #b04.banner ul li img{float:left}
 
 #sidenav{height:100%;width:165px; float:left;}
-#sidenav h2{color:#555;padding:0px 0 3px 10px;font-weight:bolder;background:url('../images/sidenav_h2icon.gif') no-repeat 0 8px;margin-top:10px}
+#sidenav h2{color:#555;padding:0px 0 3px 10px;font-weight:bolder/*;background:url('../images/sidenav_h2icon.gif') no-repeat 0 8px*/;margin-top:10px}
 .sale{padding:0;font-style:normal;line-height:1.7;height:100%; margin-top:-10px}
 .menu_onsale{border-bottom:1px #f0f0f0 solid;padding:10px 0;margin-right:20px}
-.on_sale li,.sale_category li,.sale_news li{color:#4d494a}
+.on_sale li,.sale_category li,.sale_news li{color:#4d494a;text-align:left}
 .on_sale li a,.sale_category li a,.sale_news li a{color:#4d494a;background: url('../images/sidenav_list_icon.gif') no-repeat 0 5px; padding-left:10px}
 .sale_news li a{color:#83521e;}
 .on_sale li a:hover,.sale_category li a:hover,.sale_news li a:hover,.on_sale li a.current,.sale_category li a.current,.sale_news li a.current{color:#bb9064}
@@ -105,7 +105,7 @@ img#navLogo{position:absolute;top:55px;left:0}
 .list_display li .productname,.list_display_5 li .productname{width:140px;line-height:3.5}
 .list_display .picksize a,.list_display_5 .picksize a{width:23px;line-height:23px;white-space:nowrap}
 .picksize{text-align:center;padding-top:5px;width:155px;margin:5px auto 0}
-.picksize label{float: left; width: 100px;font-size: 14px;color: #666;line-height: 30px;position: relative;margin-top:15px;}
+.picksize label{float: left; width: 100px;font-size: 14px;color: #666;line-height: 30px;position: relative;margin-top:15px;text-align:left}
 .picksize a{text-decoration:none;width:auto;min-width:23px;line-height:35px;display:inline-block;background-color:#e7e7e7;border:1px solid #eee;color:#575757;-webkit-text-size-adjust:none;font-size:12px;font-family:Arial;margin:16px 16px 0 0;text-align:center;letter-spacing:0}
 .picksize a.current{text-decoration:none;border:1px solid #555}
 .picksize .lack,.picksize .lack:hover,#exhibit .lack,#exhibit .lack:hover,#sizelist .lack,#sizelist .lack:hover{text-decoration:none;color:#dadada;border:1px dashed #eee;background-color:transparent}

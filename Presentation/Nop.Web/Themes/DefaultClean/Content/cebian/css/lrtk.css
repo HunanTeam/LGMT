@@ -1,27 +1,4 @@
-/* 懒人图库 搜集整理 www.lanrentuku.com */
-html,body {
-	height:100%
-}
-html,body,form,input,span,p,img,ul,ol,li,dl,dt,dd {
-	margin:0;
-	padding:0;
-	border:0
-}
-ul,ol {
-	list-style:none
-}
-body {
-	background:#fff;
-	font:12px/1.5 arial,sans-serif;
-	text-align:center;
  
-}
-a {
-	text-decoration:none
-}
-a:hover {
-	text-decoration:underline
-}
 
 #moquu_top,#moquu_wxin,#moquu_wshare,#moquu_wmaps {
 	z-index:2;
