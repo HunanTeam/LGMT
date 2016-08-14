@@ -443,6 +443,7 @@
     <Content Include="App_Data\Settings_bak.txt" />
     <Content Include="App_Data\Settings.txt" />
     <Content Include="App_Data\更新脚本\02.发送验证码.sql" />
+    <Content Include="App_Data\更新脚本\03.添加一些配置.sql" />
     <Content Include="Content\BBEditor\ed.js" />
     <Content Include="Content\BBEditor\images\bold.gif" />
     <Content Include="Content\BBEditor\images\code.gif" />
