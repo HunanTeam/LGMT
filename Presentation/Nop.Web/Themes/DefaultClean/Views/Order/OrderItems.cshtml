@@ -27,12 +27,12 @@
                         <th style="width:200px; text-align:left;">商品名</th>
                         <th style="width:24px">颜色</th>
                         <th>尺寸</th>            
-                        <th>房间</th>
-                        <th>序号</th>
-                        <th style="width:40px">轨道</th>
-                        <th style="width:40px">窗纱</th>
-                        <th style="width:40px">遮光布</th>
-                        <th style="width:60px">帘头</th>
+                        <th>@DomainFieldNames.Product_Detail_AnZhuangFangJian</th>
+                        <th>@DomainFieldNames.Product_Detail_AnZHuangWeiZhi</th>
+                        <th style="width:40px">@DomainFieldNames.Product_Detail_GuiDao</th>
+                        <th style="width:40px">@DomainFieldNames.Product_Detail_ShaChuang</th>
+                        <th style="width:40px">@DomainFieldNames.Product_Detail_ZheGuangBu</th>
+                        <th style="width:60px">@DomainFieldNames.Product_Detail_LianTou</th>
                         <th style="width:80px">小计</th>
                         @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
                         {
@@ -72,19 +72,19 @@
                                 }
                             </td>            
                             <td>
-                                @if (attrs.ContainsKey("房间"))
+                                @if (attrs.ContainsKey(DomainFieldNames.Product_Detail_AnZhuangFangJian))
                                 {
-                                    <text>@attrs["房间"]</text>
+                                    <text>@attrs[DomainFieldNames.Product_Detail_AnZhuangFangJian]</text>
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("序号"))
+                                @if (attrs.ContainsKey(DomainFieldNames.Product_Detail_AnZHuangWeiZhi))
                                 {
-                                    <text>@attrs["序号"]</text>
+                                    <text>@attrs[DomainFieldNames.Product_Detail_AnZHuangWeiZhi]</text>
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("轨道") && attrs["轨道"] != "")
+                                @if (attrs.ContainsKey(@DomainFieldNames.Product_Detail_GuiDao) && attrs[@DomainFieldNames.Product_Detail_GuiDao] != "")
                                 {
 
                                     <img src="/content/custom/images/active-true.jpg">
@@ -95,7 +95,7 @@
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("窗纱") && attrs["窗纱"] != "")
+                                @if (attrs.ContainsKey(@DomainFieldNames.Product_Detail_ShaChuang) && attrs[@DomainFieldNames.Product_Detail_ShaChuang] != "")
                                 {
 
                                     <img src="/content/custom/images/active-true.jpg">
@@ -106,7 +106,7 @@
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("遮光布") && attrs["遮光布"] != "")
+                                @if (attrs.ContainsKey(DomainFieldNames.Product_Detail_ZheGuangBu) && attrs[DomainFieldNames.Product_Detail_ZheGuangBu] != "")
                                 {
 
                                     <img src="/content/custom/images/active-true.jpg">
@@ -117,9 +117,9 @@
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("帘头"))
+                                @if (attrs.ContainsKey(@DomainFieldNames.Product_Detail_LianTou))
                                 {
-                                    <text>@attrs["帘头"]</text>
+                                    <text>@attrs[@DomainFieldNames.Product_Detail_LianTou]</text>
                                 }
                             </td>
                             <td>@item.SubTotal</td>
