@@ -18,5 +18,9 @@ namespace Nop.Web.Models.Order
         public OrderStep Step { get; set; }
 
         public string Description { get; set; }
+
+        public bool HasUploadLiveScenes { get; set; }
+
+        public bool? CurrentPayInOnline { get; set; }
     }
 }

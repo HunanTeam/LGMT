@@ -1,8 +1,11 @@
 ﻿@model ShoppingCartModel
 @using Nop.Core
 @using Nop.Core.Infrastructure
+@using Nop.Services
 @using Nop.Web.Models.ShoppingCart;
-
+@{
+    var isInCart = ViewData["isInCart"];
+}
 
 <div class="order">
     <div class="hearts">
@@ -19,7 +22,7 @@
                                 <th>&nbsp;</th>
                                 <th style="width:200px; text-align:left;">商品名</th>
                                 <th style="width:24px">颜色</th>
-                                <th>尺寸</th>                      
+                                <th>尺寸</th>
                                 <th>@DomainFieldNames.Product_Detail_AnZhuangFangJian</th>
                                 <th>@DomainFieldNames.Product_Detail_AnZHuangWeiZhi</th>
                                 <th style="width:40px">@DomainFieldNames.Product_Detail_GuiDao</th>
@@ -60,7 +63,7 @@
                                         {
                                             <text>@attrs["尺寸"]</text>
                                         }
-                                    </td>             
+                                    </td>
                                     <td>
                                         @if (attrs.ContainsKey(DomainFieldNames.Product_Detail_AnZhuangFangJian))
                                         {
@@ -130,7 +133,7 @@
                                 <th>&nbsp;</th>
                                 <th style="width:200px; text-align:left;">商品名</th>
                                 <th style="width:24px">颜色</th>
-                                <th>尺寸</th>                        
+                                <th>尺寸</th>
                                 <th>@DomainFieldNames.Product_Detail_AnZhuangFangJian</th>
                                 <th>@DomainFieldNames.Product_Detail_AnZHuangWeiZhi</th>
                                 <th style="width:40px">&nbsp;</th>
@@ -176,7 +179,7 @@
                                         {
                                             <text> x @(attrs["高度"])cm</text>
                                         }
-                                    </td>                        
+                                    </td>
                                     <td>
                                         @if (attrs.ContainsKey(DomainFieldNames.Product_Detail_AnZhuangFangJian))
                                         {
@@ -201,16 +204,20 @@
                     </table>
                 </div>
             }
-           <div class="fcontainer">
-               <div class="left">
-                   <p style="line-height:26px; font-size:12px;float:left">给卖家留言：</p>
-                   <textarea name="CustomerNote" placeholder="选填:对商品或交易的特殊要求" style="width:460px;" ></textarea>
-               </div>
-               <span class="right">共 @Model.Items.Count 件商品，合计 @Html.Action("OrderTotals", "ShoppingCart", new { isEditable = Model.IsEditable })&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-           </div>
-            
-           
-           
+            <div class="fcontainer">
+                @if (isInCart == null)
+                {
+                    <div class="left">
+                        <p style="line-height:26px; font-size:12px;float:left">给卖家留言：</p>
+                        <textarea name="CustomerNote" placeholder="选填:对商品或交易的特殊要求" style="width:460px;"></textarea>
+                    </div>
+                }
+
+                <span class="right">共 @Model.Items.Count 件商品，合计 @Html.Action("OrderTotals", "ShoppingCart", new { isEditable = Model.IsEditable })&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+
+
+
             <p class="points">※线上预算金额仅为概略估算，实际售价仍以测量师傅的报价为准。</p>
             <p class="points">※预约量尺上限为20窗。政企单位订购请联系我们，或重新调整数量。</p>
             <p class="points">※线上计算之金额为基本窗，高度＜280cm，高度超过280聪cm，请与客服联系。</p>

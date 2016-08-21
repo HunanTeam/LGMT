@@ -1,6 +1,7 @@
 ﻿@model OrderDetailsModel
 @using Nop.Core.Domain.Orders
 @using Nop.Web.Models.Order
+@using Nop.Services
 <div class="hearts">
     @if (Model.OrderStepId == (int)OrderStep.ConfirmBooking)
     {
@@ -157,8 +158,8 @@
                         <th style="width:200px; text-align:left;">商品名</th>          
                         <th style="width:24px">颜色</th>
                         <th>尺寸</th>           
-                        <th>房间</th>
-                        <th>序号</th>
+                        <th>@DomainFieldNames.Product_Detail_AnZhuangFangJian</th>
+                        <th>@DomainFieldNames.Product_Detail_AnZHuangWeiZhi</th>
                         <th style="width:40px">&nbsp;</th>
                         <th style="width:40px">&nbsp;</th>
                         <th style="width:40px">&nbsp;</th>
@@ -203,15 +204,15 @@
                                 }
                             </td>              
                             <td>
-                                @if (attrs.ContainsKey("房间"))
+                                @if (attrs.ContainsKey(@DomainFieldNames.Product_Detail_AnZhuangFangJian))
                                 {
-                                    <text>@attrs["房间"]</text>
+                                    <text>@attrs[@DomainFieldNames.Product_Detail_AnZhuangFangJian]</text>
                                 }
                             </td>
                             <td>
-                                @if (attrs.ContainsKey("序号"))
+                                @if (attrs.ContainsKey(@DomainFieldNames.Product_Detail_AnZHuangWeiZhi))
                                 {
-                                    <text>@attrs["序号"]</text>
+                                    <text>@attrs[@DomainFieldNames.Product_Detail_AnZHuangWeiZhi]</text>
                                 }
                             </td>
                             <td>&nbsp;</td>

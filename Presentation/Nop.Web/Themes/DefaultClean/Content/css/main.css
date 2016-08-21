@@ -437,13 +437,26 @@ a:hover { color:#f00; text-decoration: none; }
 .order .payment a { display: block; float: right; width: 120px; background: #E5002D; border: 1px solid #A60021; height: 30px; line-height: 30px; color: #fff; text-align: center; margin-top: 20px; }
 .order .payment a:hover { background: #A60021; }
 
-.order .fed { width: 94%; float: left; margin-top: 40px; border: 1px solid #ccc; border-radius: 5px; padding: 30px 3%; color: #666; height: 400px; }
+.order .fed { width: 94%; float: left; margin-top: 40px; border: 1px solid #ccc; border-radius: 5px; padding: 30px 3%; color: #666; /*height: 400px;*/ }
 .order .fed h1 { width: 100%; float: left; font-size: 16px; margin-bottom: 20px; background: url(../images/sucess.jpg) left center no-repeat; text-indent: 40px; line-height: 30px; height: 30px; color: #333; }
 .order .fed .infor { width: 100%; float: left; padding-top: 10px; border-top: 1px solid #ddd; padding-top: 30px; }
 .order .fed .infor p { width: 100%; float: left; text-indent: 40px; display: block; line-height: 30px; font-size: 14px; }
 .order .fed .infor a { display: block; float: right; width: 100px; background: #E5002D; border: 1px solid #A60021; height: 40px; line-height: 40px; color: #fff; text-align: center; margin-top: 80px; margin-right: 50px; }
 .order .fed .infor a:hover { background: #A60021; }
 
+.order .fed .infor2 { width: 100%; float: left; padding-top: 10px; border-top: 1px solid #ddd; padding-top: 30px;}
+.order .fed .infor2 .left {width: 60%; float: left;}
+.order .fed .infor2 .left .image01 { width:550px;height:420px;  background:url(../images/pending01.gif)  center no-repeat; }
+.order .fed .infor2 .left .image02 { width:550px;height:420px;   background:url(../images/pending02.gif)  center no-repeat; }
+.order .fed .infor2 .left .image03 { width:550px;height:420px;   background:url(../images/confirmBooking.gif)  center no-repeat; }
+.order .fed .infor2 .left .image04 { width:550px;height:420px;    background:url(../images/orderComplete.gif)  center no-repeat; }
+.order .fed .infor2 .right {width: 40%; float:right;vertical-align:middle;margin-top:200px;}
+.order .fed .infor2 .right .title{display:block; font-size:22px;border-bottom: 1px solid #333;padding-bottom:5px;}
+
+.order .fed .infor2 .right .content{display:block; font-size:15px;margin-top:5px;}
+.order .fed .option{text-align: center;}
+.order .fed .option a { display: block; float: right; width: 100px; background: #E5002D; border: 1px solid #A60021; height: 40px; line-height: 40px; color: #fff; text-align: center; margin-top: 80px; margin-right: 50px; }
+.order .fed .option a:hover { background: #A60021; }
 
 /**我的账户**/
 .account { width: 100%; float: left; }

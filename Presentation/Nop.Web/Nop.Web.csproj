@@ -1783,6 +1783,7 @@
     <Content Include="Themes\DefaultClean\Content\images\btn_search.gif" />
     <Content Include="Themes\DefaultClean\Content\images\bundle.css" />
     <Content Include="Themes\DefaultClean\Content\images\close.jpg" />
+    <Content Include="Themes\DefaultClean\Content\images\confirmBooking.gif" />
     <Content Include="Themes\DefaultClean\Content\images\date.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\delete.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\erweima.jpg" />
@@ -1810,12 +1811,15 @@
     <Content Include="Themes\DefaultClean\Content\images\logo.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\new.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\new_1180x570_20160601_CN2.jpg" />
+    <Content Include="Themes\DefaultClean\Content\images\orderComplete.gif" />
     <Content Include="Themes\DefaultClean\Content\images\order_1.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\order_2.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\order_3.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\order_4.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\pay.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\pay_select.png" />
+    <Content Include="Themes\DefaultClean\Content\images\pending01.gif" />
+    <Content Include="Themes\DefaultClean\Content\images\pending02.gif" />
     <Content Include="Themes\DefaultClean\Content\images\pic.jpg" />
     <Content Include="Themes\DefaultClean\Content\images\quester.png" />
     <Content Include="Themes\DefaultClean\Content\images\search.jpg" />

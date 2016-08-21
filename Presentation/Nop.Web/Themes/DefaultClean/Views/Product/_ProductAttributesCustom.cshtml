@@ -5,7 +5,8 @@
 @using System.Text;
 @using System.Globalization;
 @using Nop.Services.Security;
-
+@using Nop.Services;
+     
 @{
     var priceAttributeScripts = new StringBuilder();
     var productId = Model.Any() ? Model.First().ProductId : 0;

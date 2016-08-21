@@ -19,12 +19,129 @@
         @Html.Partial("OrderProgress", Model.Step)
         <div class="fed">
             <h1>操作成功</h1>
-            <div class="infor">
-                <p>
-                    @Model.Description
-                </p>
+            @htmlSelecter()
+            <div class="option">
                 <a href="@url" style="margin-right:300px">订单详情</a><a href="@Url.Action("CustomerOrders", "Order")">我的账户</a>
             </div>
         </div>
     </div>
 </div>
+
+@helper htmlSelecter()
+{
+switch (Model.Step)
+{
+    case OrderStep.Pending: @pendingHtml(Model.HasUploadLiveScenes); break;//未上传实景图片
+    case OrderStep.ConfirmBooking: @pendingHtml(Model.HasUploadLiveScenes); break;//已上传实景图片
+    case OrderStep.ManufactureAndInstallment:
+        if (Model.CurrentPayInOnline.HasValue)
+        {
+           @manufactureAndInstallmentHtml(Model.CurrentPayInOnline.Value);
+        }
+        break;
+    case OrderStep.MeasureForPrice:
+       @measureForPriceHtml();break;
+    case OrderStep.Complete: @defaultHtml(); break;
+}
+}
+
+@* 心愿单预选 *@
+@helper pendingHtml(bool isUploadLiveScenes)
+{
+if (isUploadLiveScenes)
+{
+        <div class="infor2">
+            <div class="left">
+                <div class="image01"></div>
+            </div>
+            <div class="right">
+                <span class="title">设计师正在拼命赶稿中......</span>
+                
+                <span class="content">24小时后可在我的订单中查看您的效果图!</span>
+            </div>
+
+        </div>
+}
+else
+{
+        <div class="infor2">
+            <div class="left">
+                <div class="image02"></div>
+            </div>
+            <div class="right">
+                <span class="title">接下来就等您上传窗户实景图了......</span>
+                
+                <span class="content">越早在“我的订单”中上传拍摄好的窗户实景图片，便可越早收到设计师帮您制作效果图哦!</span>
+            </div>
+
+        </div>
+}
+
+
+
+}
+@* 确认预定 *@
+@helper confirmBookingHtml()
+{
+    <div class="infor2">
+        <div class="left">
+            <div class="image03"></div>
+        </div>
+        <div class="right">
+            <span class="title">测量师傅将搭乘飞碟赶往您家中 ......</span>
+            
+            <span class="content">您的预约单我们已经收到，客服会尽快与您电话确定上门测量时间，请务必要保持电话畅通哦!</span>
+        </div>
+
+    </div>
+}
+@* 测量和报价（线下支付定金） *@
+@helper measureForPriceHtml()
+{
+    <div class="infor2">
+        <div class="left">
+            <div class="image04"></div>
+        </div>
+        <div class="right">
+            <span class="title">订单已生成，等待您线下支付定金  ......</span>
+            
+            <span class="content">您的订单已生成，我们将在您线下支付成功后依照约定时间及时完全制作及安装，您可以在“我的订单”中随时关注订单状态!</span>
+        </div>
+
+    </div>
+}
+@* 在线支付定金 *@
+@helper manufactureAndInstallmentHtml(bool isOnline)
+{
+if (isOnline)
+{
+        <div class="infor2">
+            <div class="left">
+                <div class="image04"></div>
+            </div>
+            <div class="right">
+                <span class="title">定金支付成功，安心等待制作安装吧......</span>
+                
+                <span class="content">您的订单已生成，我们将依照约定时间帮您完成制作及安装!</span>
+            </div>
+
+        </div>
+}
+else
+{  
+}
+}
+
+
+@helper defaultHtml()
+{
+    <div class="infor">
+        <p>
+            @Model.Description
+        </p>
+
+    </div>
+}
+
+
+

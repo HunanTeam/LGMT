@@ -42,6 +42,7 @@ using Nop.Web.Models.Media;
 using Nop.Web.Models.ShoppingCart;
 using Nop.Services.Helpers;
 using Nop.Services.Authentication;
+using Nop.Services;
 
 namespace Nop.Web.Controllers
 {
@@ -2698,9 +2699,9 @@ namespace Nop.Web.Controllers
                 foreach (var attrInfo in item.AttributeInfo.Split(new string[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries).ToList())
                 {
                     var tmp = attrInfo.Split(':');
-                    if (tmp[0] == "房间")
+                    if (tmp[0] == DomainFieldNames.Product_Detail_AnZhuangFangJian)
                         room = tmp[1];
-                    if (tmp[0] == "序号")
+                    if (tmp[0] == DomainFieldNames.Product_Detail_AnZHuangWeiZhi)
                         window = tmp[1];
                 }
                 if (model.RoomWindows.FirstOrDefault(m => m.Room == room && m.Window == window) == null)
@@ -2735,9 +2736,9 @@ namespace Nop.Web.Controllers
                 foreach (var attrInfo in item.AttributeInfo.Split(new string[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries).ToList())
                 {
                     var tmp = attrInfo.Split(':');
-                    if (tmp[0] == "房间")
+                    if (tmp[0] == DomainFieldNames.Product_Detail_AnZhuangFangJian)
                         room = tmp[1];
-                    if (tmp[0] == "序号")
+                    if (tmp[0] == DomainFieldNames.Product_Detail_AnZHuangWeiZhi)
                         window = tmp[1];
                 }
                 if (model.LiveScenes.FirstOrDefault(m => m.Room == room && m.Window == window) == null)
