@@ -4,7 +4,10 @@
 @if (Model.LiveScenes.Count > 0)
 {
     <div class="uploads">
-        <h1>上传实景  免费设计</h1>
+        <div class="header">
+            <h1 style="display:inline">上传实景  免费设计</h1>
+            <a href="@Url.Action("TopicBlock", "Topic", new { systemName = "UploadLiveScenesHelp" })" target="_blank" style="float:right;font-size:14px;color:orange; text-decoration:underline;font-weight:bold;">帮助：如何拍出合适的实景图</a>
+        </div>
         <div class="upload_pic">
             <ul>
                 @foreach (var lc in Model.LiveScenes)

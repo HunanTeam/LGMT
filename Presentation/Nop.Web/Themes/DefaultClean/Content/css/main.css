@@ -330,7 +330,8 @@ a:hover { color:#f00; text-decoration: none; }
 .order .process ul li.last { width: 60px; }
 .order .process ul li.last span { display: none; }
 .order .uploads { width: 94%; float: left; margin-top: 40px; border: 1px solid #ccc; border-radius: 5px; padding: 30px 3%; color: #666; }
-.order .uploads h1 { width: 100%; float: left; font-size: 16px; margin-bottom: 20px; background: url(../images/pic.jpg) left center no-repeat; text-indent: 40px; line-height: 30px; height: 30px; color: #333; }
+.order .uploads .header {height:100%;}
+.order .uploads .header h1 { width: 60%; float: left; font-size: 16px; margin-bottom: 20px; background: url(../images/pic.jpg) left center no-repeat; text-indent: 40px; line-height: 30px; height: 30px; color: #333; }
 .order .uploads .upload_img { width: 100%; float: left; padding: 10px 0px; border-bottom: 1px solid #ddd; border-top: 1px solid #ddd; }
 .order .uploads .upload_img .fl { width: 400px; float: left; }
 .order .uploads .upload_img .fl h2 { width: 100%; float: left; font-size: 14px; line-height: 30px; }
