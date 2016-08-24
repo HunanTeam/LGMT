@@ -621,6 +621,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+
         //My account / Orders / Cancel recurring order
         [HttpPost, ActionName("CustomerOrders")]
         [FormValueRequired(FormValueRequirement.StartsWith, "cancelRecurringPayment")]
@@ -794,6 +795,30 @@ namespace Nop.Web.Controllers
             var model = PrepareShipmentDetailsModel(shipment);
 
             return View(model);
+        }
+        [HttpPost, ActionName("DeleteOrder")]
+        public ActionResult DeleteOrder(int orderId)
+        {
+            var order = _orderService.GetOrderById(orderId);
+            if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
+            {
+                return Json(new { isOk = false, Content = "该订单已删除或您没有权限访问该订单！" });
+            }
+            try
+            {
+                order.Deleted = true;
+                _orderService.UpdateOrder(order);
+
+                return Json(new { isOk = true, Content = RenderPartialViewToString("CustomerOrderList", PrepareCustomerOrderListModel().Orders) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isOk = false, Content = ex.Message });
+
+            }
+
+
+
         }
 
         #endregion

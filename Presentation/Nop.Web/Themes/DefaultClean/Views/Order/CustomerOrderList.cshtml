@@ -1,0 +1,152 @@
+﻿@using Nop.Core.Domain.Orders
+@using Nop.Web.Models.Customer
+@using Nop.Web.Models.Order;
+@model IList<CustomerOrderListModel.OrderDetailsModel>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <div class="list">
+        <table cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <th>时间</th>
+                    <th>订单号</th>
+                    <th>商品</th>
+                    <th>商品数量</th>
+                    <th>订单总额</th>
+                    <th>预约安装时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                @foreach (var order in Model)
+                {
+                    <tr id="orderItem_@order.Id">
+                        <td>@order.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@OrderLink(order, false)</td>
+                        <td>
+                            @{
+                                var productName = string.Empty;
+                                foreach (var item in order.Items)
+                                {
+                                    productName = productName + item.ProductName + ", ";
+                                }
+                                productName = productName.Substring(0, productName.Length - 2);
+                                if (productName.Length > 18)
+                                {
+                                    productName = productName.Substring(0, 15) + "...";
+                                }
+                            }
+                            @Html.Raw(productName)
+                        </td>
+                        <td>@order.Items.Count()</td>
+                        <td>@order.OrderTotal</td>
+                        <td>@(order.BookingDate.HasValue ? order.BookingDate.Value.ToString("yyyy-MM-dd") : "") @order.BookingTimeName</td>
+                        <td>@OrderLink(order, true)</td>
+                        <td>
+                            <a style="font-size:14px;" href="javascript:vodi(0)" onclick="deleteOrder(@order.Id)">删除</a>
+                        </td>
+                        @*<td>
+                                <p>小梦</p>
+                                <span class="weixin" onmouseover="this.className = 'weixin on';" onmouseout="this.className = 'weixin';">
+                                    <a href="javascript:;"></a>
+                                    <div class="weixin_nr">
+                                        <div class="arrow"></div>
+                                        <img src="images/erweima.jpg" width="100" height="100">
+                                    </div>
+                                </span>
+                                <span class="qq">QQ</span>
+                            </td>*@
+                    </tr>
+                                }
+            </tbody>
+        </table>
+        <div class="foots">共 @Model.Count 笔订单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    </div>
+                                }
+                                else
+                                {
+                                    <div class="no-data">
+                                        @T("Account.CustomerOrders.NoOrders")
+                                    </div>
+                                }
+
+
+@helper OrderLink(CustomerOrderListModel.OrderDetailsModel order, bool showStepName)
+{
+var linkName = "";
+var step = ((OrderStep)order.OrderStepId);
+var url = Url.Action("OrderStep1", new { orderId = order.Id });
+
+switch (step)
+{
+    case OrderStep.Pending:
+        {
+            linkName = "待上传实景图";
+            url = Url.Action("OrderStep1", new { orderId = order.Id });
+            break;
+        }
+    case OrderStep.ConfirmBooking:
+        {
+            linkName = "待确定预约";
+            url = Url.Action("OrderStep2", new { orderId = order.Id });
+            break;
+        }
+    case OrderStep.MeasureForPrice:
+        {
+            linkName = "待支付定金";
+            url = Url.Action("OrderStep3", new { orderId = order.Id });
+            break;
+        }
+    case OrderStep.ManufactureAndInstallment:
+        {
+            linkName = "待支付尾款";
+            url = Url.Action("OrderStep4", new { orderId = order.Id });
+            break;
+        }
+    case OrderStep.Complete:
+        {
+            linkName = "订单完成";
+            url = Url.Action("OrderStep5", new { orderId = order.Id });
+            break;
+        }
+}
+
+if (!showStepName)
+{
+    linkName = order.OrderNumber;
+}
+
+    <a href="@url">@linkName</a>
+}
+<script type="text/javascript">
+    function deleteOrder(id) {
+        layer.confirm('您确定要删除该订单吗？', {
+            btn: ['确定', '取消'] //可以无限个按钮
+   ,
+        }, function (index, layero) {
+
+           
+            $.ajax({
+                url: '@Url.Action("DeleteOrder","Order")',
+                dataType: "json",
+                type: "POST",
+                data: { orderId: id },
+                success: function (data) {
+                    if (data.isOk) {
+                        $('#orderListInfo').html(data.Content);
+                    }
+                    else {
+                        layer.msg(data.Content);
+                    }
+                }
+            });
+            layer.close(index);
+        }, function (index) {
+            //按钮【按钮二】的回调
+            layer.close(index);
+        });
+
+    }
+</script>

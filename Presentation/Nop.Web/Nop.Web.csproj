@@ -2159,6 +2159,7 @@
     <Content Include="Themes\DefaultClean\Views\Customer\PasswordRecoveryStep4.cshtml" />
     <Content Include="Themes\DefaultClean\Content\cebian\懒人图库.url" />
     <Content Include="Themes\DefaultClean\Content\cebian\images\lrtk_weixin.psd" />
+    <Content Include="Themes\DefaultClean\Views\Order\CustomerOrderList.cshtml" />
     <None Include="Themes\DefaultClean\Views\ShoppingCart\Cart.cshtml" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN %281%29.jpg" />
     <Content Include="Themes\Mobile\Content\images\1P19_1180x570_20160627_CN.jpg" />
