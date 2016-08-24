@@ -811,7 +811,7 @@ namespace Nop.Web.Controllers
             var model = new StepInfoModel();
             model.OrderId = order.Id;
             model.Step = (OrderStep)order.OrderStepId;
-            model.HasUploadLiveScenes = order.OrderLiveScenes.Count > 0 && order.OrderLiveScenes.All(s => s.Id == 0);
+            model.HasUploadLiveScenes = order.OrderLiveScenes.Count > 0 && order.OrderLiveScenes.All(s => s.OriginalPictureId != 0);
             switch (model.Step)
             {
                 case OrderStep.Pending:

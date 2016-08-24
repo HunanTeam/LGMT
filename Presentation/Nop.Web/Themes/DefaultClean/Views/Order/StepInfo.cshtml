@@ -40,7 +40,7 @@ switch (Model.Step)
         }
         break;
     case OrderStep.MeasureForPrice:
-       @measureForPriceHtml();break;
+       @measureForPriceHtml(Model.CurrentPayInOnline.HasValue);break;
     case OrderStep.Complete: @defaultHtml(); break;
 }
 }
@@ -96,19 +96,27 @@ else
     </div>
 }
 @* 测量和报价（线下支付定金） *@
-@helper measureForPriceHtml()
+@helper measureForPriceHtml(bool isPaid)
 {
-    <div class="infor2">
-        <div class="left">
-            <div class="image04"></div>
-        </div>
-        <div class="right">
-            <span class="title">订单已生成，等待您线下支付定金  ......</span>
-            
-            <span class="content">您的订单已生成，我们将在您线下支付成功后依照约定时间及时完全制作及安装，您可以在“我的订单”中随时关注订单状态!</span>
-        </div>
+    if (isPaid)
+    {
+        <div class="infor2">
+            <div class="left">
+                <div class="image04"></div>
+            </div>
+            <div class="right">
+                <span class="title">订单已生成，等待您线下支付定金  ......</span>
 
-    </div>
+                <span class="content">您的订单已生成，我们将在您线下支付成功后依照约定时间及时完全制作及安装，您可以在“我的订单”中随时关注订单状态!</span>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        @confirmBookingHtml();
+    }
+
 }
 @* 在线支付定金 *@
 @helper manufactureAndInstallmentHtml(bool isOnline)

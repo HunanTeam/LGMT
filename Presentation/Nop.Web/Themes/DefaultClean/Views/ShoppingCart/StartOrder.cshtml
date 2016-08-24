@@ -72,7 +72,7 @@
             if (validOrder()) {
 
 
-                if (isOrderStepBreak()) {
+                if (isOrderStepBreak()&&!hasUploadImages) {
                     layer.open({
                         type: 1,
                         area:['450px','220px'],
@@ -85,7 +85,7 @@
                         content: $('#subOrderMsg') //这里content是一个DOM
                     });
                 }else {
-                     realSubOrder();
+                    realSubOrder();
                 }
 
 
@@ -110,13 +110,14 @@
                         document.location.href = "@Url.Action("StepInfo", "Order")?orderId=" + data.orderId;
                     else
                         layer.alert(data.message, { icon: 7 });
-                    
+
 
                 }
             });
         }
         function isOrderStepBreak() {
             var setVal = $("#orderStep").val();
+
             return !(setVal==@((int)OrderStep.MeasureForPrice));
 
 
@@ -168,10 +169,11 @@
             });
         });
 
-   
+
     </script>
 
     <script type="text/javascript">
+        var hasUploadImages=false;
         function fileChange(target) {
             var imgName = target.value;
             var ext, idx;
@@ -194,7 +196,7 @@
                     return false;
                 }
             }
-
+            hasUploadImages=true;
             //检测上传文件的大小
             //var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
             //var fileSize = 0;
