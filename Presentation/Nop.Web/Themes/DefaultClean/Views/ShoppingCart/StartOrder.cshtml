@@ -15,6 +15,7 @@
 }
 @section sec_body{
     <script type="text/javascript">
+
         function validOrder() {
             var orderStep = $("#orderStep").val();
             if (orderStep == "@((int)OrderStep.MeasureForPrice)") {
@@ -69,16 +70,56 @@
 
         function submitOrder() {
             if (validOrder()) {
-                $("#order-form").ajaxSubmit({
-                    url: "@Url.Action("StartOrderSubmit","ShoppingCart")",
-                    success: function (data) {
-                        if (data.success)
-                            document.location.href = "@Url.Action("StepInfo", "Order")?orderId=" + data.orderId;
-                        else
-                            layer.alert(data.message, { icon: 7 });
-                    }
-                });
+
+
+                if (isOrderStepBreak()) {
+                    layer.open({
+                        type: 1,
+                        area:['450px','220px'],
+                        scrollbar:false,
+                        title: false,
+                        skin: 'default',
+                        shade:-1,
+                        shadeClose: true,
+                        closeBtn: 0,
+                        content: $('#subOrderMsg') //这里content是一个DOM
+                    });
+                }else {
+                     realSubOrder();
+                }
+
+
+
             }
+        }
+        function unUpLoadSet()
+        {
+            $("#orderStep").val("@((int)OrderStep.MeasureForPrice)");
+            $('#upload_img').slideUp("fast");
+            $("#booking_date_aera").show();
+            $("#btn_no_upload").hide();
+            $("#btn_need_upload").show();
+            $("#btn_submit").html("提交预约");
+        }
+        function realSubOrder()
+        {
+            $("#order-form").ajaxSubmit({
+                url: "@Url.Action("StartOrderSubmit","ShoppingCart")",
+                success: function (data) {
+                    if (data.success)
+                        document.location.href = "@Url.Action("StepInfo", "Order")?orderId=" + data.orderId;
+                    else
+                        layer.alert(data.message, { icon: 7 });
+                    
+
+                }
+            });
+        }
+        function isOrderStepBreak() {
+            var setVal = $("#orderStep").val();
+            return !(setVal==@((int)OrderStep.MeasureForPrice));
+
+
         }
 
         $(function () {
@@ -111,12 +152,7 @@
                     time: 0
                   , btn: ['确定', '不跳过']
                   , yes: function (index) {
-                      $("#orderStep").val("@((int)OrderStep.MeasureForPrice)");
-                      $('#upload_img').slideUp("fast");
-                      $("#booking_date_aera").show();
-                      $("#btn_no_upload").hide();
-                      $("#btn_need_upload").show();
-                      $("#btn_submit").html("提交预约");
+                      unUpLoadSet();
                       layer.close(index);
                   }
                 });
@@ -131,6 +167,8 @@
                 $("#btn_submit").html("提交心愿单");
             });
         });
+
+   
     </script>
 
     <script type="text/javascript">
@@ -185,8 +223,8 @@
         <div class="order">
             @Html.Partial("OrderProgress", OrderStep.Pending)
             @Html.Action("CartItems")
-          
-            <div class="uploads">
+
+            <div id="uploadpic001" class="uploads">
                 <h1>上传实景  免费设计</h1>
                 <div id="upload_img" class="upload_img" style="border-bottom:0px;">
                     <div class="fl">
@@ -266,3 +304,32 @@
         </div>
     }
 </div>
+<div id="subOrderMsg" class="subOrderMsg">
+    <div class="msgContent">
+        <span>如需免费设计效果图，需上传实景图片。<br />你可以选择：</span>
+    </div>
+    <div class="btns">
+        <a onclick="uploadNow();">现在上传</a>
+        <a onclick="uploadLater();">以后上传</a>
+    </div>
+    <div class="exlink">
+        <a href="javascript:void(0);" onclick="unUpload();"> 不上传，直接预约</a>
+    </div>
+</div>
+<script type="text/javascript">
+    function uploadNow()
+    {
+        document.getElementById('uploadpic001').scrollIntoView();
+        layer.closeAll();
+    }
+    function uploadLater()
+    {
+        realSubOrder();
+        layer.closeAll();
+    }
+    function unUpload()
+    {
+        unUpLoadSet();
+        layer.closeAll();
+    }
+</script>

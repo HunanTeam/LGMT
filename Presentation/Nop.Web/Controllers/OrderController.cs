@@ -811,7 +811,7 @@ namespace Nop.Web.Controllers
             var model = new StepInfoModel();
             model.OrderId = order.Id;
             model.Step = (OrderStep)order.OrderStepId;
-            model.HasUploadLiveScenes = order.OrderLiveScenes.Count > 0;
+            model.HasUploadLiveScenes = order.OrderLiveScenes.Count > 0 && order.OrderLiveScenes.All(s => s.Id == 0);
             switch (model.Step)
             {
                 case OrderStep.Pending:
@@ -822,13 +822,17 @@ namespace Nop.Web.Controllers
                     {
                         if (order.OrderDepositPaymentStatus == (int)OrderDepositPaymentStatus.Paid)
                         {
-                            if (order.PaymentMethodSystemName=="")
+                            if (string.CompareOrdinal(order.OrderDepositPaymentMethod, "Alipay") == 0)
                             {
-
+                                model.CurrentPayInOnline = true;
+                            }
+                            else if (string.CompareOrdinal(order.OrderDepositPaymentMethod, "OfflinePayment") == 0)
+                            {
+                                model.CurrentPayInOnline = false;
                             }
                             model.Description = "线下支付申请成功，待客服审核，您可以在我的账户中随时查看订单状态。";
                         }
-                          
+
                         else
                             model.Description = "您的预订单我们已经收到，工程师将尽快联系您进行测量报价，您可以在我的账户中随时查看订单状态。";
                         break;

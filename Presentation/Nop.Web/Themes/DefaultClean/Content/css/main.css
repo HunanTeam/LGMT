@@ -586,3 +586,30 @@ a:hover { color:#f00; text-decoration: none; }
 .login_pop .close { position: absolute; right: 0px; top: 0px; width: 35px; height: 35px; }
 .login_pop .close a { display: block; width: 35px; height: 35px; background: url(../images/close.jpg) no-repeat; text-indent: -999px; }
 .login_pop .close a:hover { background-position: 0px -42px; }
+
+.subOrderMsg {display:none;background-color: rgba(0,0,0,.6);width:450px;height:220px;}
+.subOrderMsg .msgContent {}
+.subOrderMsg .msgContent span{position:relative;left:60px; top:20px; font-size:18px;color:#fff;}
+.subOrderMsg .btns {position:relative;top:60px;text-align:center;}
+.subOrderMsg .btns a {
+     border-color: #4898d5;
+    background-color: #2e8ded;
+    color: #fff;
+    height: 28px;
+    line-height: 28px;
+    margin: 0 6px;
+    padding: 0 15px;
+    border: 1px solid #dedede;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 2px;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+ }
+
+    .subOrderMsg .exlink {position:relative;top:110px;right:12px;
+    } 
+        .subOrderMsg .exlink a {
+            float:right;color:#fff;border-bottom :1px solid #333
+    } 
